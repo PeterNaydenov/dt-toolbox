@@ -1,0 +1,35 @@
+{
+  "name": "dt-toolbox",
+  "version": "1.0.0",
+  "description": "Data manipulation tool",
+  "main": "dt-toolbox.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PeterNaydenov/dt-toolbox.git"
+  },
+  "keywords": [
+    "flatten",
+    "shallow",
+    "data",
+    "object",
+    "structure",
+    "dt"
+  ],
+  "author": "Peter Naydenov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PeterNaydenov/dt-toolbox/issues"
+  },
+  "homepage": "https://github.com/PeterNaydenov/dt-toolbox#readme"
+}
