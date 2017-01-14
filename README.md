@@ -1,6 +1,6 @@
 # DT Toolbox
 
-Tool for javascript data object manipulation:
+Data manipulation tool:
   - Converting object from ST to DT format and reverse;
   - Add new object properties without touching the existing ones;
   - Update only existing properties of the object;
