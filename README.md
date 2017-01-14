@@ -278,7 +278,7 @@ dtbox
 ## More 
 Find more examples in `./test` folder. Almost 40 unit test are on your disposal. Find what is possible start experimenting with the library. 
 
-Let me know what you think by using twitter tag #dt-toolbox.
+Let me know what you think by using twitter tag #dttoolbox.
 
 
 
