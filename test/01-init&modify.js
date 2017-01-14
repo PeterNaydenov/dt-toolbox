@@ -135,6 +135,28 @@ it ( 'Init: Files', () => {
 
 
 
+it ( 'Init: Handmade files-like structure', () => {
+ let  result;
+ let data = [
+                   'a/www'
+                 , 'a/b/www'
+                 , 'a/c/www'
+                 , 'd/www'
+                 , 'd/e/www'
+               ]
+ 
+ result =  dtbox.init ( data, 'files')
+
+ expect ( result.value ).to.contain.property ( 'root/a/0' )
+ expect ( result.value ).to.contain.property ( 'root/a/b' )
+ expect ( result.value ).to.contain.property ( 'root/a/c' )
+ expect ( result.value ).to.contain.property ( 'root/d/0' )
+ expect ( result.value ).to.contain.property ( 'root/d/e' )
+}) // it handmade
+
+
+
+
 
 it ( 'Load: DT', () => {
 	// Init with DT object. Strip DT mean only dt.value element

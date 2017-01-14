@@ -316,8 +316,11 @@ _(Nothing yet)_
 
 ## Release History
 
-### 1.0.0 (2017-01-14)
+### 1.0.2 (2017-01-14)
+ - [x] Bug fix - init with files;
 
+### 1.0.0 (2017-01-14)
+ 
  - [x] Initial code;
  - [x] Test package;
  - [x] Documentation;

@@ -1,8 +1,10 @@
 'use strict'
 
 /*
-     DT object & DT Toolbox
-     =======================
+    DT object & DT Toolbox
+    =======================
+    
+    Version 1.0.2
 
     History notes:
      - Idea was born on March 17th 2016.
@@ -967,8 +969,12 @@ _build : function _build ( word, selectors, data ) {
      target.map ( el => {
                             let file = el.split('/').pop()
                             let folder = el.replace(`/${file}`,'')
-                            if      ( !folderKeys.includes(folder) ) folderKeys.push ( folder )
-                            else if ( !duplicates.includes(folder) ) duplicates.push ( folder )
+                            
+                            folderKeys.forEach ( key => {
+                                      if ( folder.includes(key) && !duplicates.includes(key) )   duplicates.push ( key )
+                                   })
+                            if      ( !folderKeys.includes(folder) )   folderKeys.push ( folder )
+                            else if ( !duplicates.includes(folder) )   duplicates.push ( folder )
                 })
 
      result = target.reduce ( (res,item) => {
