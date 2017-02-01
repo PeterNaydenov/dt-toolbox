@@ -40,7 +40,7 @@ notObject : function notObject ( str ) {
 		if ( typeof str == 'function' ) { result = true }
 		return result
   } // notObject func.
-
+, isObject    : str  => !simple.notObject(str)
 , dt          :  ()  => { 
         const 
                 val = Object.create ( exportAPI )
@@ -320,6 +320,153 @@ let dtlib = {
 
   return me
 } // insert func.
+
+
+
+
+
+ // -------------------------------> dtlib : IDENTICAL
+, identical ( data, callback ) {
+  // * Compare values. Reduce data to identical key/value pairs.
+    let
+          me = this
+        , dt = this.value
+        ;
+    
+    // NOTE: data should be DT!    
+
+    const dataKeys = simple.getIterator ( data );
+    const dtKeys   = simple.getIterator ( dt   );
+
+    const result = dataKeys.reduce ( (res,el) => {
+                                                   if ( !dtKeys.includes(el) ) return res
+                                                   if ( dt[el] != data[el]    ) return res
+
+                                                   res[el] = data[el]
+                                                   return res
+                            }, simple.value() )
+
+   callback ( result )
+   return me
+}  // same func.
+
+
+
+
+
+ // -------------------------------> dtlib : CHANGE
+ , change ( data, callback ) {
+   // * Compare values. Reduce data to key/value pairs with different values.
+    let
+          me = this
+        , dt = this.value
+        ;
+    
+    // NOTE: data should be DT!    
+
+    const dtKeys   = simple.getIterator ( dt   );
+    const dataKeys = simple.getIterator ( data );
+
+    const result = dataKeys.reduce ( (res,el) => {
+                                                   if ( !dtKeys.includes(el) ) return res
+                                                   if ( dt[el] == data[el]    ) return res
+
+                                                   res[el] = data[el]
+                                                   return res
+                            }, simple.value() )
+
+   callback ( result )
+   return me   
+ } // change func.
+ 
+
+
+
+
+
+ // -------------------------------> dtlib : SAME
+ , same ( data, callback ) {
+   // * Compare keys. Returns key/value pairs where keys are the same.
+   let
+          me = this
+        , dt = this.value
+        ;
+    
+    // NOTE: data should be DT!    
+
+    const dataKeys = simple.getIterator ( data );
+    const dtKeys   = simple.getIterator ( dt   );
+
+    const result = dataKeys.reduce ( (res,el) => {
+                                                   if ( !dtKeys.includes(el) ) return res
+
+                                                   res[el] = data[el]
+                                                   return res
+                            }, simple.value() )
+
+   callback ( result )
+   return me   
+
+ }
+
+
+
+
+
+
+ // -------------------------------> dtlib : DIFFERENT
+ , different ( data, callback ) {
+   // * Compare keys. Returns key/value pairs where key does not exist.
+    let
+          me = this
+        , dt = this.value
+        ;
+    
+    // NOTE: data should be DT!    
+
+    const dtKeys   = simple.getIterator ( dt   );
+    const dataKeys = simple.getIterator ( data );
+
+    const result = dataKeys.reduce ( (res,el) => {
+                                                   if ( dtKeys.includes(el) ) return res
+
+                                                   res[el] = data[el]
+                                                   return res
+                            }, simple.value() )
+
+   callback ( result )
+   return me   
+ } // different func.
+ 
+
+
+
+
+ // -------------------------------> dtlib : MISSING
+ , missing ( data, callback ) {
+   // * Key compare. Returns key/value pairs that are missing'
+   let
+          me = this
+        , dt = this.value
+        ;
+    
+    // NOTE: data should be DT!    
+
+    const dtKeys   = simple.getIterator ( dt );
+    const dataKeys = simple.getIterator ( data );
+
+    const result  = dtKeys.reduce ( (res,el) => {
+                                                   if ( dataKeys.includes(el) ) return res
+
+                                                   res[el] = dt[el]
+                                                   return res
+                            }, simple.value() )
+
+   callback ( result )
+   return me   
+ } // missing func.
+
+
 
 
 
@@ -1247,7 +1394,15 @@ API = {
        , overwrite  : dtlib.overwrite   // Add new data to DT object. Overwrite existing fields
        , spread     : dtlib.spread      // Export DT object
        , log        : dtlib.errorLog    // Executes callback with errors list as argument
+       , empty      : Object.create ( exportAPI ) // Empty object with export methods
        
+    // Compare Operations
+       , identical  :  dtlib.identical // Value compare. Reduce data to identical key/value pairs.
+       , change     :  dtlib.change    // Value compare. Reduce to key/value pairs with different values.
+       , same       :  dtlib.same      // Key compare. Returns key/value pairs where keys are the same.
+       , different  :  dtlib.different // Key compare. Returns key/value pairs where key does not exist.
+       , missing    :  dtlib.missing   // Key compare. Returns key/value pairs that are missing'
+    
     // Selectors and Filters
        , select     : dtlib.select     // Init new selection.
        , parent     : dtlib.parent    // Selector. Apply conditions starting from parent level

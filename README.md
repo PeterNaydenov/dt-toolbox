@@ -1,9 +1,11 @@
 # DT Toolbox
 
 Data manipulation tool:
+  - Converting object to flatten version(DT) and reverse(ST);
   - Converting object from ST to DT format and reverse;
   - Add new object properties without touching the existing ones;
   - Update only existing properties of the object;
+  - Compare DT objects;
   - Search and select data;
   - Extract data chunks;
   - Manipulate data stracture according needs;
@@ -44,17 +46,25 @@ Dtbox contains two different apis. First is related to the library itself:
 API = {
  // * DT I/O Operations
      init       : 'Start chain with data or empty'
-   , load       : 'Load DT object or value.'
-   , preprocess : 'Convert ST to DT object. Change income data before add, update, overwrite.'
+   , load       : 'Load DT object or value'
+   , preprocess : 'Convert ST to DT object. Change income data before add, update, overwrite'
    , add        : 'Add data and keep existing data'
    , update     : 'Updates only existing data'
    , overwrite  : 'Add new data to DT object. Overwrite existing fields'
-   , insert     : 'Insert data on specified key, when the key represents an array.'
+   , insert     : 'Insert data on specified key, when the key represents an array'
    , spread     : 'Export DT object'
    , log        : 'Executes callback with errors list as argument'
+   , empty      : 'Returns empty DT object'
+
+// Compare Operations
+   , identical  :  'Value compare. Reduce data to identical key/value pairs'
+   , change     :  'Value compare. Reduce to key/value pairs with different values'
+   , same       :  'Key compare. Returns key/value pairs where keys are the same'
+   , different  :  'Key compare. Reduce data to key/value pairs that differ'
+   , missing    :  'Key compare. Gets from DT key/value pairs that are missing'
        
  // * Selectors and Filters
-   , select     : 'Init new selection.'
+   , select     : 'Init new selection'
    , parent     : 'Selector. Apply conditions starting from parent level'
    , folder     : 'Selector. Fullfil select with list of arguments that have specific string'
    , all        : 'Selector. Same as folder'
@@ -75,18 +85,18 @@ exportAPI = {
   // * Structure Manipulation 
      assemble     : 'Remove all duplications in the keys and shrinks th possible'
    , ignoreKeys   : 'Converts object with nosense keys in array'
-   , keyList      : 'Returns array of DT object keys;'
-   , valueList    : 'Returns array of DT object values;'
+   , keyList      : 'Returns array of DT object keys'
+   , valueList    : 'Returns array of DT object values'
    , json         : 'Return JSON format of DT object'
    , build        : 'Build ST object'
                 
   // * Data Manipulation 
    , map          : 'Standard map function'
-   , modifyKeys   : 'Add modified keys back to DT object;'
-   , keepKeys     : 'Apply test on array of keys. Keep met the criteria;'
-   , removeKeys   : 'Apply test on array of keys. Remove met the criteria;'
-   , keepValues   : 'Apply test on values. Keep met the criteria;'
-   , removeValues : 'Apply test on values. Remove met the criteria;'
+   , modifyKeys   : 'Add modified keys back to DT object'
+   , keepKeys     : 'Apply test on array of keys. Keep met the criteria'
+   , removeKeys   : 'Apply test on array of keys. Remove met the criteria'
+   , keepValues   : 'Apply test on values. Keep met the criteria'
+   , removeValues : 'Apply test on values. Remove met the criteria'
 }
 
 ```
@@ -276,7 +286,7 @@ dtbox
 
 
 ## More 
-Find more examples in `./test` folder. Almost 40 unit test are on your disposal. Find what is possible start experimenting with the library. 
+Find more examples in `./test` folder. Almost 50 unit tests are on your disposal. Find what is possible start experimenting with the library. 
 
 Let me know what you think by using twitter tag #dttoolbox.
 
@@ -315,6 +325,10 @@ _(Nothing yet)_
 
 
 ## Release History
+
+### 1.1.0
+ - [x] New method `empty` returns empty DT object;
+ - [x] Compare method were added: `identical`, `change`, `same`, `different`, `missing`
 
 ### 1.0.2 (2017-01-14)
  - [x] Bug fix - init with files;
