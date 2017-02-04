@@ -4,12 +4,13 @@
     DT object & DT Toolbox
     =======================
     
-    Version 1.0.2
+    Version 1.1.1
 
     History notes:
      - Idea was born on March 17th 2016.
      - Completely redesigned in September/October 2016
      - Published on GitHub for first time: January 14th 2017
+     - Compare methods were added: identical, change, same, different, missing. January 29th 2017
 
 */
 
@@ -34,10 +35,11 @@ simple = {    // * Simple instruments
 
 notObject : function notObject ( str ) {
 		let result = false
-		if ( typeof str == 'string'   ) { result = true }
-		if ( typeof str == 'number'   ) { result = true }
-		if ( typeof str == 'boolean'  ) { result = true }
-		if ( typeof str == 'function' ) { result = true }
+    if ( typeof str == 'undefined' ) { result = true }
+		if ( typeof str == 'string'    ) { result = true }
+		if ( typeof str == 'number'    ) { result = true }
+		if ( typeof str == 'boolean'   ) { result = true }
+		if ( typeof str == 'function'  ) { result = true }
 		return result
   } // notObject func.
 , isObject    : str  => !simple.notObject(str)
@@ -563,6 +565,16 @@ let dtlib = {
   		callback ( selection )
   		return me
   } // spread func.
+
+
+
+
+
+// -------------------------------> dtlib : SPREAD ALL
+, spreadAll ( instruction, callback ) {
+  // * Select all and export DT object with one command
+   return this.select().all().spread( instruction, callback )
+} // spreadAll func.
 
 
 
@@ -1393,8 +1405,9 @@ API = {
        , insert     : dtlib.insert      // Insert data on specified key, when the key represents an array.
        , overwrite  : dtlib.overwrite   // Add new data to DT object. Overwrite existing fields
        , spread     : dtlib.spread      // Export DT object
+       , spreadAll  : dtlib.spreadAll   // Select all and export DT object with one command
        , log        : dtlib.errorLog    // Executes callback with errors list as argument
-       , empty      : Object.create ( exportAPI ) // Empty object with export methods
+       , empty      : () => Object.create ( exportAPI ) // Empty object with export methods
        
     // Compare Operations
        , identical  :  dtlib.identical // Value compare. Reduce data to identical key/value pairs.

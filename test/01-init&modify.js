@@ -335,7 +335,7 @@ it ( 'Show Error Log', () => {
 
 it ( 'Get empty DT', () => { 
 
-    const data = dtbox.empty;
+    const data = dtbox.empty();
     const result = data.keyList();
 
     expect ( data ).to.be.an.empty.object

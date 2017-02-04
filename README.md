@@ -326,12 +326,25 @@ _(Nothing yet)_
 
 ## Release History
 
+### 1.1.1
+
+ - [x] Fix for method `empty`. Now it works as was intended;
+ - [x] Method `spreadAll` was added and could be used instead chain: .select().all().spread()
+
+
+
 ### 1.1.0
- - [x] New method `empty` returns empty DT object;
+
+ - [x] Method `empty` returns empty DT object;
  - [x] Compare method were added: `identical`, `change`, `same`, `different`, `missing`
+ - [] Error: Method `empty` is actually an object;
+
+
 
 ### 1.0.2 (2017-01-14)
  - [x] Bug fix - init with files;
+
+
 
 ### 1.0.0 (2017-01-14)
  

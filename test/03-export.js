@@ -79,6 +79,19 @@ describe ( 'Export from DT', () => {
 
 
 
+
+
+it ( 'SpreadAll', () => {
+  let result;
+  let st = { name : 'Peter' }
+
+  dtbox.init(st).spreadAll ( 'dt', dt => result = dt.build() )
+
+  expect ( result['name'] ).to.be.equal ( st['name'] )
+}) // it spreadAll
+
+
+
 }) // describe
 
 
