@@ -206,6 +206,26 @@ it ( 'map', () => {
 
 
 
+
+
+it ( 'map with indexes', () => {
+  let result;
+
+  dtbox
+    .init ( sample.test_5 )
+    .select ()
+    .folder ( 'age' )
+    .spread ( 'dt', dt => {
+                             result = dt
+                                       .map ( (el,i) => el.replace(el,`root/${i}`)   )
+                                       .build ()
+              })
+
+    expect ( result ).to.be.an('array')
+}) // it map index
+
+
+
 }) // describe
 
 

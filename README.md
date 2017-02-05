@@ -53,6 +53,7 @@ API = {
    , overwrite  : 'Add new data to DT object. Overwrite existing fields'
    , insert     : 'Insert data on specified key, when the key represents an array'
    , spread     : 'Export DT object'
+   , spreadAll  : 'Shortcut for chain: .select().all().spread()'
    , log        : 'Executes callback with errors list as argument'
    , empty      : 'Returns empty DT object'
 
@@ -326,10 +327,17 @@ _(Nothing yet)_
 
 ## Release History
 
-### 1.1.1
+### 1.1.2 (2017-02-05)
 
- - [x] Fix for method `empty`. Now it works as was intended;
- - [x] Method `spreadAll` was added and could be used instead chain: .select().all().spread()
+ - [x] Fix: ExportAPI method `map` has `index` argument;
+
+
+
+### 1.1.1 (2017-02-04)
+
+ - [x] Fix: Method `empty` now works as it was intended;
+ - [x] Method `spreadAll` was added and could be used instead the chain: .select().all().spread()
+ - [ ] Error: ExportAPI method `map` has no `index` argument;
 
 
 
@@ -337,7 +345,8 @@ _(Nothing yet)_
 
  - [x] Method `empty` returns empty DT object;
  - [x] Compare method were added: `identical`, `change`, `same`, `different`, `missing`
- - [] Error: Method `empty` is actually an object;
+ - [ ] Error: Method `empty` is actually an object;
+ - [ ] Error: ExportAPI method `map` has no `index` argument;
 
 
 

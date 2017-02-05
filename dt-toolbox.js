@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 1.1.1
+    Version 1.1.2
 
     History notes:
      - Idea was born on March 17th 2016.
@@ -804,9 +804,9 @@ map ( fx ) {
       , keys = me.keyList()
       ;
 
-  const result = keys.reduce ( (res,item) => { 
-                                                  const newKey = fx (item)
-                                                  res[newKey]  = me[ item ]
+  const result = keys.reduce ( (res,item,i) => { 
+                                                  const newKey = fx ( item, i )
+                                                  res[newKey]  = me [ item ]
                                                   return res
                                     }, simple.value())
   return result
