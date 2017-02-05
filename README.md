@@ -28,7 +28,7 @@ DT format is a flatten version of the standard javascript object. **Keys** are s
 
 Install by writing in your terminal:
 ```
-npm install fs-toolbox --save
+npm install dt-toolbox --save
 ```
 
 Once it has been installed, it can be used by writing this line of JavaScript:
