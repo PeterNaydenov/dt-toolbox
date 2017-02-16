@@ -15,7 +15,7 @@ const
 describe ( 'Compare Operations', () => {
 
 
- it ( 'identical', () => {
+ it ( 'Identical', () => {
     let 
           identResult
         , result_ST
@@ -37,7 +37,7 @@ describe ( 'Compare Operations', () => {
 
 
 
- it ( 'change', () => {
+ it ( 'Change', () => {
      let 
            result
          , result_ST
@@ -72,7 +72,7 @@ describe ( 'Compare Operations', () => {
 
 
 
- it ('same' , () => {
+ it ('Same' , () => {
      let 
            result
          , result_ST
@@ -108,7 +108,7 @@ describe ( 'Compare Operations', () => {
 
 
 
- it ( 'different', () => {
+ it ( 'Different', () => {
    let result;
    const 
            testDT = { 
@@ -131,7 +131,7 @@ describe ( 'Compare Operations', () => {
 
 
 
- it ( 'missing', () => {
+ it ( 'Missing', () => {
    let result;
    const 
            testDT = { 

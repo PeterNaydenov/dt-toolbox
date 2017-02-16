@@ -168,7 +168,7 @@ it ( 'Load: DT', () => {
  			expect ( result.structure ).to.have.property ( 'root/profile' )
  			expect ( result.namespace['profile'] ).to.contain ( 'root/profile/name' )
 
-    }) // it strip DT
+    }) // it load DT
 
 
 
@@ -215,6 +215,33 @@ it ( 'Load: Preprocess', () => {
 			
 			expect ( result.namespace.root ).to.be.empty.array;
       }) // it preprocess
+
+
+
+
+
+it ( 'Load: Load fast', () => {
+   let result;
+
+   let loadData = {
+                       'root/0/id'   : 12
+                     , 'root/0/name' : 'Peter'
+                   }
+
+   result = dtbox.loadFast ( loadData )
+
+   // Meta data should not be calculated
+   expect ( result['namespace']['root'] ).to.be.empty.array
+   expect ( result['structure']['root'] ).to.be.equal ( 'object' )
+
+   // Values are available   
+   expect ( result['value'] ).to.have.property ( 'root/0/id'  )
+   expect ( result['value'] ).to.have.property ( 'root/0/name')
+   expect ( result['value']['root/0/id'] ).to.be.equal ( 12  )
+   expect ( result['value']['root/0/name'] ).to.be.equal ( 'Peter'  )
+}) // loadFast
+
+
 
 
 

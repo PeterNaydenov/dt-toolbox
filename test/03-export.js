@@ -81,7 +81,7 @@ describe ( 'Export from DT', () => {
 
 
 
-it ( 'SpreadAll', () => {
+it ( 'SpreadAll = select().all().spread()', () => {
   let result;
   let st = { name : 'Peter' }
 

@@ -18,7 +18,7 @@ describe ( 'Select in DT', () => {
 
 
 
-it ( 'Select: Parent', () => {
+it ( 'Parent', () => {
 		  let updateObject;
 		  const result = dtbox
 		                 .init ( sample.test_8 )
@@ -50,7 +50,7 @@ it ( 'Select: Parent', () => {
 
 
 
- it ( 'Select: Folder', () => {
+ it ( 'Folder', () => {
 	 	  let result;
 	 		
 	 	  dtbox
@@ -69,7 +69,7 @@ it ( 'Select: Parent', () => {
 
 
 
- it ( 'Select: Folder with regular expression', () => {
+ it ( 'Folder with regular expression', () => {
 	 	  let result;
 	 		
 	 	  dtbox
@@ -87,7 +87,7 @@ it ( 'Select: Parent', () => {
 
 
 
-it ( 'Select: Space', () => {
+it ( 'Space', () => {
 		let 
 			  result
 			, keys
@@ -110,7 +110,7 @@ it ( 'Select: Space', () => {
 
 
 
-it ( 'Select: Limit', () => {
+it ( 'Limit', () => {
 		const result = dtbox
 				            .init ( sample.test_0 )
 				            .select ()
@@ -124,7 +124,7 @@ it ( 'Select: Limit', () => {
 
 
 
-it ( 'Select: Keep' , () => {
+it ( 'Keep' , () => {
 	 const result = dtbox
 			             .init ( sample.test_0 )
 			             .select ()
@@ -138,7 +138,7 @@ it ( 'Select: Keep' , () => {
 
 
 
-it ( 'Select: Remove' , () => {
+it ( 'Remove' , () => {
    const result = dtbox
 	    			.init ( sample.test_0 )
 	    			.select ()
@@ -152,7 +152,7 @@ it ( 'Select: Remove' , () => {
 
 
 
-it ( 'Select: Deep', () => {
+it ( 'Deep', () => {
 	const result = dtbox
 			           .init ( sample.test_0 )
 			           .select ()
@@ -165,7 +165,7 @@ it ( 'Select: Deep', () => {
 
 
 
-it ( 'Select: Deep with direction', () => {
+it ( 'Deep with direction', () => {
 	const result = dtbox
 			            .init ( sample.test_0 )
 			            .select ()
@@ -180,7 +180,64 @@ it ( 'Select: Deep with direction', () => {
 
 
 
-}) // define
+
+it ( 'Deep Objects', () => {
+   let result;
+
+   dtbox
+     .init ( sample.test_5 )
+     .select()
+     .deepObject()
+     .spread ( 'dt', dt => result = dt.list().build() )
+
+   expect ( result ).to.be.an( 'array' )
+   expect ( result ).to.have.length ( 6 )
+
+   expect ( result[0] ).to.have.property ('name')
+   expect ( result[0] ).to.have.property ('comments')
+   expect ( result[0] ).to.have.property ('age')
+}) // it deepObject
+
+
+
+it ( 'Deep Array', () => {
+	let result
+
+	let ttt = [
+               { name: 'Peter', age:42 }
+             , { name: 'Stefan', age: 41 }
+             , [
+                    {
+                         name: 'Andrey'
+                       , age : 33 
+	                   , l   : [
+	                               [ 13, 44, 43]
+	                             , [ 66, 77, 88]
+	                           ]
+                    }
+
+               ]
+              , [ 22, 33, 26 ]
+          ]
+
+	dtbox
+	  .init( ttt )
+	  .select()
+	  .deepArray()
+	  .spread ( 'dt', dt => result = dt.list().build()   )
+
+	expect ( result ).to.be.an ( 'array' )
+	expect ( result ).to.have.length ( 3 )
+
+	expect ( result[0] ).to.be.an ( 'array' )
+	expect ( result[0] ).to.have.length ( 3 )
+	expect ( result[1] ).to.be.an ( 'array' )
+	expect ( result[2] ).to.be.an ( 'array' )
+})
+
+
+
+}) // describe
 
 
 

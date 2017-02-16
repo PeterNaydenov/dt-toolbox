@@ -1,16 +1,16 @@
 # DT Toolbox
 
+
+
 Data manipulation tool:
   - Converting object to flatten version(DT) and reverse(ST);
-  - Converting object from ST to DT format and reverse;
-  - Add new object properties without touching the existing ones;
-  - Update only existing properties of the object;
-  - Compare DT objects;
-  - Search and select data;
-  - Extract data chunks;
-  - Manipulate data stracture according needs;
+  - Modify DT objects: add/update/overwrite;
+  - Compare DT objects: identical/change/same/different/missing;
+  - Select data in DT objects;
+  - Filter selection: limit/keep/remove/deep;
+  - Extract and manipulate data chunks;
 
-Deliberately designed to work nicely with JSON and simplify data creation, searching and extracting processes.
+Deliberately designed to work nicely with JSON and simplify data creation, searching and extracting data processes.
 
 
 
@@ -40,7 +40,7 @@ let dtbox = require ( 'dt-toolbox')
 
 
 ## APIs Reference
-Dtbox contains two different apis. First is related to the library itself:
+Dtbox contains two different APIs. First is related to the library itself:
 
 ```
 API = {
@@ -88,11 +88,11 @@ exportAPI = {
    , ignoreKeys   : 'Converts object with nosense keys in array'
    , keyList      : 'Returns array of DT object keys'
    , valueList    : 'Returns array of DT object values'
+   , map          : 'Standard map function'
    , json         : 'Return JSON format of DT object'
    , build        : 'Build ST object'
                 
   // * Data Manipulation 
-   , map          : 'Standard map function'
    , modifyKeys   : 'Add modified keys back to DT object'
    , keepKeys     : 'Apply test on array of keys. Keep met the criteria'
    , removeKeys   : 'Apply test on array of keys. Remove met the criteria'
@@ -172,6 +172,13 @@ dtbox
     .spread ( 'dt' => friendList = dt.assemble().build() ) // = [ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ]
     // 'assemble' removes all duplicated elements in the keys and simplifies the result.
     
+```
+
+### Convert ST to DT objects
+
+```js
+let dt = dtbox.init(st).value;
+
 ```
 
 ### Mixing objects - Add/Update/Overwrite
@@ -258,7 +265,7 @@ dtbox
    .init ( data )
    .select ()
    .parent ( 'name', person => person.age < 40 )
-   .spread ( 'dt' , dt => result = dt.assemble().ignoreKeys(0).build()   )
+   .spread ( 'dt' , dt => result = dt.assemble().ignoreKeys().build()   )
 
 /*
    result will look like this:
@@ -287,7 +294,7 @@ dtbox
 
 
 ## More 
-Find more examples in `./test` folder. Almost 50 unit tests are on your disposal. Find what is possible start experimenting with the library. 
+Find more examples in `./test` folder. Over 50 unit tests are on your disposal. Find what is possible start experimenting with the library. 
 
 Let me know what you think by using twitter tag #dttoolbox.
 
@@ -302,9 +309,11 @@ Let me know what you think by using twitter tag #dttoolbox.
 
 ## Tips
 
-- DT format not depends on DT Toolbox. Use toolbox only when language cannot provide better tools;
-- Iteration over DT Toolbox could bring performance issues(anti-pattern). Iterate over data first and then use DT Toolbox;
+- DT format not depends on DT Toolbox. Use toolbox when language cannot provide better tools;
+- Iteration on data with DT Toolbox could bring performance issues(anti-pattern). Iterate over data first and then use DT Toolbox;
 - Working with flat objects (DT) could be relieving experience with extras - performance and readability gain;
+
+
 
 
 
@@ -320,6 +329,15 @@ _(Nothing yet)_
 
 
 
+## Roadmap
+- API method `folder` can receive second argument `deep`. At the moment `deep` is absolute deep and will be changed to relative;
+- Upgrade error handling. Add proper error messages;
+- Create API methods documentation;
+
+
+
+
+
 
 
 
@@ -327,9 +345,19 @@ _(Nothing yet)_
 
 ## Release History
 
+### 1.2.0 (2017-02-16)
+- [x] ExportAPI method 'list'. Returns findings in an array.
+- [x] API method 'deepArray'  - selector
+- [x] API method 'deepObject' - selector
+- [x] API method 'loadFast' - load DT data without meta information calculation. 
+- [x] ExportLib method `map` is 'root/' aware. 
+
+
+
 ### 1.1.2 (2017-02-05)
 
  - [x] Fix: ExportAPI method `map` has `index` argument;
+ - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
 
 
 
@@ -337,6 +365,7 @@ _(Nothing yet)_
 
  - [x] Fix: Method `empty` now works as it was intended;
  - [x] Method `spreadAll` was added and could be used instead the chain: .select().all().spread()
+ - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
  - [ ] Error: ExportAPI method `map` has no `index` argument;
 
 
@@ -345,6 +374,7 @@ _(Nothing yet)_
 
  - [x] Method `empty` returns empty DT object;
  - [x] Compare method were added: `identical`, `change`, `same`, `different`, `missing`
+ - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
  - [ ] Error: Method `empty` is actually an object;
  - [ ] Error: ExportAPI method `map` has no `index` argument;
 

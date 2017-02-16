@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 1.1.2
+    Version 1.2.0
 
     History notes:
      - Idea was born on March 17th 2016.
@@ -76,7 +76,7 @@ notObject : function notObject ( str ) {
 
 , copy        :  obj => JSON.parse ( JSON.stringify(obj) ) 
 , folderKind  : test => test instanceof Array ? 'array' : 'object'
-, getIterator : list => Object.getOwnPropertyNames ( list )
+, getIterator : list => Object.keys ( list )
 
 , removeLast ( path ) {
                 	  let list = path.split('/')
@@ -133,7 +133,7 @@ let dtlib = {
  
 
 
- // -------------------------------> dtlib : LOAD	
+ // -------------------------------> dtlib : LOAD 
  , load (data) {
    // * Load existing DT object
                     if ( !data.namespace || !data.structure ) {
@@ -141,11 +141,18 @@ let dtlib = {
                                 const st = data.build();
                                 data     = dtlib.scan ( st ) 
                         }
- 					data._select = []
- 					return data
- 	  } // load func.
+          data._select = []
+          return data
+    } // load func.
 
-
+ // -------------------------------> dtlib : LOAD	FAST
+ , loadFast ( val ) {
+   // * Load existing DT without meta calculation
+    let result = simple.dt()
+    result.value = val
+   
+    return result
+ }
 
  // -------------------------------> dtlib : SCAN	
  , scan ( target ) {
@@ -188,7 +195,7 @@ let dtlib = {
  				, iterator
  				;
 	
- 	  dt = dtlib.scan ( data )   // convert data to DT object
+ 	    dt = dtlib.scan ( data )   // convert data to DT object
 
       if ( !instructions )  scanData = dt
       else                  scanData = lib._transform ( dt, instructions )
@@ -228,10 +235,10 @@ let dtlib = {
  				, iterator
  				;
 	
-            dt = dtlib.scan ( data )   // convert data to DT object
+      dt = dtlib.scan ( data )   // convert data to DT object
  			
-            if ( !instructions )  scanData = dt
-            else                  scanData = lib._transform ( dt, instructions )
+      if ( !instructions )  scanData = dt
+      else                  scanData = lib._transform ( dt, instructions )
  			
       iterator = simple.getIterator ( scanData.value )
  			iterator.forEach ( el => {
@@ -472,25 +479,12 @@ let dtlib = {
 
 
 
-
-
  // -------------------------------> dtlib : ERRORLOG
  , errorLog ( callback ) {
   // * Executes callback with errors as argument
                             callback ( this._error )
                             return this
  } // errorLog func.
-
-
-
-
-
- // -------------------------------> dtlib : HAS
-, has ( name ) {
-  // * 'Check if property exists. Returns true or false.'
-                        	if ( this.value[name] ) return true
-                        	else                    return false
-  } // has func.
 
 
 
@@ -595,13 +589,12 @@ let dtlib = {
 	deep =  deep + 1 // because we add default wrapper 'root'
   deepMax = name.split('/').length + deep
 
-    let collection = Object.getOwnPropertyNames ( me.value )
-                           // .filter ( el => el.indexOf(name) != -1  )
-                           .filter ( el => el.match (name) )
-                           .reduce ( (res, el) => {
-                                                     let elDeep = el.split('/').length
-    												 if ( elDeep <= deepMax ) res.push(el)
-    												 return res
+  let collection = simple.getIterator ( me.value )
+                         .filter ( el => el.match (name) )
+                         .reduce ( (res, el) => {
+                                                   let elDeep = el.split('/').length
+    												                       if ( elDeep <= deepMax ) res.push(el)
+    												                       return res
 	    						         },[] )
 	me._select = me._select.concat ( collection )
 	return me
@@ -754,25 +747,80 @@ let dtlib = {
 
 // -------------------------------> dtlib : SPACE
 , space ( names ) {
-	// Fullfil '_select' with namespace members.
-	const 
+  // Fullfil '_select' with namespace members.
+  const 
           me = this
         , defaultSpace = ['root']
         ;
-	
+  
     if ( names === undefined ) names = defaultSpace
     if ( typeof names == 'string' ) names = [ names ]
 
-	let collection = names.reduce ( (res, name) => {
-												  let space = me.namespace
+  let collection = names.reduce ( (res, name) => {
+                          let space = me.namespace
 
-												  if ( space.hasOwnProperty(name) ) res = res.concat( space[name] )
-												  return res
-					}, [] )
+                          if ( space.hasOwnProperty(name) ) res = res.concat( space[name] )
+                          return res
+          }, [] )
 
    if ( !collection.length == 0 )   me._select = me._select.concat ( collection )
    return me
   } // space func.
+
+
+
+
+
+// -------------------------------> dtlib : BLOCK
+, block ( type ) {
+  // * Fullfil '_select' with deepest structure elements
+  return function () {
+  const 
+       me          = this
+     , dtStructure = me.structure
+     , dtValue     = me.value
+     , iStructure  = simple.getIterator ( dtStructure )
+     , iValue      = simple.getIterator ( dtValue )
+     , find        = type || 'object'
+     ;
+
+  let collection = [];
+
+  const t = lib._reorder ( iStructure )
+               .reduce ( (res,item) => {
+                                    let notIncluded = false;
+                                    if ( dtStructure[item] == find )   notIncluded = res.every ( el => !el.includes(item)   )
+                                    if ( notIncluded )   res.push(item)
+                                    return res
+                           },[])
+
+collection = iValue
+               .reduce ( (res,item) => {
+                                let notValid = t.every ( el => !item.includes(el) )
+                                let isValid = !notValid;
+
+                                if ( isValid ) { 
+                                // Deep-key control. Ignores nestled objects/arrays
+                                                    let end = false;
+                                                    t.forEach ( el => {
+                                                            if ( end ) return
+                                                            if ( item.includes(el) ) {
+                                                                    const size = el.split('/').length + 1;
+                                                                    const itemSize = item.split('/').length;
+                                                                    
+                                                                    isValid = (itemSize == size) ? true : false
+                                                                    end = true
+                                                                }
+                                                       })
+                                   }
+                                if ( isValid ) res.push ( item)
+                                return res
+                     },[])
+
+if ( !collection.length == 0 )   me._select = me._select.concat ( collection )
+return me
+} // return func
+} // block func.
 
 } // dtlib 
 
@@ -805,12 +853,16 @@ map ( fx ) {
       ;
 
   const result = keys.reduce ( (res,item,i) => { 
-                                                  const newKey = fx ( item, i )
+                                                  let newKey = fx ( item, i )
+                                                  if ( !newKey.includes('root/') )    newKey = `root/${newKey}`
                                                   res[newKey]  = me [ item ]
                                                   return res
-                                    }, simple.value())
+                       }, simple.value())
   return result
 } // map func.
+
+
+
 // -------------------------------> exportlib : ASSEMBLE
 , assemble () {
 // * Removes duplicated path elements LTR and build ST object. Data should look like dt.value
@@ -1020,6 +1072,44 @@ map ( fx ) {
 
 
 
+ // -------------------------------> exportlib : LIST
+, list () {
+  // * List of items
+  const 
+          me = this
+        , iterator = simple.getIterator(me)
+        ;
+
+  let 
+         counter = 0
+       , result
+       ;
+
+  const replaceMap = iterator.reduce ( (res,item) => {
+                                    let key = simple.removeLast(item)
+                                    if ( res[key] == undefined )   res[key] = counter++
+                                    return res
+                              },{})
+
+  const iReplaceMap = simple.getIterator ( replaceMap )
+  result = iterator.reduce ( (res,item) => {
+                                    let find = simple.removeLast ( item )
+                                    
+                                    if ( iReplaceMap.includes (find) ) {
+                                            let it = simple.getUlt(item)
+                                            let newKey = `root/${replaceMap[find]}/${it}` 
+                                            res[ newKey ] = me [ item ]
+                                    }
+                                    else    res[item] = me[item]
+                                    return res
+                             }, simple.value() )
+  return result
+} // list func.
+
+
+
+
+
  // -------------------------------> exportlib : BUILD
 , build ( data ) {
   // * Convert any DT object in ST object
@@ -1083,9 +1173,9 @@ _build : function _build ( word, selectors, data ) {
 		  								 return res
 	  			 }, {})
 
-	  // Recognize container-type
+	  // Recognize container-type: array or object
 	   let isObject = set.reduce ( (res,el) => { 
-	   												    if ( !isNaN(el[0]) ) return false
+                                if ( !isNaN(el[0]) ) return false
 	   												    return res
 	   					       }, true )
 	   if ( isObject ) result = {}
@@ -1157,7 +1247,6 @@ _build : function _build ( word, selectors, data ) {
  	let iterator;
     iterator = simple.getIterator ( list )
     iterator.forEach ( el => {
-                if ( el == 'length') return  // ignore 'length' property
                 const prop = `${namespace}/${el}`;
 
                 if ( simple.notObject ( list[el] )   ) {
@@ -1166,7 +1255,7 @@ _build : function _build ( word, selectors, data ) {
                                dt.namespace[obj].push(prop)
                      }
                 else {
-                              if ( !simple.getUlt(prop).match(/^[0-9]/) )   dt.structure[prop] = simple.folderKind ( list[el] )
+                              dt.structure[prop] = simple.folderKind ( list[el] )
                               if ( !dt.namespace.hasOwnProperty(el)     )   dt.namespace[el] = []
     													lib._scan ( list[el], prop , dt )
     			           }
@@ -1380,8 +1469,9 @@ exportAPI = {
                 , ignoreKeys   : exportlib.ignoreKeys // Remove keys that have no value. Converts object with nosense keys in array;
                 , keyList      : exportlib.keyList    // Returns array of DT object keys;
                 , valueList    : exportlib.valueList  // Returns array of DT object values;
-                , json         : exportlib.json       // Return JSON format of DT object
-                , build        : exportlib.build      // Build ST object
+                , list         : exportlib.list       // Returns array of items;
+                , json         : exportlib.json       // Returns JSON format of DT object;
+                , build        : exportlib.build      // Build ST object;
                 
                 // Data Manipulation
                 , map          : exportlib.map          // Standard map function
@@ -1390,6 +1480,7 @@ exportAPI = {
                 , removeKeys   : exportlib.removeKeys   // Apply test on array of keys. Remove met the criteria;
                 , keepValues   : exportlib.keepValues   // Apply test on values. Keep met the criteria;
                 , removeValues : exportlib.removeValues // Apply test on values. Remove met the criteria;
+
 };
 
 
@@ -1399,6 +1490,7 @@ API = {
     // DT I/O Operations
 		     init       : dtlib.init        // Start chain with data or empty
 		   , load       : dtlib.load        // Load DT object or value.
+       , loadFast   : dtlib.loadFast    // Use only when no meta-related operations
        , preprocess : dtlib.preprocess  // Convert ST to DT object. Change income data before add, update, overwrite.
        , add        : dtlib.add         // Add data and keep existing data
        , update     : dtlib.update      // Updates only existing data
@@ -1417,15 +1509,17 @@ API = {
        , missing    :  dtlib.missing   // Key compare. Returns key/value pairs that are missing'
     
     // Selectors and Filters
-       , select     : dtlib.select     // Init new selection.
-       , parent     : dtlib.parent    // Selector. Apply conditions starting from parent level
-       , folder     : dtlib.folder    // Selector. Fullfil select with list of arguments that have specific string
-       , all        : dtlib.folder    // Selector. Same as folder
-       , space      : dtlib.space     // Selector. Fullfil select with namespace members
-       , limit      : dtlib.limit     // Filter.   Reduces amount of records in the selection
-       , keep       : dtlib.keep      // Filter.   Keeps records in selection if check function returns true
-       , remove     : dtlib.remove    // Filter.   Removes records from selection if check function returns true
-       , deep       : dtlib.deep      // Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members
+       , select     : dtlib.select          // Init new selection.
+       , parent     : dtlib.parent          // Selector. Apply conditions starting from parent level
+       , folder     : dtlib.folder          // Selector. Fullfil select with list of arguments that have specific string
+       , all        : dtlib.folder          // Selector. Same as folder
+       , space      : dtlib.space           // Selector. Fullfil select with namespace members
+       , deepArray  : dtlib.block('array' ) // Selector. Fullfil '_select' with deepest array elements
+       , deepObject : dtlib.block('object') // Selector. Fullfil '_select' with deepest object elements
+       , limit      : dtlib.limit           // Filter.   Reduces amount of records in the selection
+       , keep       : dtlib.keep            // Filter.   Keeps records in selection if check function returns true
+       , remove     : dtlib.remove          // Filter.   Removes records from selection if check function returns true
+       , deep       : dtlib.deep            // Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members
 }; // API
 
 module.exports = API

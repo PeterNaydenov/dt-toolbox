@@ -226,6 +226,44 @@ it ( 'map with indexes', () => {
 
 
 
+
+it ( 'map is "root" aware', () => {
+  // * same as prev. example but without using 'root' in transformation
+  let result;
+
+  dtbox
+    .init ( sample.test_5 )
+    .select ()
+    .folder ( 'age' )
+    .spread ( 'dt', dt => {
+                             result = dt
+                                       .map ( (el,i) => el.replace(el,i)   ) //note: Compare with prev test case.
+                                       .build ()
+              })
+
+    expect ( result ).to.be.an('array')
+}) // it root aware
+
+
+
+
+
+it ( 'list', () => {
+  // * Returns array of objects/arrays
+  let result;
+
+  dtbox
+    .init ( sample.test_3 )
+    .select ()
+    .parent ( 'name' )
+    .spread ( 'dt', dt => result = dt.list().build()   )
+
+  expect ( result ).to.be.an ( 'array' )
+  expect ( result ).to.have.length ( 3 )
+  expect ( result[0]).to.be.an ( 'object' )
+}) // it list
+
+
 }) // describe
 
 
