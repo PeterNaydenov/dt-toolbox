@@ -124,11 +124,25 @@ it ( 'Limit', () => {
 
 
 
-it ( 'Keep' , () => {
+it ( 'Keep: No arguments' , () => {
 	 const result = dtbox
 			             .init ( sample.test_0 )
 			             .select ()
-			             .folder ()
+			             .all ()
+			             .keep ()
+
+	 expect( result._select ).has.length(7)
+}) // it keep
+
+
+
+
+
+it ( 'Keep: Value check' , () => {
+	 const result = dtbox
+			             .init ( sample.test_0 )
+			             .select ()
+			             .all ()
 			             .keep ( el => typeof el === 'boolean' )
 
 	 expect( result._select ).has.length(1)
@@ -138,7 +152,21 @@ it ( 'Keep' , () => {
 
 
 
-it ( 'Remove' , () => {
+it( 'Remove: No arguments' , () => {
+   const result = dtbox
+	    			.init ( sample.test_0 )
+	    			.select ()
+	    			.folder ('array')
+	    			.remove ()
+
+    expect ( result._select ).to.have.length(3)
+}) // it remove
+
+
+
+
+
+it ( 'Remove: Value check' , () => {
    const result = dtbox
 	    			.init ( sample.test_0 )
 	    			.select ()
@@ -237,7 +265,50 @@ it ( 'Deep Array', () => {
 
 
 
+
+
+it ( 'Invert: Empty Selection', () => {
+   const result = dtbox
+	    			.init ( sample.test_0 )
+	    			.select ()
+	    			.invert ()
+
+   expect( result._select ).to.have.length(7)
+}) // it invert empty selection
+
+
+
+
+
+it ( 'Invert: Selection', () => {
+   const result = dtbox
+	    			.init ( sample.test_0 )
+	    			.select ()
+	    			.folder ('array')
+	    			.invert ()
+
+  expect ( result._select ).to.have.length(4)
+  expect ( result._select ).to.not.contains ( 'root/array/0' )
+}) // it invert selected items
+
+
+
+
+
+it ( 'Invert: Select All', () => { 
+   const result = dtbox
+	    			.init ( sample.test_0 )
+	    			.select ()
+	    			.all()
+	    			.invert ()
+
+  expect ( result._select ).to.be.an.empty.array
+}) // it invert select all
+
+
+
 }) // describe
+
 
 
 

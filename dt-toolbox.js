@@ -4,13 +4,14 @@
     DT object & DT Toolbox
     =======================
     
-    Version 1.2.0
+    Version 1.3.0
 
     History notes:
-     - Idea was born on March 17th 2016.
-     - Completely redesigned in September/October 2016
-     - Published on GitHub for first time: January 14th 2017
-     - Compare methods were added: identical, change, same, different, missing. January 29th 2017
+     - Idea was born on March 17th, 2016.
+     - Completely redesigned in September/October, 2016
+     - Published on GitHub for first time: January 14th, 2017
+     - Compare methods were added: identical, change, same, different, missing. January 29th, 2017
+     - Invert selection method was added. February 19th, 2017
 
 */
 
@@ -574,6 +575,26 @@ let dtlib = {
 
 
 
+// -------------------------------> dtlib : INVERT
+, invert () {
+  // * Invert existing selection
+ const
+          me        = this
+        , selection = me._select
+        , valueKeys = simple.getIterator(me.value)
+        ;
+
+  me._select = valueKeys.reduce( (res,item) => {
+                        if ( !selection.includes(item) ) res.push(item)
+                        return res
+                        },[])
+  return me
+} // invert func.
+
+
+
+
+
 // -------------------------------> dtlib : FOLDER
 , folder ( name, deep ) {
  // * Find if string exists in value attribute name.
@@ -669,11 +690,13 @@ let dtlib = {
   // * Reduce selected item by testing their values. If pass the test will remove.
   // Filter
     const me = this;
+    
+    if ( fx === undefined )   return me
     me._select = me._select.reduce ( (res, item ) => {
                                 if ( !fx(me.value[item]) )   res.push ( item )
                                 return res
                        },[])
-      return this
+      return me
  } // remove func.
 
 
@@ -685,11 +708,13 @@ let dtlib = {
   // * Reduce selected item by testing their values. If pass the test will stay.
   // Filter
     const me = this;
+    
+    if ( fx === undefined   )   return me
     me._select = me._select.reduce ( (res, item ) => {
                                 if ( fx(me.value[item]) )   res.push ( item )
                                 return res
                        },[])
-	  return this
+	  return me
   } // keep func.
 
 
@@ -1470,11 +1495,11 @@ exportAPI = {
                 , keyList      : exportlib.keyList    // Returns array of DT object keys;
                 , valueList    : exportlib.valueList  // Returns array of DT object values;
                 , list         : exportlib.list       // Returns array of items;
+                , map          : exportlib.map          // Standard map function
                 , json         : exportlib.json       // Returns JSON format of DT object;
                 , build        : exportlib.build      // Build ST object;
                 
                 // Data Manipulation
-                , map          : exportlib.map          // Standard map function
                 , modifyKeys   : exportlib.modifyKeys   // Add modified keys back to DT object;
                 , keepKeys     : exportlib.keepKeys     // Apply test on array of keys. Keep met the criteria;
                 , removeKeys   : exportlib.removeKeys   // Apply test on array of keys. Remove met the criteria;
@@ -1516,6 +1541,7 @@ API = {
        , space      : dtlib.space           // Selector. Fullfil select with namespace members
        , deepArray  : dtlib.block('array' ) // Selector. Fullfil '_select' with deepest array elements
        , deepObject : dtlib.block('object') // Selector. Fullfil '_select' with deepest object elements
+       , invert     : dtlib.invert          // Selector. Invert existing selection
        , limit      : dtlib.limit           // Filter.   Reduces amount of records in the selection
        , keep       : dtlib.keep            // Filter.   Keeps records in selection if check function returns true
        , remove     : dtlib.remove          // Filter.   Removes records from selection if check function returns true

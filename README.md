@@ -70,6 +70,9 @@ API = {
    , folder     : 'Selector. Fullfil select with list of arguments that have specific string'
    , all        : 'Selector. Same as folder'
    , space      : 'Selector. Fullfil select with namespace members'
+   , deepArray  : 'Selector. Fullfil '_select' with deepest array elements'
+   , deepObject : 'Selector. Fullfil '_select' with deepest object elements'
+   , invert     : 'Selector. Invert existing selection'
    , limit      : 'Filter.   Reduces amount of records in the selection'
    , keep       : 'Filter.   Keeps records in selection if check function returns true'
    , remove     : 'Filter.   Removes records from selection if check function returns true'
@@ -88,6 +91,7 @@ exportAPI = {
    , ignoreKeys   : 'Converts object with nosense keys in array'
    , keyList      : 'Returns array of DT object keys'
    , valueList    : 'Returns array of DT object values'
+   , list         : 'Returns array of items'
    , map          : 'Standard map function'
    , json         : 'Return JSON format of DT object'
    , build        : 'Build ST object'
@@ -294,7 +298,7 @@ dtbox
 
 
 ## More 
-Find more examples in `./test` folder. Over 50 unit tests are on your disposal. Find what is possible start experimenting with the library. 
+Find more examples in `./test` folder. Almost 60 unit tests are on your disposal. Find what is possible start experimenting with the library. 
 
 Let me know what you think by using twitter tag #dttoolbox.
 
@@ -344,6 +348,11 @@ _(Nothing yet)_
 
 
 ## Release History
+
+### 1.3.0 (2017-02-19)
+- [x] API method 'invert' - selector. Invert existing selection
+
+
 
 ### 1.2.0 (2017-02-16)
 - [x] ExportAPI method 'list'. Returns findings in an array.
