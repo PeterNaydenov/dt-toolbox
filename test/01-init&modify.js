@@ -34,8 +34,8 @@ it  ( 'Init: Set empty DT object' , () => {
 it ( 'Init: ST(standard) object' , () => {
  			let dt, result ;
 
- 			    dt = dtbox.init ({name:'Ivan'})
- 			result = dtbox.load ( dt )   //   result === dt
+                dt = dtbox.init ({name:'Ivan'})
+        	result = dtbox.load ( dt )   //   result === dt
 
  			expect ( result.value     ).to.have.property ('root/name' )
  			expect ( result.structure ).to.have.property ('root' )

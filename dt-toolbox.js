@@ -165,8 +165,17 @@ let dtlib = {
 
 	  dt.structure['root'] = simple.folderKind ( target )
 	  dt.namespace['root'] = []
-
-	  lib._scan ( target, namespace , dt )
+    
+    let find = [{ target, namespace, dt }]
+    let complete = false;
+    while ( !complete ) {
+           find = find.reduce ( (res,search) => {
+                                                let update = lib._scan ( search )
+                                                res = res.concat ( update )
+                                                return res
+                        },[])
+          if ( find.length == 0 )   complete = true
+    }
 
     return dt
  } // scan func.
@@ -544,7 +553,7 @@ let dtlib = {
       case 'key'    : 
   		case 'keys'   : 
   							 selection = me._select.reduce ( (res, el,i) => {
-			  													  res['root/' + i] = el.replace('root/','') 
+			  													  res[`root/${i}`] = el.replace('root/','') 
 			  													  return res
   							               }, simple.value() )
   							        break
@@ -1267,26 +1276,35 @@ _build : function _build ( word, selectors, data ) {
 
 
 
- , _scan : function _scan ( list , namespace , dt ) {
+
+, _scan : function _scan ( request ) {
  	// * Convert ST object to DT
- 	let iterator;
-    iterator = simple.getIterator ( list )
-    iterator.forEach ( el => {
-                const prop = `${namespace}/${el}`;
+   let 
+        {target, namespace, dt} = request
+      , iterator = simple.getIterator(target)
+      ;
 
-                if ( simple.notObject ( list[el] )   ) {
-                               dt.value[prop] = list[el]
-                               const obj = simple.getUlt (namespace )
-                               dt.namespace[obj].push(prop)
-                     }
-                else {
-                              dt.structure[prop] = simple.folderKind ( list[el] )
-                              if ( !dt.namespace.hasOwnProperty(el)     )   dt.namespace[el] = []
-    													lib._scan ( list[el], prop , dt )
-    			           }
-           }) // foreach interator
-  } // _scan func.
+   return iterator.reduce ( (res,key) => {
+                   let 
+                         isPrimitive = simple.notObject(target[key])
+                       , location = `${namespace}/${key}`
+                       ;
 
+                    if ( isPrimitive ) {
+                                          dt.value[location] = target[key]
+                                          const name = simple.getUlt (namespace )
+                                          dt.namespace[name].push(location)
+                                          return res
+                         }
+                    else {
+                                         dt.structure[location] = simple.folderKind ( target[key] )
+                                         if ( !dt.namespace.hasOwnProperty(key)   )   dt.namespace[key] = []
+                                         let result = { target : target[key], namespace: location, dt }
+                                         res.push(result)
+                                         return res
+                         }
+            },[]) // map key
+} // _scan func.
 
 
 

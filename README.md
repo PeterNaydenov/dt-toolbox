@@ -9,6 +9,7 @@ Data manipulation tool:
   - Select data in DT objects;
   - Filter selection: limit/keep/remove/deep;
   - Extract and manipulate data chunks;
+  - Replacement for underscore/lodash libraries;
 
 Deliberately designed to work nicely with JSON and simplify data creation, searching and extracting data processes.
 
@@ -154,6 +155,16 @@ Same object in DT will look like:
   , 'root/friends/3'      : 'Vasil'
 }
 ```
+
+Convert any standard javascript object to DT using dt-toolbox:
+
+```js
+let dt = dtbox.init ( standard ).value
+```
+
+
+
+
 
 Let's play with DT Toolbox:
 
@@ -349,8 +360,14 @@ _(Nothing yet)_
 
 ## Release History
 
+### 1.4.0 (2017-03-28)
+- [x] Fix: Very large files can cause 'stack overflow';
+
+
+
 ### 1.3.0 (2017-02-19)
-- [x] API method 'invert' - selector. Invert existing selection
+- [x] API method 'invert' - selector. Invert existing selection;
+- [ ] Warning: Very large files can cause 'stack overflow';
 
 
 
@@ -360,6 +377,7 @@ _(Nothing yet)_
 - [x] API method 'deepObject' - selector
 - [x] API method 'loadFast' - load DT data without meta information calculation. 
 - [x] ExportLib method `map` is 'root/' aware. 
+- [ ] Warning: Very large files can cause 'stack overflow';
 
 
 
@@ -367,6 +385,7 @@ _(Nothing yet)_
 
  - [x] Fix: ExportAPI method `map` has `index` argument;
  - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
+ - [ ] Warning: Very large files can cause 'stack overflow';
 
 
 
@@ -376,6 +395,7 @@ _(Nothing yet)_
  - [x] Method `spreadAll` was added and could be used instead the chain: .select().all().spread()
  - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
  - [ ] Error: ExportAPI method `map` has no `index` argument;
+ - [ ] Warning: Very large files can cause 'stack overflow';
 
 
 
@@ -386,6 +406,7 @@ _(Nothing yet)_
  - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
  - [ ] Error: Method `empty` is actually an object;
  - [ ] Error: ExportAPI method `map` has no `index` argument;
+ - [ ] Warning: Very large files can cause 'stack overflow';
 
 
 
