@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 1.3.0
+    Version 1.5.0
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -888,7 +888,8 @@ map ( fx ) {
 
   const result = keys.reduce ( (res,item,i) => { 
                                                   let newKey = fx ( item, i )
-                                                  if ( !newKey.includes('root/') )    newKey = `root/${newKey}`
+                                                  if ( typeof newKey !== 'string'    ) newKey = item
+                                                  if ( newKey.indexOf('root/') != 0  ) newKey = `root/${newKey}`
                                                   res[newKey]  = me [ item ]
                                                   return res
                        }, simple.value())
@@ -977,7 +978,34 @@ map ( fx ) {
       })
 
  return result
-} // ignoreKeys
+} // ignoreKeys func.
+
+
+
+
+
+// -------------------------------> exportlib : CUT
+, cut ( number ) {
+  // * Cut out number of key elements
+  const 
+          me      = this
+        , oldKeys = me.keyList()
+        ;
+
+ if ( typeof number !== 'number' ) return me
+ function _cut ( x, count ) {
+                              let ix = x.indexOf ( '/' )
+                              
+                              if ( ix == -1    ) count = 0
+                              else               count--
+                              if ( count  <  1 ) return x.substring(ix+1)
+                              let r = _cut ( x.substring(ix+1), count ) 
+                              return r
+          }
+ 
+ let newKeys = oldKeys.map ( k => `root/${_cut(k,number+1)}`   )
+ return me.modifyKeys(oldKeys,newKeys)
+} // cut func.
 
 
 
@@ -1101,6 +1129,28 @@ map ( fx ) {
    		if ( !data ) data = this
      	return JSON.stringify ( data )	
      } // json func.
+
+
+
+
+
+ // -------------------------------> exportlib : FILE
+, file () {
+  // * Convert dt to file array
+  const me = this;
+
+  let result = me.keyList().reduce ( (res,item) => {
+                          const arr = item.split('/')
+                          let str = arr.reduce( (r,el) => {
+                                        if ( el == 'root'         ) return r
+                                        if ( !isNaN(parseInt(el)) ) return r
+                                        return r + `/${el}`
+                                        },'root')
+                          res.push(`${str}/${me[item]}`)
+                          return res
+                  },[])
+  return result
+} // file func.
 
 
 
@@ -1510,11 +1560,13 @@ exportAPI = {
                 // Structure Manipulation
                   assemble     : exportlib.assemble   // Remove all duplications in the keys and shrinks the nestling as possible
                 , ignoreKeys   : exportlib.ignoreKeys // Remove keys that have no value. Converts object with nosense keys in array;
+                , cut          : exportlib.cut        // Cut out number of key elements;
                 , keyList      : exportlib.keyList    // Returns array of DT object keys;
                 , valueList    : exportlib.valueList  // Returns array of DT object values;
                 , list         : exportlib.list       // Returns array of items;
-                , map          : exportlib.map          // Standard map function
+                , map          : exportlib.map        // Standard map function
                 , json         : exportlib.json       // Returns JSON format of DT object;
+                , file         : exportlib.file       // Returns file format array;
                 , build        : exportlib.build      // Build ST object;
                 
                 // Data Manipulation

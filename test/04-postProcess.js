@@ -264,6 +264,91 @@ it ( 'list', () => {
 }) // it list
 
 
+
+
+
+it ( 'cut', () => {
+// * Cut out number of key elements
+/* how it works: 
+   dt = {
+             root/deep/key/example : 55
+           , root/other/key/sample : 'Text'
+        }
+   result = dt.cut(2) 
+   result:
+   {
+         root/example : 55
+       , root/sample  : 'Text'
+   }
+ Notes: 
+    - Deep props will overwrite externals if have same name;
+    - If cut number is larger then existing key elements - last key elements will stay
+    - Result can not be predicted with data like:
+       {
+            'root/Peter/age' : 43
+          , 'root/Vlado/age' : 66
+          , 'root/Ivan/age'  : 22
+       }
+    - use with care;
+*/
+let cutTwo, cutTen, cutFail;
+
+let data = {
+                 'Peter/web/user'        : 'dreamgfx'
+               , 'Peter/web/realname'    : 'Peter'
+               , 'Peter/web/profile/age' : 43
+               , 'age' : 66
+}
+
+dtbox
+  .load ( data )
+  .select()
+  .all()
+  .spread ( 'dt', dt => { 
+                           cutTwo  = dt.cut(2)   // Will remove 'Peter/web'
+                           cutTen  = dt.cut(10)  // Will keep only last key element. User, realname, age.
+                           cutFail = dt.cut()    // Will ignore cut. Expected argument type - number
+          })
+
+  expect ( cutTwo ).to.have.property('root/age')
+  expect ( cutTwo['root/age'] ).to.be.equal(66)
+
+  expect ( cutTen ).to.have.property('root/age')
+  expect ( cutTen['root/age'] ).to.be.equal(43)
+
+  expect ( cutFail ).to.have.property('root/Peter/web/user')  
+
+}) // it cut
+
+
+
+
+
+it ( 'file', () => {
+// * Returns file format array
+let result;
+const data = {
+                  'root/type/0'      : 'user'
+                , 'root/12/username' : 'peter'
+                , 'root/1/username'  : 'stefan'
+                , 'root/state'       : 'active'
+             };
+
+
+dtbox
+  .load(data)
+  .spreadAll ( 'dt', dt => {
+                    result = dt.file()
+        })
+
+  expect ( result ).to.be.an.array
+  expect ( result ).contains ( 'root/username/peter'  )
+  expect ( result ).contains ( 'root/username/stefan' )
+  expect ( result ).contains ( 'root/type/user'       )
+  expect ( result ).contains ( 'root/state/active'    )
+}) // it file
+
+
 }) // describe
 
 

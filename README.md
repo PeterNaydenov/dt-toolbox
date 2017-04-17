@@ -90,13 +90,15 @@ exportAPI = {
   // * Structure Manipulation 
      assemble     : 'Remove all duplications in the keys and shrinks th possible'
    , ignoreKeys   : 'Converts object with nosense keys in array'
+   , cut          : 'Cut out number of key elements'
    , keyList      : 'Returns array of DT object keys'
    , valueList    : 'Returns array of DT object values'
    , list         : 'Returns array of items'
    , map          : 'Standard map function'
    , json         : 'Return JSON format of DT object'
+   , file         : 'Returns file format array'
    , build        : 'Build ST object'
-                
+
   // * Data Manipulation 
    , modifyKeys   : 'Add modified keys back to DT object'
    , keepKeys     : 'Apply test on array of keys. Keep met the criteria'
@@ -345,6 +347,7 @@ _(Nothing yet)_
 
 
 ## Roadmap
+- Add support for **key-value string** format that will simplify the work with Redis;
 - API method `folder` can receive second argument `deep`. At the moment `deep` is absolute deep and will be changed to relative;
 - Upgrade error handling. Add proper error messages;
 - Create API methods documentation;
@@ -360,14 +363,22 @@ _(Nothing yet)_
 
 ## Release History
 
+### 1.5.0 (2017-04-17)
+- [x] ExportAPI method 'cut' will cut out number of key elements;
+- [x] ExportAPI method 'file' will convert dt data to file format;
+- [x] Fix: ExportAPI method 'map' could break the app if callback function does not return a string;
+
+
+
 ### 1.4.0 (2017-03-28)
 - [x] Fix: Very large files can cause 'stack overflow';
-
+- [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
 
 
 ### 1.3.0 (2017-02-19)
 - [x] API method 'invert' - selector. Invert existing selection;
 - [ ] Warning: Very large files can cause 'stack overflow';
+- [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
 
 
 
@@ -378,6 +389,8 @@ _(Nothing yet)_
 - [x] API method 'loadFast' - load DT data without meta information calculation. 
 - [x] ExportLib method `map` is 'root/' aware. 
 - [ ] Warning: Very large files can cause 'stack overflow';
+- [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
+
 
 
 
@@ -386,6 +399,8 @@ _(Nothing yet)_
  - [x] Fix: ExportAPI method `map` has `index` argument;
  - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
  - [ ] Warning: Very large files can cause 'stack overflow';
+ - [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
+
 
 
 
@@ -396,6 +411,8 @@ _(Nothing yet)_
  - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
  - [ ] Error: ExportAPI method `map` has no `index` argument;
  - [ ] Warning: Very large files can cause 'stack overflow';
+ - [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
+
 
 
 
@@ -403,10 +420,12 @@ _(Nothing yet)_
 
  - [x] Method `empty` returns empty DT object;
  - [x] Compare method were added: `identical`, `change`, `same`, `different`, `missing`
- - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
  - [ ] Error: Method `empty` is actually an object;
  - [ ] Error: ExportAPI method `map` has no `index` argument;
  - [ ] Warning: Very large files can cause 'stack overflow';
+ - [ ] Warning: ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
+ - [ ] Warning: ExportAPI method `map` could break the app if callback function does not return a string;
+
 
 
 
