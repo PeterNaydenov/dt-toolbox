@@ -349,7 +349,50 @@ dtbox
 }) // it file
 
 
+
+
+
+it ( 'keyValue', () => {
+  let result;
+  const data = {
+                     'user'        : 'dreamgfx'
+                   , 'realname'    : 'Peter'
+                   , 'profile/age' : 43
+               }
+  dtbox
+     .load(data)
+     .spreadAll  ( 'dt', dt => result = dt.keyValue()   )
+
+  expect ( result ).to.be.a.string
+  expect ( result ).to.be.equal ( 'root/user dreamgfx root/realname Peter root/profile/age 43' )
+}) // it keyValue
+
+
+
+
+
+it ( 'keyValue with custom divider', () => {
+  let result;
+  const data = {
+                     'user'        : 'dreamgfx'
+                   , 'realname'    : 'Peter'
+                   , 'profile/age' : 43
+               }
+  dtbox
+     .load(data)
+     .spreadAll  ( 'dt', dt => result = dt.keyValue(';')   )
+
+  expect ( result ).to.be.a.string
+  expect ( result ).to.be.equal ( 'root/user dreamgfx; root/realname Peter; root/profile/age 43;' )
+}) // it keyValue
+
+
+
 }) // describe
+
+
+
+
 
 
 

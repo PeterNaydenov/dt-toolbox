@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 1.5.0
+    Version 1.6.0
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -12,7 +12,7 @@
      - Published on GitHub for first time: January 14th, 2017
      - Compare methods were added: identical, change, same, different, missing. January 29th, 2017
      - Invert selection method was added. February 19th, 2017
-
+     - String format support introduces. April 22th, 2017
 */
 
 
@@ -1156,6 +1156,29 @@ map ( fx ) {
 
 
 
+ // -------------------------------> exportlib : KEY-VALUE
+, keyValue ( customDivider) {
+  // * Returns key-value string
+  const 
+          me  = this
+        , div = customDivider || ''
+        , keys = me.keyList()
+        ;
+  
+  let result;
+  let ls = me.keyList()
+
+  result = ls
+             .map  ( (k,i) => `${k} ${me[ls[i]]}`   )
+             .join ( `${div} ` ) + div
+
+  return result       
+} // keyValue func.
+
+
+
+
+
  // -------------------------------> exportlib : LIST
 , list () {
   // * List of items
@@ -1567,6 +1590,7 @@ exportAPI = {
                 , map          : exportlib.map        // Standard map function
                 , json         : exportlib.json       // Returns JSON format of DT object;
                 , file         : exportlib.file       // Returns file format array;
+                , keyValue     : exportlib.keyValue   // Returns key-value string
                 , build        : exportlib.build      // Build ST object;
                 
                 // Data Manipulation

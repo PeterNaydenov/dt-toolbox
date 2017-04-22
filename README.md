@@ -3,12 +3,13 @@
 
 
 Data manipulation tool:
-  - Converting object to flatten version(DT) and reverse(ST);
+  - Converts object to flatten version(DT) and reverse(ST);
   - Modify DT objects: add/update/overwrite;
   - Compare DT objects: identical/change/same/different/missing;
   - Select data in DT objects;
-  - Filter selection: limit/keep/remove/deep;
+  - Accumulative filter selection: limit/keep/remove/deep;
   - Extract and manipulate data chunks;
+  - Converts objects in key-value string;
   - Replacement for underscore/lodash libraries;
 
 Deliberately designed to work nicely with JSON and simplify data creation, searching and extracting data processes.
@@ -97,6 +98,7 @@ exportAPI = {
    , map          : 'Standard map function'
    , json         : 'Return JSON format of DT object'
    , file         : 'Returns file format array'
+   , keyValue     : 'Returns key-value string'
    , build        : 'Build ST object'
 
   // * Data Manipulation 
@@ -347,7 +349,6 @@ _(Nothing yet)_
 
 
 ## Roadmap
-- Add support for **key-value string** format that will simplify the work with Redis;
 - API method `folder` can receive second argument `deep`. At the moment `deep` is absolute deep and will be changed to relative;
 - Upgrade error handling. Add proper error messages;
 - Create API methods documentation;
@@ -362,6 +363,11 @@ _(Nothing yet)_
 
 
 ## Release History
+
+### 1.6.0 (2017-04-22)
+- [x] ExportAPI method `keyValue` returns a key-value string;
+
+
 
 ### 1.5.0 (2017-04-17)
 - [x] ExportAPI method 'cut' will cut out number of key elements;
