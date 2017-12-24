@@ -3,18 +3,23 @@
   "version": "1.6.0",
   "description": "Data manipulation tool",
   "main": "src/dt-toolbox.js",
+  "scripts": {
+    "test": "mocha test",
+    "build": "webpack",
+    "cover": "nyc mocha test"
+  },
   "directories": {
     "test": "test"
   },
   "dependencies": {},
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",
-    "nyc": "^11.4.1"
-  },
-  "scripts": {
-    "test": "mocha test",
-    "cover": "nyc mocha test"
+    "nyc": "^11.4.1",
+    "webpack": "^3.10.0"
   },
   "repository": {
     "type": "git",
