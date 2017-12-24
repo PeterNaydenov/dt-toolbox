@@ -13,7 +13,7 @@ module.exports = {
     , output: {
               filename: "dt-toolbox.js"
             , path: __dirname + "/dist"
-            , library: 'dt-toolbox'
+            , library: 'dtbox'
             , libraryTarget: "umd"
             , umdNamedDefine : true
        }
