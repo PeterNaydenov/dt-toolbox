@@ -1,7 +1,7 @@
 'use strict'
 
 const		 
-		  dtbox = require  ( '../dt-toolbox' )
+		  dtbox = require  ( '../src/dt-toolbox' )
 		, sample = require ( '../test-data/sample' )
 		, chai = require   ( 'chai'          )
 		, expect = require ( 'chai'   ).expect
@@ -30,7 +30,8 @@ describe ( 'Compare Operations', () => {
     
     // NOTE: Compare methods expect DT!
     expect ( identResult ).to.have.property ( 'root/profile/active' )
-    expect ( result_ST ).to.be.empty.object
+    expect ( result_ST ).to.be.empty
+    expect ( result_ST ).to.be.an ( 'object' )
  }) // it same
  
 
@@ -65,7 +66,8 @@ describe ( 'Compare Operations', () => {
      expect ( result['root/age']).to.be.equal(43)
      expect ( result ).to.not.have.property ( 'root/name' )
 
-     expect ( result_ST ).to.be.empty.object
+     expect ( result_ST ).to.be.empty
+     expect ( result_ST ).to.be.an ( 'object' )
  }) // it change
 
 
@@ -101,7 +103,8 @@ describe ( 'Compare Operations', () => {
      expect ( result['root/name']).to.be.equal('Ivan')
      expect ( result).to.not.have.property ( 'gender' )
 
-     expect ( result_ST ).to.be.empty.object
+     expect ( result_ST ).to.be.empty
+     expect ( result_ST ).to.be.an ( 'object' )
  }) // it same
 
 

@@ -1,7 +1,7 @@
 'use strict'
 
 var		 
-		  dtbox = require  ( '../dt-toolbox' )
+		  dtbox = require  ( '../src/dt-toolbox' )
 		, sample = require ( '../test-data/sample' )
 		, chai = require   ( 'chai'          )
 		, expect = require ( 'chai'   ).expect
@@ -37,12 +37,12 @@ it ( 'Parent', () => {
 		  expect ( result ).to.have.property      ( 'namespace' )
 		  
 		  // Convertion to DT format success
-		  expect ( result ).to.have.deep.property ( 'value.root/0/genre'   )
-		  expect ( result ).to.have.deep.property ( 'value.root/2/profile/age' )
+		  expect ( result.value ).to.have.deep.property ( 'root/0/genre'       )
+		  expect ( result.value ).to.have.deep.property ( 'root/2/profile/age' )
 
 		  // Manipulations on export
 		  expect ( updateObject ).to.be.an ( 'array' )
-		  expect ( updateObject ).has.deep.property ( '0.id' )
+		  expect ( updateObject[0] ).has.property ( 'id' )
 
   }) // it select
 
@@ -302,7 +302,8 @@ it ( 'Invert: Select All', () => {
 	    			.all()
 	    			.invert ()
 
-  expect ( result._select ).to.be.an.empty.array
+  expect ( result._select ).to.be.an.empty
+  expect ( result._select ).to.be.an ( 'array' )
 }) // it invert select all
 
 

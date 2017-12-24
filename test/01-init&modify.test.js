@@ -1,7 +1,7 @@
 'use strict'
 
 var		 
-		  dtbox = require  ( '../dt-toolbox' )
+		  dtbox = require  ( '../src/dt-toolbox' )
 		, sample = require ( '../test-data/sample' )
 		, chai = require   ( 'chai'          )
 		, expect = require ( 'chai'   ).expect
@@ -206,14 +206,14 @@ it ( 'Load: Preprocess', () => {
 																	// Important: function must return !
 																	return result
 							                })
-
-			expect ( result ).to.not.have.deep.property ( 'value.root/name' )
-			expect ( result ).to.not.have.deep.property ( 'value.root/age'  )
+											
+			expect ( result.value ).to.not.have.property ( 'root/name' )
+			expect ( result.value ).to.not.have.deep.property ( 'root/age'  )
 			
-			expect ( result ).to.have.deep.property ( 'value.root/profile/active' )
-			expect ( result ).to.have.deep.property ( 'value.root/array/0'        )
+			expect ( result.value ).to.have.deep.property ( 'root/profile/active' )
+			expect ( result.value ).to.have.deep.property ( 'root/array/0'        )
 			
-			expect ( result.namespace.root ).to.be.empty.array;
+			expect ( result.namespace.root ).to.be.empty;
       }) // it preprocess
 
 
@@ -231,7 +231,7 @@ it ( 'Load: Load fast', () => {
    result = dtbox.loadFast ( loadData )
 
    // Meta data should not be calculated
-   expect ( result['namespace']['root'] ).to.be.empty.array
+   expect ( result['namespace']['root'] ).to.be.empty
    expect ( result['structure']['root'] ).to.be.equal ( 'object' )
 
    // Values are available   
@@ -274,7 +274,7 @@ it  ( 'Modify: Add' , () => {
 			                .update ( sample.test_0   );
 
  			// updates only existing values
- 			expect ( result                    ).to.have.deep.property ( 'value.root/name'  )
+ 			expect ( result.value              ).to.have.deep.property ( 'root/name'  )
  			expect ( result.value['root/name'] ).to.be.equal ( 'Peter' )
  			expect ( result.namespace          ).to.not.have.property ( 'array' )
     }) // it modify: Update
@@ -349,10 +349,10 @@ it ( 'Show Error Log', () => {
          .log ( err =>  result = err )
          .spread ( 'dt', dt => more = dt.valueList() )
 
-	expect ( result ).to.be.array
+	expect ( result ).to.be.an ( 'array' )
 	expect ( result ).to.have.length ( 1 )
 
-	expect ( more ).to.be.array
+	expect ( more ).to.be.an ( 'array' )
 	expect ( more ).to.have.length (3)
 }) // it insert
 
@@ -365,7 +365,8 @@ it ( 'Get empty DT', () => {
     const data = dtbox.empty();
     const result = data.keyList();
 
-    expect ( data ).to.be.an.empty.object
+    expect ( data ).to.be.an ( 'object' )
+    expect ( data ).to.be.an.empty
     expect ( result ).to.be.an ( 'array' )
 }) // it empty value
 

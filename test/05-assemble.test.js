@@ -1,7 +1,7 @@
 'use strict'
 
 var		 
-		  dtbox = require  ( '../dt-toolbox' )
+		  dtbox = require  ( '../src/dt-toolbox' )
 		, sample = require ( '../test-data/sample' )
 		, chai = require   ( 'chai'          )
 		, expect = require ( 'chai'   ).expect

@@ -2,17 +2,19 @@
   "name": "dt-toolbox",
   "version": "1.6.0",
   "description": "Data manipulation tool",
-  "main": "dt-toolbox.js",
+  "main": "src/dt-toolbox.js",
   "directories": {
     "test": "test"
   },
   "dependencies": {},
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "nyc": "^11.4.1"
   },
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha test",
+    "cover": "nyc mocha test"
   },
   "repository": {
     "type": "git",
@@ -31,5 +33,19 @@
   "bugs": {
     "url": "https://github.com/PeterNaydenov/dt-toolbox/issues"
   },
-  "homepage": "https://github.com/PeterNaydenov/dt-toolbox#readme"
+  "homepage": "https://github.com/PeterNaydenov/dt-toolbox#readme",
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "exclude": [
+      "node_modules",
+      "test",
+      "test-data"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  }
 }

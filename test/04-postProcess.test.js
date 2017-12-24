@@ -1,7 +1,7 @@
 'use strict'
 
 var		 
-		  dtbox = require  ( '../dt-toolbox' )
+		  dtbox = require  ( '../src/dt-toolbox' )
 		, sample = require ( '../test-data/sample' )
 		, chai = require   ( 'chai'          )
 		, expect = require ( 'chai'   ).expect
@@ -47,11 +47,10 @@ it ( 'keepKeys', () => {
                 result = dt.keepKeys ( k => k.length > 2 ).keyList()
        })
 
-   expect ( result ).is.an.array
+   expect ( result ).is.an ( 'array' )
    expect ( result ).contains ( 'root/array/0' )
    expect ( result ).contains ( 'root/profile/active' )
    expect ( result ).not.contains ( 'root/name' )
-    
 }) // it reduceKeys
 
 
@@ -155,7 +154,7 @@ it ( 'build', () => {
                             result = dt.build()
                })
 
-        expect ( result ).is.an.array
+        expect ( result ).is.an( 'array' )
         expect ( result ).contains ( 'lele' )
 }) // it build
 
@@ -176,7 +175,7 @@ it ( 'ignoreKeys', () => {
 
       })
  
-  expect ( result ).to.be.an.array
+  expect ( result ).to.be.an ( 'array' )
   expect ( result ).to.have.length (4)
 }) // it ignoreKeys
 
@@ -199,7 +198,7 @@ it ( 'map', () => {
                           .build ()
          })
 
-    expect ( result ).to.be.an.array
+    expect ( result ).to.be.an ( 'array' )
     expect ( result ).to.have.length ( 4 )
     expect ( result[0]).to.have.property ( 'firstName' )
 }) // ignoreKeys again
@@ -341,7 +340,7 @@ dtbox
                     result = dt.file()
         })
 
-  expect ( result ).to.be.an.array
+  expect ( result ).to.be.an ( 'array' )
   expect ( result ).contains ( 'root/username/peter'  )
   expect ( result ).contains ( 'root/username/stefan' )
   expect ( result ).contains ( 'root/type/user'       )
