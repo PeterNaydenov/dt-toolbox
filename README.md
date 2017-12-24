@@ -12,7 +12,7 @@ Data manipulation tool:
   - Converts objects in key-value string;
   - Replacement for underscore/lodash libraries;
 
-Deliberately designed to work nicely with JSON and simplify data creation, searching and extracting data processes.
+Deliberately designed to work nicely with JSON and simplify data creation, searching and extracting data processes. **Works in node projects and browsers**.
 
 
 
@@ -363,6 +363,15 @@ _(Nothing yet)_
 
 
 ## Release History
+
+### 1.7.0 (2017-12-24)
+- [x] Browser version is available;
+- [x] Dependencies updates ( Mocha, chai );
+- [x] Istambul coverage tool was added;
+- [x] Some minor project structure changes;
+- [x] Unit tests updates for Mocha v.4;
+
+
 
 ### 1.6.0 (2017-04-22)
 - [x] ExportAPI method `keyValue` returns a key-value string;
