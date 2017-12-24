@@ -174,7 +174,25 @@ it ( 'Remove: Value check' , () => {
 	    			.remove ( el => el == 'Peter' )
 
     expect ( result._select ).not.contains ( 'root/name' )
-}) // it remove
+}) // it remove: value check
+
+
+
+
+
+it ( 'Remove: Key check' , () => {
+   const result = dtbox
+	    			.init ( sample.test_0 )
+	    			.select ()
+	    			.all ()
+	    			.remove ( (v,k) => k.includes ('array') )
+
+    expect ( result._select ).has.length ( 4 )
+	expect ( result._select ).to.contain ( 'root/name' )
+	expect ( result._select ).to.contain ( 'root/age' )
+	expect ( result._select ).to.contain ( 'root/eyes' )
+	expect ( result._select ).to.contain ( 'root/profile/active' )
+}) // it remove: Key check
 
 
 

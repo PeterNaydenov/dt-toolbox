@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 1.6.0
+    Version 1.7.0
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -13,6 +13,7 @@
      - Compare methods were added: identical, change, same, different, missing. January 29th, 2017
      - Invert selection method was added. February 19th, 2017
      - String format support introduces. April 22th, 2017
+     - Works in browsers. December 24th, 2017
 */
 
 
@@ -702,7 +703,7 @@ let dtlib = {
     
     if ( fx === undefined )   return me
     me._select = me._select.reduce ( (res, item ) => {
-                                if ( !fx(me.value[item]) )   res.push ( item )
+                                if ( !fx(me.value[item],item) )   res.push ( item )
                                 return res
                        },[])
       return me
