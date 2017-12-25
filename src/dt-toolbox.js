@@ -721,7 +721,7 @@ let dtlib = {
     
     if ( fx === undefined   )   return me
     me._select = me._select.reduce ( (res, item ) => {
-                                if ( fx(me.value[item]) )   res.push ( item )
+                                if ( fx(me.value[item], item) )   res.push ( item )
                                 return res
                        },[])
 	  return me
@@ -1207,7 +1207,7 @@ map ( fx ) {
                                             let it = simple.getUlt(item)
                                             let newKey = `root/${replaceMap[find]}/${it}` 
                                             res[ newKey ] = me [ item ]
-                                    }
+                                       }
                                     else    res[item] = me[item]
                                     return res
                              }, simple.value() )

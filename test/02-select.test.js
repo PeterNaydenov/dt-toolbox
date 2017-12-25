@@ -152,6 +152,21 @@ it ( 'Keep: Value check' , () => {
 
 
 
+it ( 'Keep: Key check' , () => {
+	 const result = dtbox
+			             .init ( sample.test_0 )
+			             .select ()
+			             .all ()
+			             .keep ( (el,id) => id.includes ('name') )
+
+	 expect( result._select ).has.length ( 1 )
+	 expect( result._select ).contains   ( 'root/name' )
+}) // it keep: key check
+
+
+
+
+
 it( 'Remove: No arguments' , () => {
    const result = dtbox
 	    			.init ( sample.test_0 )
