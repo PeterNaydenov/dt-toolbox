@@ -364,6 +364,13 @@ _(Nothing yet)_
 
 ## Release History
 
+
+### 1.8.0 (2017-12-27)
+- [x] Method 'remove' has new argument-key. Evaluate the key name;
+- [x] Method 'keep' has new argument-key. Evaluate the key name;
+
+
+
 ### 1.7.0 (2017-12-24)
 - [x] Browser version is available;
 - [x] Dependencies updates ( Mocha, chai );

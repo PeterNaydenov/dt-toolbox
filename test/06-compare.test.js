@@ -1,10 +1,10 @@
 'use strict'
 
 const		 
-		  dtbox = require  ( '../src/dt-toolbox' )
+		  dtbox  = require ( '../src/dt-toolbox'   )
 		, sample = require ( '../test-data/sample' )
-		, chai = require   ( 'chai'          )
-		, expect = require ( 'chai'   ).expect
+		, chai   = require ( 'chai'                )
+		, expect = chai.expect
 		;
 
 
@@ -15,21 +15,30 @@ const
 describe ( 'Compare Operations', () => {
 
 
+  
  it ( 'Identical', () => {
     let 
           identResult
         , result_ST
         ;
+    const test = {
+                      name: 'Peter'
+                    , array : [ 1,15 ]
+                 }
 
-    const sampleDT = dtbox.init(sample.test_0).value;
+    const sampleDT = dtbox.init( test ).value;
 
     dtbox
       .init ( sample.test_0 )
       .identical ( sampleDT, dt => identResult = dt )
       .identical ( sample.test_0, dt => result_ST = dt)
-    
+   
     // NOTE: Compare methods expect DT!
-    expect ( identResult ).to.have.property ( 'root/profile/active' )
+    expect ( identResult ).to.have.property ( 'root/name' )
+    expect ( identResult['root/name']).to.be.equal ( 'Peter' )
+    expect ( identResult ).to.have.property ( 'root/array/0' )
+    expect ( identResult['root/array/0']).to.be.equal ( 1 )
+    expect ( identResult).to.not.have.property ( 'root/array/1' )
     expect ( result_ST ).to.be.empty
     expect ( result_ST ).to.be.an ( 'object' )
  }) // it same

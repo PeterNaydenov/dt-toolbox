@@ -1,10 +1,10 @@
 'use strict'
 
-var		 
-		  dtbox = require  ( '../src/dt-toolbox' )
+const		 
+		  dtbox = require  ( '../src/dt-toolbox'   )
 		, sample = require ( '../test-data/sample' )
-		, chai = require   ( 'chai'          )
-		, expect = require ( 'chai'   ).expect
+		, chai = require   ( 'chai'                )
+		, expect = chai.expect
 		;
 
 

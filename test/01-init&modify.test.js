@@ -1,10 +1,10 @@
 'use strict'
 
-var		 
+const		 
 		  dtbox = require  ( '../src/dt-toolbox' )
 		, sample = require ( '../test-data/sample' )
 		, chai = require   ( 'chai'          )
-		, expect = require ( 'chai'   ).expect
+		, expect = chai.expect
 		;
 
 
@@ -280,8 +280,23 @@ it  ( 'Modify: Add' , () => {
     }) // it modify: Update
 
 
+
+
+
+it ( 'Modify: Update with instructions', () => {
+			const result = dtbox 
+			                .init   ( {name : 'Ivan'} )
+			                .update ( sample.test_0 , 'key' );
+
+ 			// updates only existing values
+ 			expect ( result.value              ).to.have.deep.property ( 'root/name' )
+ 			expect ( result.value['root/name'] ).to.be.equal ( 'name' )
+ 			expect ( result.namespace          ).to.not.have.property ( 'array' )
+    }) // it modify: Update
+
+
  
- it ( 'Modify: Overwrite', () => {  
+it ( 'Modify: Overwrite', () => {  
 			const result = dtbox 
 			                .init      ( sample.test_0 )
 			                .update    ( 
@@ -310,6 +325,36 @@ it  ( 'Modify: Add' , () => {
 
 
 
+it ( 'Modify: Overwrite with instructions', () => {  
+			const result = dtbox 
+			                .init      ( sample.test_0 )
+			                .update    ( 
+			                				{ 
+			                					  name : 'Ivan'
+			                					, 'second-number' : '8899 444 444'
+			                		   })
+			                .overwrite ( 
+			                				{ 
+			                					   name : 'Stefan'
+			                					, 'prime-number'  : '8899 222 222'
+			                					, 'dummy' : [12,24,55]
+			                		   }, 'key' );
+
+ 			// updates existing values and adds new data including 'namespace' and 'structures'
+ 			expect ( result.value['root/name']        ).to.be.equal ( 'name' )
+ 			expect ( result.value                     ).to.not.have.property ( 'root/second-number' )
+			expect ( result.value                     ).to.have.property ( 'root/prime-number' )
+			expect ( result.value['root/prime-number']).to.be.equal ( 'prime-number' )
+
+ 			expect ( result.namespace               ).to.have.property ( 'dummy'      )
+ 			expect ( result.structure               ).to.have.property ( 'root/dummy' )
+ 			expect ( result.structure['root/dummy'] ).to.be.equal ( 'array' )
+    })  // it modify: Overwrite
+
+
+
+
+
 it ( 'Modify: Insert', () => {
 	// * Insert data on specified key, when the key represents an array.
 	
@@ -326,8 +371,65 @@ it ( 'Modify: Insert', () => {
 	expect ( result.structure ).to.have.property ('root' )
 	expect ( result.structure ).to.have.property ('root/friends' )
 	expect ( result.structure['root/friends'] ).to.be.equal ( 'array' )
-
 }) // it insert
+
+
+
+
+
+it ( 'Modify: Insert text', () => {
+	// * Insert data on specified key, when the key represents an array.
+	
+	const result = dtbox
+	                 .init ()
+	                 .add ( sample.test_10, 'files' )
+	                 .insert ( 'Tosho' , 'friends' )
+	                 .select()
+	                 .folder()
+
+	expect ( result.value ).to.have.property ( 'root/friends/3' )	
+	expect ( result.structure ).to.have.property ('root' )
+	expect ( result.structure ).to.have.property ('root/friends' )
+	expect ( result.structure['root/friends'] ).to.be.equal ( 'array' )
+}) // it insert text
+
+
+
+
+
+it ( 'Modify: Insert text with fake instruction', () => {
+	// * Insert data on specified key, when the key represents an array.
+	
+	const result = dtbox
+	                 .init ()
+	                 .add ( sample.test_10, 'files' )	                 
+	                 .select()
+	                 .folder()
+console.log ( result )
+	// expect ( result.value ).to.have.property ( 'root/friends/3' )	
+	// expect ( result.structure ).to.have.property ('root' )
+	// expect ( result.structure ).to.have.property ('root/friends' )
+	// expect ( result.structure['root/friends'] ).to.be.equal ( 'array' )
+}) // it insert text with fake instruction
+
+
+
+
+
+it ( 'Modify: Insert in root', () => {
+	// * Insert data on specified key, when the key represents an array.
+	
+	const result = dtbox
+	                 .init (['Tisho', 'Ivo'])
+	                 .insert ( 'Stefan' , 'root' )
+	                 .select()
+					 .folder()
+					 
+	expect ( result.value ).to.have.property ( 'root/2' )
+	expect ( result.value['root/2']).to.be.equal ( 'Stefan' )
+	expect ( result.structure ).to.have.property ( 'root' )
+	expect ( result._select ).to.contains ( 'root/2' )
+}) // it insert in root
 
 
 
@@ -362,8 +464,8 @@ it ( 'Show Error Log', () => {
 
 it ( 'Get empty DT', () => { 
 
-    const data = dtbox.empty();
-    const result = data.keyList();
+    const data = dtbox.empty ();
+    const result = data.keyList ();
 
     expect ( data ).to.be.an ( 'object' )
     expect ( data ).to.be.an.empty

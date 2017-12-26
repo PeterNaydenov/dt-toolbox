@@ -1,10 +1,10 @@
 'use strict'
 
-var		 
-		  dtbox = require  ( '../src/dt-toolbox' )
+const		 
+		  dtbox = require  ( '../src/dt-toolbox'   )
 		, sample = require ( '../test-data/sample' )
-		, chai = require   ( 'chai'          )
-		, expect = require ( 'chai'   ).expect
+		, chai = require   ( 'chai'                )
+		, expect = chai.expect
 		;
 
 
@@ -90,6 +90,25 @@ it ( 'SpreadAll = select().all().spread()', () => {
   expect ( result['name'] ).to.be.equal ( st['name'] )
 }) // it spreadAll
 
+
+
+
+
+it ( 'Spread value', () => {
+	let result;
+
+	dtbox
+	 .init ( sample.test_0 )
+	 .select ()
+	 .all ()
+	 .spread ( 'value', v => result = v.build() )
+
+	 expect ( result ).to.be.an ( 'array' )
+	 expect ( result ).to.have.length ( 7 )
+	 expect ( result ).to.contains ( 'Peter' )
+	 expect ( result ).to.contains ( '42' )
+	 expect ( result ).to.contains (  3   )
+}) // it spread value
 
 
 }) // describe

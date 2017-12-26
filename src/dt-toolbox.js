@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 1.7.0
+    Version 1.8.0
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -16,98 +16,47 @@
      - Works in browsers. December 24th, 2017
 */
 
-
- let 
+const simple = require ( './simple' );   // Simple methods like 'copy' and 'noObject'
+let 
        DTProto
-     , simple         // Simple methods like 'copy' and 'noObject'
      , API            // What is possible to do inside the library.
      , exportAPI      // Exported DT.value object methods
      ;
 
 
 
+function simpleDT () {
+    const
+          val = Object.create ( exportAPI )
+        , dt  = Object.create ( API )
+        ;
+              
+    dt.value     = val
+    dt.structure = { root : 'object' }
+    dt.namespace = { root : [] }
+    dt._select   = []
+    dt._error    = []
+    return dt
+} // simpleDT func.
 
 
 
+function value ( data ) {
+  let val = Object.create ( exportAPI )
+  if ( data ) {
+              let keys     = Object.keys ( data );
+              let newKeys  = keys.map ( key => { 
+                                                  if ( key.includes('root') ) return key;
+                                                  return `root/${key}`
+                                             })
 
-
-
-
-simple = {    // * Simple instruments
-
-notObject : function notObject ( str ) {
-		let result = false
-    if ( typeof str == 'undefined' ) { result = true }
-		if ( typeof str == 'string'    ) { result = true }
-		if ( typeof str == 'number'    ) { result = true }
-		if ( typeof str == 'boolean'   ) { result = true }
-		if ( typeof str == 'function'  ) { result = true }
-		return result
-  } // notObject func.
-, isObject    : str  => !simple.notObject(str)
-, dt          :  ()  => { 
-        const 
-                val = Object.create ( exportAPI )
-              , dt  = Object.create ( API )
-              ;
-        
-        dt.value     = val
-        dt.structure = { root : 'object' }
-        dt.namespace = { root : [] }
-        dt._select   = []
-        dt._error    = []
-        return dt
-    }
-
-, value       : data   => {
-                            let val = Object.create ( exportAPI )
-                            if ( data ) {
-                                        let keys     = Object.keys ( data );
-                                        let newKeys  = keys.map ( key => { 
-                                                                            if ( key.includes('root') ) return key;
-                                                                            return `root/${key}`
-                                                                       })
-
-                                       val = keys.reduce ( (res,key,i) => {
-                                                                                val[newKeys[i]] = data[key]
-                                                                                return res
-                                                                    }, val )
-                               }
-                            return val
-                        }
-
-, copy        :  obj => JSON.parse ( JSON.stringify(obj) ) 
-, folderKind  : test => test instanceof Array ? 'array' : 'object'
-, getIterator : list => Object.keys ( list )
-
-, removeLast ( path ) {
-                	  let list = path.split('/')
-                	  list.pop()
-                	  return list.join('/')
-  }  // removeLast func.
-
-, getPenult ( path ) {
-                	  let list = path.split('/')
-                	  list.pop()
-                	  return list.pop()
-  }  // getPenult func.
-
-, getUlt ( path ) {
-                	  let list = path.split('/')
-                	  return list.pop()
-  }  // getUlt func.
- 
-}; // simple
-
-
-
-
-
-
-
-
-
-
+             val = keys.reduce ( (res,key,i) => {
+                                                      val[newKeys[i]] = data[key]
+                                                      return res
+                                          }, val )
+     }
+  return val
+} // value func.
 
 
 
@@ -124,7 +73,7 @@ let dtlib = {
  init ( data, instructions ) {
  		let result, dt;
         
-    if ( data === undefined ) dt = simple.dt ()
+    if ( data === undefined ) dt = simpleDT ()
     else                      dt = dtlib.scan ( data )
 
     if ( !instructions ) result = dt
@@ -139,7 +88,7 @@ let dtlib = {
  , load (data) {
    // * Load existing DT object
                     if ( !data.namespace || !data.structure ) {
-                                data     = simple.value ( data )
+                                data     = value ( data )
                                 const st = data.build();
                                 data     = dtlib.scan ( st ) 
                         }
@@ -150,7 +99,7 @@ let dtlib = {
  // -------------------------------> dtlib : LOAD	FAST
  , loadFast ( val ) {
    // * Load existing DT without meta calculation
-    let result = simple.dt()
+    let result = simpleDT ()
     result.value = val
    
     return result
@@ -160,7 +109,7 @@ let dtlib = {
  , scan ( target ) {
    // * Convert any ST object in DT object and return it. 
  	let 
- 		  dt        = simple.dt()
+ 		  dt        = simpleDT ()
  		, namespace = 'root'
  		;
 
@@ -237,7 +186,7 @@ let dtlib = {
 
 
  // -------------------------------> dtlib : UPDATE
-, update ( data, instructions ) {
+, update ( data, instructions ) {   //   ( any, string ) -> DTtoolbox
   // * Updates only existing DT props
  			let 
  				  me = this
@@ -250,7 +199,7 @@ let dtlib = {
  			
       if ( !instructions )  scanData = dt
       else                  scanData = lib._transform ( dt, instructions )
- 			
+
       iterator = simple.getIterator ( scanData.value )
  			iterator.forEach ( el => {
  										const exists = me.value.hasOwnProperty(el);
@@ -325,7 +274,7 @@ let dtlib = {
                       return me
       }
  
-  dt = simple.value(data)
+  dt = value(data)
 
   newValues = dt.valueList()
   newValues.forEach ( item => {
@@ -360,11 +309,11 @@ let dtlib = {
 
     const result = dataKeys.reduce ( (res,el) => {
                                                    if ( !dtKeys.includes(el) ) return res
-                                                   if ( dt[el] != data[el]    ) return res
+                                                   if ( dt[el] != data[el]   ) return res
 
                                                    res[el] = data[el]
                                                    return res
-                            }, simple.value() )
+                            }, value() )
 
    callback ( result )
    return me
@@ -393,7 +342,7 @@ let dtlib = {
 
                                                    res[el] = data[el]
                                                    return res
-                            }, simple.value() )
+                            }, value() )
 
    callback ( result )
    return me   
@@ -422,7 +371,7 @@ let dtlib = {
 
                                                    res[el] = data[el]
                                                    return res
-                            }, simple.value() )
+                            }, value() )
 
    callback ( result )
    return me   
@@ -452,7 +401,7 @@ let dtlib = {
 
                                                    res[el] = data[el]
                                                    return res
-                            }, simple.value() )
+                            }, value() )
 
    callback ( result )
    return me   
@@ -480,7 +429,7 @@ let dtlib = {
 
                                                    res[el] = dt[el]
                                                    return res
-                            }, simple.value() )
+                            }, value() )
 
    callback ( result )
    return me   
@@ -524,13 +473,13 @@ let dtlib = {
   							selection = me._select.reduce ( (res, el, i) => {
   																  res['root/'+i] = me.value[el]
   																  return res
-  							               }, simple.value() )
+  							               }, value() )
   							 break
   			case 'st'     :  {
 					  		 let set = me._select.reduce ( (res, el) => {
 					  											 res[el] = me.value[el]
 					  											 return res
-					  		          		}, simple.value() )
+					  		          		}, value() )
 					  		 selection = exportlib.build ( set )
   			                 }
   							 break
@@ -547,7 +496,7 @@ let dtlib = {
                                let set = me._select.reduce ( (res, el) => {
                                                                    res[el] = me.value[el]
                                                                    return res
-                                              }, simple.value() )
+                                              }, value() )
                                selection = JSON.stringify ( set.build() )
                                }
                       break
@@ -556,7 +505,7 @@ let dtlib = {
   							 selection = me._select.reduce ( (res, el,i) => {
 			  													  res[`root/${i}`] = el.replace('root/','') 
 			  													  return res
-  							               }, simple.value() )
+  							               }, value() )
   							        break
   			case 'dt'     : 
   			case 'object' : 
@@ -564,7 +513,7 @@ let dtlib = {
                             selection = me._select.reduce ( (res, el) => {
                                                                  res[el] = me.value[el]
                                                                  return res
-                                            }, simple.value() )
+                                            }, value() )
   			} // switch instruction
   		
   		callback ( selection )
@@ -788,14 +737,14 @@ let dtlib = {
         , defaultSpace = ['root']
         ;
   
-    if ( names === undefined ) names = defaultSpace
+    if ( names === undefined      ) names = defaultSpace
     if ( typeof names == 'string' ) names = [ names ]
 
   let collection = names.reduce ( (res, name) => {
-                          let space = me.namespace
+                    let space = me.namespace
 
-                          if ( space.hasOwnProperty(name) ) res = res.concat( space[name] )
-                          return res
+                    if ( space.hasOwnProperty(name) ) res = res.concat( space[name] )
+                    return res
           }, [] )
 
    if ( !collection.length == 0 )   me._select = me._select.concat ( collection )
@@ -893,7 +842,7 @@ map ( fx ) {
                                                   if ( newKey.indexOf('root/') != 0  ) newKey = `root/${newKey}`
                                                   res[newKey]  = me [ item ]
                                                   return res
-                       }, simple.value())
+                       }, value()  )
   return result
 } // map func.
 
@@ -932,7 +881,7 @@ map ( fx ) {
        result   = paths.reduce ( (res,item,i) => {
                                                     res[item] = getID[i]
   	   												return res
-  	                      }, simple.value() )
+  	                      }, value() )
 
   	   // Object.setPrototypeOf ( result, exportlib )
   	   return result 
@@ -966,7 +915,7 @@ map ( fx ) {
  let    counter     = 0
       , removeLevel = (level || defaultLevel) + 1
       , removeList  = [] 
-      , result      = simple.value()     
+      , result      = value ()
       ;
 
  keyList.forEach ( item => {
@@ -1022,7 +971,7 @@ map ( fx ) {
 												let key = keysUpdate[i]
 												res[key] = value
 												return res
-	                   }, simple.value() )
+	                   }, value() )
 
     return result
 } // modifyKeys func.
@@ -1047,7 +996,7 @@ map ( fx ) {
                                             let test = callback ( arrayKeys )
                                             if ( test ) res[el] = dt[el]
                                             return res
-                                 }, simple.value() )
+                                 }, value() )
     return result
 } // keepKeys func.
 
@@ -1072,7 +1021,7 @@ map ( fx ) {
                                             let test = callback ( arrayKeys )
                                             if ( !test ) res[el] = dt[el]
                                             return res
-                                 }, simple.value() )
+                                 }, value() )
     return result
   } // removeKeys func.
 
@@ -1095,7 +1044,7 @@ map ( fx ) {
                                             let test = callback ( dt[el] )
                                             if ( test ) res[el] = dt[el]
                                             return res
-                                 }, simple.value() )
+                                 }, value() )
     return result
 } // keepKeys func.
 
@@ -1118,7 +1067,7 @@ map ( fx ) {
                                             let test = callback ( dt[el] )
                                             if ( !test ) res[el] = dt[el]
                                             return res
-                                 }, simple.value() )
+                                 }, value() )
     return result
 } // keepKeys func.
 
@@ -1210,7 +1159,7 @@ map ( fx ) {
                                        }
                                     else    res[item] = me[item]
                                     return res
-                             }, simple.value() )
+                             }, value() )
   return result
 } // list func.
 
@@ -1342,7 +1291,7 @@ _build : function _build ( word, selectors, data ) {
                                                 else                               res[folder] = file
 
                                                 return res
-                               }, simple.value() )
+                               }, value() )
 
      return result;
 } //_toFolderFile func.
@@ -1400,7 +1349,7 @@ _build : function _build ( word, selectors, data ) {
                                               break
                              case 'key':
                              case 'keys':
-                                              let list = dtValue.keyList()
+                                              let list = dtValue.keyList ()
                                               {
 
                                                 let temp = list.reduce ( (res,item) => {
@@ -1430,41 +1379,10 @@ _build : function _build ( word, selectors, data ) {
                                               break
                              default:
                                               result = dtValue
-                       }
+                       } //   switch instructions
     dt = dtlib.scan ( result )
     return dt
   } // _transform func.
-
-
-
-
-
-, _validate : function _validate ( list ) {
-   // * Check for valid property names. Removes overwritten properties.
-   let answer, result;
-
-   // Collect object names
-   let etalones = list.reduce ( (res,el) => {
-   			   							let stack = el.split('/')
-   			   							while ( stack.length > 2) {
-		   			   							stack.pop()
-		   			   							el = stack.join('/')
-												let notFound = res.every ( item => item != el )
-												if ( notFound ) res.push(el)
-   			   							}
-										return res
-   					   }, [] )
-   
-   // Remove overwritten values
-   result = list.map ( el => {
-								answer = false
-								for ( let etalon in etalones) {
-					    			  if ( etalones[etalon] == el ) answer = true
-    							   }
-        						return answer ? false : el
-            	})
-    return result
-  } // _validate func.
 
 
 
@@ -1479,11 +1397,8 @@ _build : function _build ( word, selectors, data ) {
        names = paths.map ( el => el[0] )
        word  = names[0]
 
-       if ( word != undefined ) {
-                        equal = names.every ( el => el == word )
-       }
-       else             equal = false
-
+       equal = names.every ( el => el == word )
+       
        if ( equal ) {
                         paths.forEach ( path => path.shift()  )
                         _removeDuplicates( paths )
