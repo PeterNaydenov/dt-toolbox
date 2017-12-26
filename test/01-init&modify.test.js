@@ -397,25 +397,6 @@ it ( 'Modify: Insert text', () => {
 
 
 
-it ( 'Modify: Insert text with fake instruction', () => {
-	// * Insert data on specified key, when the key represents an array.
-	
-	const result = dtbox
-	                 .init ()
-	                 .add ( sample.test_10, 'files' )	                 
-	                 .select()
-	                 .folder()
-console.log ( result )
-	// expect ( result.value ).to.have.property ( 'root/friends/3' )	
-	// expect ( result.structure ).to.have.property ('root' )
-	// expect ( result.structure ).to.have.property ('root/friends' )
-	// expect ( result.structure['root/friends'] ).to.be.equal ( 'array' )
-}) // it insert text with fake instruction
-
-
-
-
-
 it ( 'Modify: Insert in root', () => {
 	// * Insert data on specified key, when the key represents an array.
 	
