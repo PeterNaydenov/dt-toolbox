@@ -111,6 +111,27 @@ it ( 'Spread value', () => {
 }) // it spread value
 
 
+
+
+
+it ( 'Spread key', () => {
+	let result;
+
+	dtbox
+	 .init ( sample.test_0 )
+	 .select ()
+	 .all ()
+	 .spread ( 'key', k => result = k.build() )
+
+	 expect ( result ).to.be.an ( 'array' )
+	 expect ( result ).to.have.length ( 7 )
+	 expect ( result ).to.contains ( 'name' )
+	 expect ( result ).to.contains ( 'age'  )
+	 expect ( result ).to.contains ( 'eyes' )
+}) // it spread key
+
+
+
 }) // describe
 
 

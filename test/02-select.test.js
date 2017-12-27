@@ -23,13 +23,13 @@ it ( 'Parent', () => {
 		  const result = dtbox
 		                 .init ( sample.test_8 )
 		                 .select ()
-		                 .parent ('title', item => item.id.includes(222)   ) // 222 is ID pattern for drama
+		                 .parent ( 'title', item => item.id.includes(222)   ) // 222 is ID pattern for drama
 		                 .spread ( 'dt', dt => {
 					  								updateObject = dt
 					  								                .assemble   () 
 					  								                .build      ()
 							                 } );
-		  
+	
 		  // Expect DT format:
 		  expect ( result ).to.be.an              ( 'object'    )
 		  expect ( result ).to.have.property      ( 'value'     )
@@ -44,8 +44,36 @@ it ( 'Parent', () => {
 		  expect ( updateObject ).to.be.an ( 'array' )
 		  expect ( updateObject[0] ).has.property ( 'id' )
 
-  }) // it select
+  }) // it select parent
 
+
+
+
+
+it ( 'Parent with array', () => {
+	let updateObject;
+	const testData = {
+						name : [ 'Ivan', 'Stefan' ]
+					 };
+	const result = dtbox
+				   .init ( testData )
+				   .select ()
+				   .parent ( 'name', item => true  )
+				   .spread ( 'dt', dt => {
+												updateObject = dt
+																.assemble   () 
+																.build      ()
+									   } );
+
+    // Expect DT format:
+	expect ( result.value ).to.have.property ( 'root/name/0' )
+	expect ( result.value ).to.have.property ( 'root/name/1' )
+	
+	// Manipulations on export
+	expect ( updateObject ).to.be.an ( 'array' )
+	expect ( updateObject ).to.contains ( 'Ivan'   )
+	expect ( updateObject ).to.contains ( 'Stefan' )
+}) // it parent with array
 
 
 
@@ -105,6 +133,31 @@ it ( 'Space', () => {
 		    expect ( keys   ).has.property ( 'root/0' )
 		    expect ( keys['root/0'] ).is.equal ('profile/active') 
 }) // it namespace
+
+
+
+
+
+
+it ( 'Space with no arguments', () => {
+		let 
+			  result
+			, keys
+			;
+
+		dtbox
+		    .init ( sample.test_0 )
+		    .select ()
+		    .space  ( )
+		    .spread ( 'object', dt => result = dt )
+		    .spread ( 'keys'  , k => keys = k.build ()   )
+			
+			expect ( keys ).to.be.an ( 'array' )
+			expect ( keys ).to.have.length ( 3 )
+			expect ( keys ).to.contain ( 'name' )
+			expect ( keys ).to.contain ( 'age'  )
+			expect ( keys ).to.contain ( 'eyes' )
+}) // it namespace with no arguments
 
 
 

@@ -51,7 +51,26 @@ it ( 'keepKeys', () => {
    expect ( result ).contains ( 'root/array/0' )
    expect ( result ).contains ( 'root/profile/active' )
    expect ( result ).not.contains ( 'root/name' )
-}) // it reduceKeys
+}) // it keepKeys
+
+
+
+
+
+it ( 'keepKeys call with string', () => {
+    let result;
+
+    dtbox
+       .init ( sample.test_0 )
+       .select()
+       .all()
+       .spread ( 'dt', dt => {
+                result = dt.keepKeys ( 'notAFunction' ).keyList() // ignore keepKeys if argument is not a function
+       })
+
+   expect ( result ).is.an ( 'array' )
+   expect ( result ).to.have.length ( 7 )
+}) // it keepKeys call with string
 
 
 
@@ -79,6 +98,25 @@ it ( 'removeKeys', () => {
 
 
 
+it ( 'removeKeys call with string', () => {
+    let result;
+
+    dtbox
+       .init( sample.test_0 )
+       .select()
+       .all()
+       .spread('dt', dt => {
+                result = dt.removeKeys ( 'insteadOfFunction' ).keyList()
+       })
+
+    expect ( result ).to.be.an ( 'array' )
+    expect ( result ).to.have.length ( 7 )
+}) // it removeKeys call with string
+
+
+
+
+
 it ( 'keepValues', () => {
     let result;
 
@@ -99,6 +137,25 @@ it ( 'keepValues', () => {
 
 
 
+it ( 'keepValues call with string', () => {
+    let result;
+
+    dtbox
+      .init ( sample.test_0 )
+      .select()
+      .all()
+      .spread ( 'dt', dt => {
+                    result = dt.keepValues( 'insteadOfFunction' ).keyList()
+              })
+
+    expect ( result ).to.be.an ( 'array' )
+    expect ( result ).to.have.length ( 7 )
+}) // it keepValues call with string
+
+
+
+
+
 it ( 'removeValues', () => {
     let result;
 
@@ -114,6 +171,25 @@ it ( 'removeValues', () => {
     expect ( result ).to.not.have.property ( 'root/array/0' )
     expect ( result ).to.have.property     ( 'root/array/1' )
 }) // it removeValues
+
+
+
+
+
+it ( 'removeValues call with string', () => {
+    let result;
+
+    dtbox
+      .init ( sample.test_0 )
+      .select()
+      .all()
+      .spread ( 'dt', dt => {
+                    result = dt.removeValues( 'insteadOfFunction' ).keyList()
+              })
+
+    expect ( result ).to.be.an ( 'array' )
+    expect ( result ).to.have.length ( 7 )
+}) // it removeValues call with string
 
 
 
@@ -201,7 +277,27 @@ it ( 'map', () => {
     expect ( result ).to.be.an ( 'array' )
     expect ( result ).to.have.length ( 4 )
     expect ( result[0]).to.have.property ( 'firstName' )
-}) // ignoreKeys again
+}) // it map
+
+
+
+
+
+it ( 'map returns object', () => {
+  let result;
+  let testData = [ 12, 24]
+
+  dtbox
+     .init ( testData )
+     .select ()
+     .spreadAll ( 'dt', dt => {
+               result = dt
+                          .map ( (key,i) => { name: i} )   // ignore non string values
+                          .build ()
+         })
+  
+  expect ( result ).to.be.deep.equal ( testData )
+}) // it map returns object
 
 
 

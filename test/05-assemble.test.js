@@ -21,7 +21,7 @@ it ( 'When optimization is not needed', () => {
      dtbox
  	      .init ( sample.test_0 )
  	      .select ()
- 	      .folder ()
+ 	      .all ()
  	      .spread ( 'dt', dt => result = dt.assemble().build()   )
 
  	expect ( result ).has.property ( 'name' )
@@ -35,13 +35,27 @@ it ( 'When optimization is not needed', () => {
 
 
 
+it ( 'Assemble empty data', () => {
+	let result;
+	const testData = { a: 12, b:24 };
+	dtbox
+	  .init ( testData )
+	  .spread ( 'dt', x => result = x.assemble() )
+	
+	expect ( result ).to.be.empty
+	expect ( result ).to.be.an ( 'object' )
+}) // it assemble empty data
+
+
+
+
 it ( 'Single property result', () => {
      let result;
 
      dtbox
  	      .init ( sample.test_0 )
  	      .select ()
- 	      .folder ('profile')
+ 	      .folder ( 'profile' )
  	      .spread ( 'dt', dt => result = dt.assemble().build()   )
 
  	expect ( result ).to.have.property ( 'active' )

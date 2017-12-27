@@ -591,7 +591,7 @@ let dtlib = {
 		  collection
 		, oldList
 		;
-	
+
 	oldList = me._select
 	// find values
 	me._select = []
@@ -600,8 +600,8 @@ let dtlib = {
 	let findValues = me._select
 	// collect object list
 	let objects = findValues.reduce ( (r,el) => {
-													let objName = simple.removeLast(el)
-													if ( r.hasOwnProperty ( objName )   ) return r
+                          let objName = simple.removeLast ( el )
+                          if ( r.includes ( objName )   ) return r
 													r.push ( objName )
 													return r
 	                        },[])
@@ -737,7 +737,7 @@ let dtlib = {
         , defaultSpace = ['root']
         ;
   
-    if ( names === undefined      ) names = defaultSpace
+    if ( names == null            ) names = defaultSpace
     if ( typeof names == 'string' ) names = [ names ]
 
   let collection = names.reduce ( (res, name) => {
@@ -765,7 +765,7 @@ let dtlib = {
      , dtValue     = me.value
      , iStructure  = simple.getIterator ( dtStructure )
      , iValue      = simple.getIterator ( dtValue )
-     , find        = type || 'object'
+     , find        = type
      ;
 
   let collection = [];
@@ -833,7 +833,7 @@ let exportlib = {
 map ( fx ) {
   let 
         me   = this
-      , keys = me.keyList()
+      , keys = me.keyList ()
       ;
 
   const result = keys.reduce ( (res,item,i) => { 
@@ -858,11 +858,8 @@ map ( fx ) {
        		, result
        		;
 
-       if ( simple.notObject(data) ) return false
-       if ( data instanceof Array  ) return false
-
        let iterator = simple.getIterator ( data )
-   	   if ( iterator.length == 0 ) return data
+   	   if ( iterator.length == 0 ) return data   // finish faster
 
    	   paths    = iterator
                         .map ( el => el.split('/')   )
@@ -881,9 +878,7 @@ map ( fx ) {
        result   = paths.reduce ( (res,item,i) => {
                                                     res[item] = getID[i]
   	   												return res
-  	                      }, value() )
-
-  	   // Object.setPrototypeOf ( result, exportlib )
+  	                      }, value () )
   	   return result 
   } // assemble func.
 
@@ -988,7 +983,7 @@ map ( fx ) {
         , result
         ;
 
-    if ( typeof callback != 'function' ) return dt
+    if ( typeof callback != 'function' ) return dt  // ignore if not a function
     
     iterator = Object.getOwnPropertyNames ( dt ) 
     result = iterator.reduce ( (res, el) => {
@@ -1013,7 +1008,7 @@ map ( fx ) {
         , result
         ;
 
-    if ( typeof callback != 'function' ) return dt
+    if ( typeof callback != 'function' ) return dt // ignore if not a function
     
     iterator = Object.getOwnPropertyNames ( dt ) 
     result = iterator.reduce ( (res, el) => {
@@ -1143,22 +1138,20 @@ map ( fx ) {
        ;
 
   const replaceMap = iterator.reduce ( (res,item) => {
-                                    let key = simple.removeLast(item)
+                                    let key = simple.removeLast ( item )
                                     if ( res[key] == undefined )   res[key] = counter++
                                     return res
                               },{})
 
   const iReplaceMap = simple.getIterator ( replaceMap )
   result = iterator.reduce ( (res,item) => {
-                                    let find = simple.removeLast ( item )
-                                    
-                                    if ( iReplaceMap.includes (find) ) {
-                                            let it = simple.getUlt(item)
-                                            let newKey = `root/${replaceMap[find]}/${it}` 
-                                            res[ newKey ] = me [ item ]
-                                       }
-                                    else    res[item] = me[item]
-                                    return res
+                                const
+                                        find   = simple.removeLast ( item )
+                                      , it     = simple.getUlt(item)
+                                      , newKey = `root/${replaceMap[find]}/${it}`
+                                      ;
+                                res[ newKey ] = me [ item ]
+                                return res
                              }, value() )
   return result
 } // list func.
@@ -1169,7 +1162,7 @@ map ( fx ) {
 
  // -------------------------------> exportlib : BUILD
 , build ( data ) {
-  // * Convert any DT object in ST object
+  // * Convert any DT object to ST object
    	if ( !data ) data = this
     
     let props = Object.getOwnPropertyNames ( data )
@@ -1245,9 +1238,8 @@ _build : function _build ( word, selectors, data ) {
 	  							  else                 result[nextWord] = lib._build ( nextWord, set, data )
 	            })
 	  if ( result instanceof Array ) {
-	  let it = simple.getIterator(result)
+    let it = simple.getIterator ( result )
 	  result = it.reduce ( (res,el) => {
-	  										  if ( el == 'length') return res
 	  										  if ( isNaN(el) ) res[el] =  result[el]
 	  										  else			   res.push ( result[el] )
 	  										  return res
@@ -1332,7 +1324,7 @@ _build : function _build ( word, selectors, data ) {
 
 
 
-, _transform : function transform (dt,instructions) {
+, _transform : function transform ( dt,instructions ) {
   // * Transformer for DT object. Reverse object key and values, or get only keys/values
     let 
           dtValue = dt.value
@@ -1378,7 +1370,7 @@ _build : function _build ( word, selectors, data ) {
                                               result = lib._toFolderFile ( dtValue.valueList().map(el=>`root/${el}`)  ).build()
                                               break
                              default:
-                                              result = dtValue
+                                              result = {}
                        } //   switch instructions
     dt = dtlib.scan ( result )
     return dt

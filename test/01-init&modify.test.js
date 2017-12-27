@@ -268,6 +268,19 @@ it  ( 'Modify: Add' , () => {
 
 
 
+it  ( 'Modify: Add with fake instructions' , () => {			
+		const result = dtbox 
+						.init ()
+						.add ( { age: 25} )
+						.add ( {'name' : 'Ivan'}, 'fakeInstruction' );   // fake instructions are ignored
+
+		expect ( result.value ).to.have.property ( 'root/age' )
+		expect ( result.value ).to.not.have.property ( 'root/name' )
+}) // it modify: Add with fake instructions
+
+
+
+
  it ( 'Modify: Update', () => {
 			const result = dtbox 
 			                .init   ( {name : 'Ivan'} )
