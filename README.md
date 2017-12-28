@@ -367,8 +367,8 @@ _(Nothing yet)_
 
 ### 2.0.0 (2017-12-28)
 - [x] Breaking change: Method ‘modifyKeys’ argument should be a function;
-- Test cases updates;
-- Browser version was updated;
+- [x] Test cases updates;
+- [x] Browser version was updated;
 
 
 
