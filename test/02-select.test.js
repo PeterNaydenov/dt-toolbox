@@ -92,6 +92,23 @@ it ( 'Parent with array', () => {
 	 	 expect ( result ).contains ( 'root/profile/active' )
 	 	 expect ( result ).has.length(1)
  }) // it folder
+ 
+ 
+ 
+ 
+ 
+ it ( 'Folder with deep', () => {
+	 	let result;
+	 		
+	 	dtbox
+	         .init   ( sample.test_1 )
+			 .select ()
+	         .folder ('set', 1 ) // only first lever
+	         .spread ('object', dt => {   result = dt.keyList()   })
+		
+		expect ( result ).to.be.an ( 'array' )
+		expect ( result ).to.have.length ( 4 )
+ }) // it folder with deep
 
 
 
@@ -158,6 +175,25 @@ it ( 'Space with no arguments', () => {
 			expect ( keys ).to.contain ( 'age'  )
 			expect ( keys ).to.contain ( 'eyes' )
 }) // it namespace with no arguments
+
+
+
+
+
+it ( 'Space with fake name', () => {
+		let 
+			  result
+			, keys
+			;
+
+		dtbox
+		    .init ( sample.test_0 )
+		    .select ()
+		    .space  ( 'fake' )
+		    .spread ( 'object', dt => result = dt )
+		    
+		expect ( result ).to.be.empty
+}) // it namespace with fake name
 
 
 
@@ -311,6 +347,25 @@ it ( 'Deep Objects', () => {
    expect ( result[0] ).to.have.property ('comments')
    expect ( result[0] ).to.have.property ('age')
 }) // it deepObject
+
+
+
+
+
+it ( 'Deep Array fail', () => {
+   let result;
+
+   dtbox
+     .init ( sample.test_5 )
+     .select()
+     .deepArray ()
+     .spread ( 'dt', dt => result = dt.list().build() )
+
+   expect ( result ).to.be.an( 'object' )
+   expect ( result ).to.be.empty
+}) // it deepArray fail
+
+
 
 
 

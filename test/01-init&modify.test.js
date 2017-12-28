@@ -84,7 +84,7 @@ it ( 'Init: Keys only', () => {
 
 
 it ( 'Init: Values only', () => {
- 			let result = dtbox.init ( sample.test_9, 'values' );
+ 			let result = dtbox.init ( sample.test_9, 'value' );
 
  			expect ( result.value ).to.have.deep.property ( 'root/rootFolder/profile/name/Peter'  )
 
@@ -112,7 +112,7 @@ it ( 'Init: Value only --> Important Detail', () => {
 
 it ( 'Init: Files', () => {
 	// Create new object from values where we have value with '/' delimiter. Last element of the string will become a value
- 			const result = dtbox.init ( sample.test_9, 'files' );
+ 			const result = dtbox.init ( sample.test_9, 'file' );
 
  			expect ( result.value ).to.have.property ( 'root/rootFolder/profile/name'  )
  			expect ( result.value['root/rootFolder/profile/name'] ).to.be.equal ( 'Peter'  )
@@ -129,8 +129,8 @@ it ( 'Init: Files', () => {
  			expect ( result.namespace ).to.have.property ( 'profile'    )
  			expect ( result.namespace ).to.have.property ( 'friends'    )
  			expect ( result.namespace ).to.have.property ( 'rootFolder' )
-
     }) // it files
+
 
 
 

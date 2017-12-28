@@ -54,9 +54,9 @@ module.exports = {
 		    				, { name: 'Stefan', comments: 41, age: 38 }
 		    		   ]]
 		    		   , { name: 'Ludmil', comments: 12 , age: 44 }
-					   , { name: 'Alina', comments: 153 , age: 51 }
-					   , { name: 'Yordan', comments: 66 , age: 18 }
-					   , 'test'
+					     , { name: 'Alina', comments: 153 , age: 51 }
+					     , { name: 'Yordan', comments: 66 , age: 18 }
+					     , 'test'
 	    		   ]
 	    , test_6 : { 
 	    				  'root/id' : 23

@@ -565,7 +565,7 @@ let dtlib = {
 		 ;
 	
 	name = name || nameDefault
-	deep = isNaN(deep) ? deepDefault : deep
+	deep = (deep == null) ? deepDefault : deep
 	deep =  deep + 1 // because we add default wrapper 'root'
   deepMax = name.split('/').length + deep
 
@@ -605,13 +605,7 @@ let dtlib = {
 													r.push ( objName )
 													return r
 	                        },[])
-	// Reduce object list
-	objects = objects.reduce ( (r,el) => {
-												let notExists = r.every ( value => value != el )
-												if ( notExists ) r.push ( el )
-												return r
-					 }, [])
-
+	
 	// test against 'where' if exists
 	if ( where ) {
 		objects = objects.reduce ( (r,el) => {
@@ -1069,10 +1063,9 @@ map ( fx ) {
 
 
  // -------------------------------> exportlib : JSON
-, json ( data ) {
+, json () {
      /* Convert any object to JSON */
-   		if ( !data ) data = this
-     	return JSON.stringify ( data )	
+     	return JSON.stringify ( this )	
      } // json func.
 
 
@@ -1264,15 +1257,14 @@ _build : function _build ( word, selectors, data ) {
      
      
      // Find repeating folder names
-     target.map ( el => {
-                            let file = el.split('/').pop()
+     target.forEach ( el => {
+                            let file   = el.split('/').pop()
                             let folder = el.replace(`/${file}`,'')
                             
                             folderKeys.forEach ( key => {
                                       if ( folder.includes(key) && !duplicates.includes(key) )   duplicates.push ( key )
                                    })
                             if      ( !folderKeys.includes(folder) )   folderKeys.push ( folder )
-                            else if ( !duplicates.includes(folder) )   duplicates.push ( folder )
                 })
 
      result = target.reduce ( (res,item) => {
