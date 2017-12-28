@@ -17,20 +17,14 @@ it ( 'modify', () => {
     // * Modify keys on exported DT object
     const result = dtbox
                        .init ()
-                       .preprocess ( sample.test_0, dt => {
-                                                            const oldKeys = dt.keyList()
-                                                            const newKeys = oldKeys.map ( el => el.replace ( 'array', 'counter')   )
-                                                            return dt.modifyKeys( oldKeys, newKeys )
-                                           })
+                       .preprocess ( sample.test_0, dt => dt.modifyKeys ( key => key.replace('array','counter'))   )
 
     expect ( result.value ).to.have.property ( 'root/counter/0' )
-
     expect ( result.structure ).to.have.property ( 'root/counter' )
     expect ( result.structure['root/counter'] ).is.equal ( 'array' )
-
     expect ( result.namespace ).to.have.property ( 'counter' )
     expect ( result.namespace['counter'] ).has.length ( 3 )
-}) // it setKeys
+}) // it modify
 
 
 

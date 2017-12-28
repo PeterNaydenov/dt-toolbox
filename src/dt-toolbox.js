@@ -926,13 +926,9 @@ map ( fx ) {
 // -------------------------------> exportlib : CUT
 , cut ( number ) {
   // * Cut out number of key elements
-  const 
-          me      = this
-        , oldKeys = me.keyList()
-        ;
-
- if ( typeof number !== 'number' ) return me
- function _cut ( x, count ) {
+  const me = this;
+  if ( typeof number !== 'number' ) return me
+  function _cut ( x, count ) {
                               let ix = x.indexOf ( '/' )
                               
                               if ( ix == -1    ) count = 0
@@ -941,9 +937,7 @@ map ( fx ) {
                               let r = _cut ( x.substring(ix+1), count ) 
                               return r
           }
- 
- let newKeys = oldKeys.map ( k => `root/${_cut(k,number+1)}`   )
- return me.modifyKeys(oldKeys,newKeys)
+ return me.modifyKeys ( k => `root/${_cut(k,number+1)}`)
 } // cut func.
 
 
@@ -951,19 +945,23 @@ map ( fx ) {
 
 
 // -------------------------------> exportlib : MODIFY KEYS
-, modifyKeys ( oldKeys, keysUpdate ) {
+, modifyKeys ( callback ) {
   // * Updates object with modified keys.
-	const me = this;
-
-	let result = oldKeys.reduce ( (res,item,i) => {
-												let value = me[item];
-												let key = keysUpdate[i]
-												res[key] = value
-												return res
-	                   }, value() )
-
+  const 
+      me = this
+    , result = simple.getIterator ( me )
+                     .reduce ( (res,item,i) => {
+                                            const
+                                                  value = me[item]
+                                                , key = callback ( item )
+                                                ;
+                                            res[key] = value
+                                            return res
+                            }, value() )
+    ;
     return result
 } // modifyKeys func.
+
 
 
 
