@@ -28,7 +28,7 @@ DT format is a flatten version of the standard javascript object. **Keys** are s
 
 ## Installation
 
-Install by writing in your terminal:
+Install for node.js projects by writing in your terminal:
 ```
 npm install dt-toolbox --save
 ```
@@ -38,6 +38,7 @@ Once it has been installed, it can be used by writing this line of JavaScript:
 let dtbox = require ( 'dt-toolbox')
 ```
 
+**Installation for browsers**: Grab file 'dist/dt-toolbox.min.js' and put it inside the project. Request the file from HTML page. Global variable 'dtbox' is available for use.
 
 
 
@@ -313,7 +314,7 @@ dtbox
 
 
 ## More 
-Find more examples in `./test` folder. Almost 60 unit tests are on your disposal. Find what is possible start experimenting with the library. 
+Find more examples in `./test` folder. Almost 90 unit tests are on your disposal. Find what is possible start experimenting with the library. 
 
 Let me know what you think by using twitter tag #dttoolbox.
 
@@ -349,7 +350,6 @@ _(Nothing yet)_
 
 
 ## Roadmap
-- API method `folder` can receive second argument `deep`. At the moment `deep` is absolute deep and will be changed to relative;
 - Upgrade error handling. Add proper error messages;
 - Create API methods documentation;
 
@@ -363,6 +363,13 @@ _(Nothing yet)_
 
 
 ## Release History
+
+
+### 2.0.0 (2017-12-28)
+- [x] Breaking change: Method ‘modifyKeys’ argument should be a function;
+- Test cases updates;
+- Browser version was updated;
+
 
 
 ### 1.8.0 (2017-12-28)

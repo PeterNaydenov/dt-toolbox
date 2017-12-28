@@ -92,7 +92,7 @@ module.exports = {
 	                           				       , description : 'he he he he'
 	                                            }
 	                                      ]
-		    				}
+		    				  }
 		    			  , { 
 	                             genre  : 'drama'
 	                           , videos : [

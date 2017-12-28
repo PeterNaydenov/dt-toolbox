@@ -11,7 +11,7 @@ const
 module.exports = {
       entry: "./src/dt-toolbox.js"
     , output: {
-              filename: "dt-toolbox.js"
+              filename: "dt-toolbox.min.js"
             , path: __dirname + "/dist"
             , library: 'dtbox'
             , libraryTarget: "umd"
