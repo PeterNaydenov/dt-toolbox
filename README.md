@@ -365,9 +365,10 @@ _(Nothing yet)_
 ## Release History
 
 
-### 1.8.0 (2017-12-27)
+### 1.8.0 (2017-12-28)
 - [x] Method 'remove' has new argument-key. Evaluate the key name;
 - [x] Method 'keep' has new argument-key. Evaluate the key name;
+- [x] Test coverage - 100%;
 
 
 
