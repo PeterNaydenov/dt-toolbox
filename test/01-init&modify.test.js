@@ -101,9 +101,9 @@ it ( 'Init: Values only', () => {
 it ( 'Init: Value only --> Important Detail', () => {
 	// * Attention! Values that are numbers, will convert to array!
 	//   Avoid this problem by using init with 'files'. See next unit test.
- 			const result = dtbox.init ( sample.test_9, 'values' );
- 			expect ( result.value ).to.have.deep.property ( 'root/rootFolder/profile/age/0'  )
- 			expect ( result.value['root/rootFolder/profile/age/0'] ).is.equal ( '42' )			
+			 const result = dtbox.init ( sample.test_9, 'values' );
+ 			 expect ( result.value ).to.have.deep.property ( 'root/rootFolder/profile/age/0'  )
+ 			 expect ( result.value['root/rootFolder/profile/age/0'] ).is.equal ( '42' )			
 }) // it values Important
 
  
@@ -146,7 +146,7 @@ it ( 'Init: Handmade files-like structure', () => {
                ]
  
  result =  dtbox.init ( data, 'files')
-
+console.log ( result )
  expect ( result.value ).to.contain.property ( 'root/a/0' )
  expect ( result.value ).to.contain.property ( 'root/a/b' )
  expect ( result.value ).to.contain.property ( 'root/a/c' )

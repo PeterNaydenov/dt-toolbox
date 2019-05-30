@@ -1133,8 +1133,6 @@ map ( fx ) {
                                     if ( res[key] == undefined )   res[key] = counter++
                                     return res
                               },{})
-
-  const iReplaceMap = simple.getIterator ( replaceMap )
   result = iterator.reduce ( (res,item) => {
                                 const
                                         find   = simple.removeLast ( item )
@@ -1153,13 +1151,9 @@ map ( fx ) {
 
  // -------------------------------> exportlib : BUILD
 , build ( data ) {
-  // * Convert any DT object to ST object
+  // * Calling convertion from DT object to ST object
    	if ( !data ) data = this
-    
-    let props = Object.getOwnPropertyNames ( data )
-    let list = props.map ( prop => prop.split('/')   )
-
-    return	lib._build ( 'root', list , data )	
+    return	lib._build ( data )
   }  // build func.
 
 } // exportlib
@@ -1186,95 +1180,101 @@ map ( fx ) {
 let lib = {
  // * Library that contain core functions 
 
-_build : function _build ( word, selectors, data ) {
-	// * Recursive ST object creation
-	  let 
-	  		  result
-	  		, set = simple.copy ( selectors )
-	  		;
+ _build ( data ) {
+    // *** Recursive ST object creation
+    const keys = Object.keys ( data ).map ( k => k.split('/'));
+    let 
+          std    = {}   // Standard object instance
+        ,  spaces = []   // Property names on level [1] that are not primitive.
+        , keyList = []   // Collection of all property-names for level [1]
+        ;
+        keys.forEach ( k => {  // Find spaces
+                        const key = k[0];
+                        if ( k.length == 1 )   return
+                        if ( !spaces.includes(key) )   spaces.push ( key )
+                })
 
-	  // Modify data according word request
-	  set = set.reduce ( (res,s) => { 
-		  							      if ( s[0] == word ) {
-									   						    s.shift()
-									   						    res.push(s)
-		  							   	     }
-		  							      return res
-	  			          },[])
+        keys.forEach ( k => {   // Find keyList members.
+                                if ( !keyList.includes(k[0]) )   keyList.push ( k[0] )
+                            })
+        let isArray = ( isNaN(keyList[0]) ) ? false : true
+        if ( isArray ) std = []
 
-	  data = set.reduce ( (res, s) => {
-		  								 let path = s.join('/')
-		  								 let source = path
-
-		  								 if ( s.length == 1 ) {
-		  								 						source = source.slice ( path.length + 1 )
-		  								 						res[s[0]] = data[word + '/' + s[0] ]
-		  								 	}
-		  								 else 					res[path] = data[word + '/' + path]
-		  								 return res
-	  			 }, {})
-
-	  // Recognize container-type: array or object
-	   let isObject = set.reduce ( (res,el) => { 
-                                if ( !isNaN(el[0]) ) return false
-	   												    return res
-	   					       }, true )
-	   if ( isObject ) result = {}
-	   else            result = []
-
-	  // Set properties and find next word
-	  set.forEach ( s => {
-	  							  let nextWord = s[0]
-	  							  if ( s.length == 1 ) result[nextWord] = data[nextWord]
-	  							  else                 result[nextWord] = lib._build ( nextWord, set, data )
-	            })
-	  if ( result instanceof Array ) {
-    let it = simple.getIterator ( result )
-	  result = it.reduce ( (res,el) => {
-	  										  if ( isNaN(el) ) res[el] =  result[el]
-	  										  else			   res.push ( result[el] )
-	  										  return res
-	                   },[])
-	     }
-	  return result
+        spaces.forEach ( sp => {
+                        let 
+                            model = []
+                          , words = keys.reduce ( (res,k) => {
+                                                        if ( k[0] != sp       )   return res
+                                                        if ( !res.includes(k[1]) )   res.push(k[1])
+                                                        return res
+                                            },[])
+                          ;
+                        words.every ( k => {
+                                            const x = parseInt(k)
+                                            if ( isNaN(x) )   model = {}
+                                    })
+                                    
+                        std = words.reduce ( (res,word) => {
+                                            const 
+                                                  selector = `${sp}/${word}`
+                                                , nfo      = data [ selector ]
+                                                ;
+                                            let 
+                                                  counter = 0
+                                                , updateData = keys.reduce ( (res,k) => {
+                                                                                if ( k.length == 2 )   return res
+                                                                                let key = k.join ( '/' );
+                                                                                if ( !key.includes(selector) )   return res
+                                                                                let newKey = k.slice (1);
+                                                                                res [ newKey.join('/')] = data[k.join('/')]
+                                                                                return res
+                                                                },{});
+                                            if ( nfo )   res [word] = nfo
+                                            else         res [word] = lib._build ( updateData )
+                                            return res
+                                        }, model )
+                }) // forEach spaces
+        return std
   } // _build func.
 
 
 
 
 
-, _toFolderFile : function _toFolderFile ( target ) {
+, _toFolderFile ( target ) {
   // * Find hidden arrays and update keys. Like in folders/files.
      let 
-          iterator
-        , folderKeys = []
+          folderKeys = []
         , duplicates = []
-        , counter    = 0
+        , counters   = []
         , result
         ;
      
-     
      // Find repeating folder names
      target.forEach ( el => {
-                            let file   = el.split('/').pop()
-                            let folder = el.replace(`/${file}`,'')
-                            
+                            let file    = el.split('/').pop()
+                            let folder = el.replace ( `/${file}`, '' )
+
                             folderKeys.forEach ( key => {
-                                      if ( folder.includes(key) && !duplicates.includes(key) )   duplicates.push ( key )
+                                      if ( folder.includes(key) && !duplicates.includes(key) ) { 
+                                                duplicates.push ( key )
+                                                counters.push ( 0 )
+                                          }
                                    })
                             if      ( !folderKeys.includes(folder) )   folderKeys.push ( folder )
                 })
-
      result = target.reduce ( (res,item) => {
-                                                let file   = item.split('/').pop()
-                                                let folder = item.replace(`/${file}`,'')
-
-                                                if ( duplicates.includes(folder) ) res[`${folder}/${counter++}`] = file;
-                                                else                               res[folder] = file
-
+                                                let 
+                                                     file      = item.split('/').pop()
+                                                   , folder   = item.replace(`/${file}`,'')
+                                                   , dupIndex = duplicates.findIndex ( el => el == folder )
+                                                   ;
+                                                if ( dupIndex > -1 ) {
+                                                        res[`${folder}/${counters[dupIndex]++}`] = file;
+                                                   }
+                                                else    res[ folder ] = file
                                                 return res
                                }, value() )
-
      return result;
 } //_toFolderFile func.
 
@@ -1282,7 +1282,7 @@ _build : function _build ( word, selectors, data ) {
 
 
 
-, _scan : function _scan ( request ) {
+, _scan ( request ) {
  	// * Convert ST object to DT
    let 
         {target, namespace, dt} = request
@@ -1314,7 +1314,7 @@ _build : function _build ( word, selectors, data ) {
 
 
 
-, _transform : function transform ( dt,instructions ) {
+, _transform ( dt,instructions ) {
   // * Transformer for DT object. Reverse object key and values, or get only keys/values
     let 
           dtValue = dt.value
@@ -1343,20 +1343,26 @@ _build : function _build ( word, selectors, data ) {
                                               break
                              case 'value' :
                              case 'values':
-                                              const temp = lib._toFolderFile  ( dtValue.valueList().map(el=>`root/${el}`) )
-                                              const next = simple.getIterator ( temp )
+                                              const 
+                                                    temp = lib._toFolderFile  ( dtValue.valueList().map(el=>`root/${el}`) )
+                                                  , next = simple.getIterator ( temp )
                                                                  .reduce ( (res,el) => {
-                                                                                           let newKey  = `${el}/${temp[el]}`
-                                                                                           res[newKey] = temp[el]
+                                                                                           let 
+                                                                                                val = temp[el]
+                                                                                              , isNumber = isNaN ( parseInt(val)) ? false : true
+                                                                                              , newKey  = ( isNumber ) ? `${el}/0` : `${el}/${val}`
+                                                                                              ;
+                                                                                           res[newKey] = val
                                                                                            return res
                                                                                },{})
+                                                  ;
                                               result = exportlib.build ( next )
                                               break
                              case 'file'    :
                              case 'files'   :
                              case 'folders' :
                              case 'folder'  :
-                                              // Value and key in one '/' separated string. Last element will become value
+                                              // Value and key in one '/' separated string. Last element will become a value
                                               result = lib._toFolderFile ( dtValue.valueList().map(el=>`root/${el}`)  ).build()
                                               break
                              default:
@@ -1370,7 +1376,7 @@ _build : function _build ( word, selectors, data ) {
 
 
 
-, _removeDuplicates : function _removeDuplicates ( paths ) {
+, _removeDuplicates ( paths ) {
   // * Remove common elements in list of paths. Paths are arrays here.
 	   let 	names, word , equal;
 
@@ -1383,7 +1389,7 @@ _build : function _build ( word, selectors, data ) {
        
        if ( equal ) {
                         paths.forEach ( path => path.shift()  )
-                        _removeDuplicates( paths )
+                        lib._removeDuplicates ( paths )
             }
       
        return paths
@@ -1393,7 +1399,7 @@ _build : function _build ( word, selectors, data ) {
 
 
 
-, _reorder : function _reorder ( paths, ix ) {
+, _reorder ( paths, ix ) {
    // * Rearange order in path array
    		let result = [];
    		
@@ -1431,7 +1437,7 @@ _build : function _build ( word, selectors, data ) {
 
 
 
-, _ignore : function ( paths ) {
+, _ignore ( paths ) {
   // * Mixes first and second path arguments.
   	 let test,props, name, counter = 0;
 
