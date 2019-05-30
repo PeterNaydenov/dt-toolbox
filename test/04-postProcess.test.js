@@ -231,6 +231,28 @@ it ( 'build', () => {
 
 
 
+it ( 'build with value "false"', () => {
+  const 
+     data = {
+                name : 'Peter'
+              , description: 'Some text...'
+              , active : false
+            }
+    let result
+
+    dtbox
+      .init ( data )
+      .select ()
+      .folder ( 'root' )
+      .spread ( 'dt', dt => result = dt.build()   )
+
+    expect ( result ).to.have.property ( 'active' )
+    expect ( result.active ).to.be.equal ( false )
+}) // it build with value 'false'
+
+
+
+
 
 it ( 'ignoreKeys', () => {
    let result;
@@ -468,7 +490,7 @@ it ( 'keyValue with custom divider', () => {
                    , 'profile/age' : 43
                }
   dtbox
-     .load(data)
+     .load ( data )
      .spreadAll  ( 'dt', dt => result = dt.keyValue(';')   )
 
   expect ( result ).to.be.a.string

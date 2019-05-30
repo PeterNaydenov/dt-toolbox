@@ -146,7 +146,7 @@ it ( 'Init: Handmade files-like structure', () => {
                ]
  
  result =  dtbox.init ( data, 'files')
-console.log ( result )
+
  expect ( result.value ).to.contain.property ( 'root/a/0' )
  expect ( result.value ).to.contain.property ( 'root/a/b' )
  expect ( result.value ).to.contain.property ( 'root/a/c' )

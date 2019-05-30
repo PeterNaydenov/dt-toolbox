@@ -1218,10 +1218,9 @@ let lib = {
                                             const 
                                                   selector = `${sp}/${word}`
                                                 , nfo      = data [ selector ]
+                                                , haveNfo  = ( typeof nfo == 'boolean' ) ? true : (nfo != null)
                                                 ;
-                                            let 
-                                                  counter = 0
-                                                , updateData = keys.reduce ( (res,k) => {
+                                            let updateData = keys.reduce ( (res,k) => {
                                                                                 if ( k.length == 2 )   return res
                                                                                 let key = k.join ( '/' );
                                                                                 if ( !key.includes(selector) )   return res
@@ -1229,8 +1228,8 @@ let lib = {
                                                                                 res [ newKey.join('/')] = data[k.join('/')]
                                                                                 return res
                                                                 },{});
-                                            if ( nfo )   res [word] = nfo
-                                            else         res [word] = lib._build ( updateData )
+                                            if ( haveNfo )   res [word] = nfo
+                                            else             res [word] = lib._build ( updateData )
                                             return res
                                         }, model )
                 }) // forEach spaces
