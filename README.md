@@ -365,10 +365,19 @@ _(Nothing yet)_
 ## Release History
 
 
+
+### 2.0.2 (2019-05-30)
+- [x] Fix: ST Build regression with boolean values;
+- [x] Browser version was updated;
+
+
+
+
 ### 2.0.1 (2019-05-30)
 - [x] Fix: ST Build (lib._build) was refactored;
 - [x] Improvment: Method 'lib._toFolderFiles' has array of counters in sync with duplications;
 - [x] Browser version was updated;
+- [ ] Bug: ST Build regression with boolean values;
 
 
 
