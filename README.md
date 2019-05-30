@@ -365,10 +365,20 @@ _(Nothing yet)_
 ## Release History
 
 
+### 2.0.1 (2019-05-30)
+- [x] Fix: ST Build (lib._build) was refactored;
+- [x] Improvment: Method 'lib._toFolderFiles' has array of counters in sync with duplications;
+- [x] Browser version was updated;
+
+
+
+
+
 ### 2.0.0 (2017-12-28)
 - [x] Breaking change: Method ‘modifyKeys’ argument should be a function;
 - [x] Test cases updates;
 - [x] Browser version was updated;
+- [ ] Problems with building heavy ST structures;
 
 
 
