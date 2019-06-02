@@ -18,8 +18,7 @@
 
 const simple = require ( './simple' );   // Simple methods like 'copy' and 'noObject'
 let 
-       DTProto
-     , API            // What is possible to do inside the library.
+       API            // What is possible to do inside the library.
      , exportAPI      // Exported DT.value object methods
      ;
 
@@ -73,11 +72,11 @@ let dtlib = {
  init ( data, instructions ) {
  		let result, dt;
         
-    if ( data === undefined ) dt = simpleDT ()
-    else                      dt = dtlib.scan ( data )
+    if ( data === undefined )   dt = simpleDT ()
+    else                       dt = dtlib.scan ( data )
 
-    if ( !instructions ) result = dt
-    else                 result = lib._transform ( dt, instructions )
+    if ( !instructions )   result = dt
+    else                   result = lib._transform ( dt, instructions )
 
 	 	return result
  } // init func.
@@ -155,7 +154,7 @@ let dtlib = {
  				, iterator
  				;
 	
- 	    dt = dtlib.scan ( data )   // convert data to DT object
+ 	    dt = dtlib._detectDT ( data )   // convert data to DT object if it's a ST
 
       if ( !instructions )  scanData = dt
       else                  scanData = lib._transform ( dt, instructions )
@@ -185,6 +184,22 @@ let dtlib = {
 
 
 
+ // -------------------------------> dtlib : _detectDT
+ , _detectDT ( data ) {   // (ST|DT) -> DT
+   // * Detect if data is DT. ST object will be converted to DT
+      const 
+            dtObject = data.value && data.structure && data._error
+          , isDTValue = ( dtObject ) ? true : Object.keys(data)[0].includes ('root')
+          ;
+      if ( dtObject )    return data  
+      if ( isDTValue )   return dtlib.load ( data )
+      return dtlib.scan ( data ) 
+ }  // detectDT
+
+
+
+
+
  // -------------------------------> dtlib : UPDATE
 , update ( data, instructions ) {   //   ( any, string ) -> DTtoolbox
   // * Updates only existing DT props
@@ -195,7 +210,7 @@ let dtlib = {
  				, iterator
  				;
 	
-      dt = dtlib.scan ( data )   // convert data to DT object
+      dt = dtlib._detectDT ( data )   // convert data to DT object if it's a ST
  			
       if ( !instructions )  scanData = dt
       else                  scanData = lib._transform ( dt, instructions )
@@ -230,7 +245,7 @@ let dtlib = {
         , iterator
         ;
 	
-      dt = dtlib.scan ( data )   // convert data to DT object
+      dt = dtlib._detectDT ( data )   // convert data to DT object if it's a ST
  			
       if ( !instructions )   scanData = dt
       else                   scanData = lib._transform ( dt, instructions )

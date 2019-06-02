@@ -280,6 +280,33 @@ it  ( 'Modify: Add with fake instructions' , () => {
 
 
 
+it ( 'Modify: Add DT value', () => {
+		const 
+					  value = dtbox.init ({ name:'Peter', age: 45 }).value
+					, result = dtbox
+											.init ()
+											.add ( value )
+					;
+		expect ( result.value ).to.have.property ( 'root/age' )
+		expect ( result.value ).to.have.property ( 'root/name' )
+}) // it modify: Add DT value
+
+
+
+it ( 'Modify: Add DT object', () => {
+	const 
+					value = dtbox.init ({ name:'Peter', age: 45 })
+				, result = dtbox
+										.init ()
+										.add ( value )
+				;
+
+	expect ( result.value ).to.have.property ( 'root/age' )
+	expect ( result.value ).to.have.property ( 'root/name' )
+}) // it modify: Add DT object
+
+
+
 
  it ( 'Modify: Update', () => {
 			const result = dtbox 
