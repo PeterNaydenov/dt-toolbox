@@ -366,6 +366,14 @@ _(Nothing yet)_
 
 
 
+### 2.1.0 (2019-06-02)
+- [x] Modify methods ( add/update/overwrite ) can receive DT data format;
+- [x] Browser version was updated;
+
+
+
+
+
 ### 2.0.2 (2019-05-30)
 - [x] Fix: ST Build regression with boolean values;
 - [x] Browser version was updated;
