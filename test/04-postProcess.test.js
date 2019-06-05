@@ -231,7 +231,7 @@ it ( 'build', () => {
 
 
 
-it ( 'build with value "false"', () => {
+it ( 'Build with value "false"', () => {
   const 
      data = {
                 name : 'Peter'
@@ -249,6 +249,34 @@ it ( 'build with value "false"', () => {
     expect ( result ).to.have.property ( 'active' )
     expect ( result.active ).to.be.equal ( false )
 }) // it build with value 'false'
+
+
+
+
+it ( 'Build a ST object with repeating structure', () => {
+  let flat, st;
+  const initData = {
+                      name: 'Peter'
+                    , children : [
+                                    {   name: 'Ivan' }
+                                  , {   name: 'Yordan'
+                                      , children: [
+                                                     { name:'Maria' }
+                                                  ]
+                                    }
+                                ]
+                }
+    dtbox
+        .init ( initData )
+        .spreadAll ( 'dt', dt => flat = dt   )
+
+    st = flat.build ()
+
+    expect ( st.children[0] ).to.have.property ( 'name' )
+    expect ( st.children[0].name ).to.be.equal ( 'Ivan' )
+    expect ( st.children[1].name ).to.be.equal ( 'Yordan' )
+    expect ( st.children[1].children[0].name ).to.be.equal ( 'Maria' )
+}) // it Build a ST object with repeating structure
 
 
 

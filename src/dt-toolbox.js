@@ -1197,24 +1197,26 @@ let lib = {
 
  _build ( data ) {
     // *** Recursive ST object creation
-    const keys = Object.keys ( data ).map ( k => k.split('/'));
+    const keys = Object.keys ( data ).map ( k => k.split('/'));   // Array of keys as []
     let 
-          std    = {}   // Standard object instance
+           std    = {}   // Standard object instance
         ,  spaces = []   // Property names on level [1] that are not primitive.
-        , keyList = []   // Collection of all property-names for level [1]
+        , keyList = []   // Collection of all property-names for level [0]
         ;
+        
         keys.forEach ( k => {  // Find spaces
                         const key = k[0];
-                        if ( k.length == 1 )   return
+                        // if ( k.length == 1 )   return   // means: it's just a property name
                         if ( !spaces.includes(key) )   spaces.push ( key )
                 })
 
+       
         keys.forEach ( k => {   // Find keyList members.
-                                if ( !keyList.includes(k[0]) )   keyList.push ( k[0] )
-                            })
+                                                if ( !keyList.includes(k[0]) )   keyList.push ( k[0] )
+                                            })
         let isArray = ( isNaN(keyList[0]) ) ? false : true
         if ( isArray ) std = []
-
+       
         spaces.forEach ( sp => {
                         let 
                             model = []
@@ -1228,21 +1230,24 @@ let lib = {
                                             const x = parseInt(k)
                                             if ( isNaN(x) )   model = {}
                                     })
-                                    
+                           
                         std = words.reduce ( (res,word) => {
                                             const 
                                                   selector = `${sp}/${word}`
+                                                , currentSpace = new RegExp ( `^${selector}` )
                                                 , nfo      = data [ selector ]
                                                 , haveNfo  = ( typeof nfo == 'boolean' ) ? true : (nfo != null)
                                                 ;
-                                            let updateData = keys.reduce ( (res,k) => {
+                                                  
+                                            let updateData = keys.reduce ( (res,k) => {   // Data for next iteration of _build 
                                                                                 if ( k.length == 2 )   return res
                                                                                 let key = k.join ( '/' );
-                                                                                if ( !key.includes(selector) )   return res
+                                                                                if ( key.match(currentSpace) == null )   return res
                                                                                 let newKey = k.slice (1);
                                                                                 res [ newKey.join('/')] = data[k.join('/')]
                                                                                 return res
                                                                 },{});
+    
                                             if ( haveNfo )   res [word] = nfo
                                             else             res [word] = lib._build ( updateData )
                                             return res
