@@ -1,6 +1,6 @@
 {
   "name": "dt-toolbox",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Data manipulation tool",
   "main": "src/dt-toolbox.js",
   "scripts": {
