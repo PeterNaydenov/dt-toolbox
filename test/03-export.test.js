@@ -92,6 +92,22 @@ it ( 'SpreadAll = select().all().spread()', () => {
 
 
 
+it ( 'Spread an array of objects', ()  => {
+	// Detected as bug on 2019.09.12
+	/**
+	 *  Bug descriptioin: If we have array of objects, and attributes of elements after 10 will overwrite content of element 1.
+	 */
+	let result;
+	const testData = sample.test_11;
+
+	dtbox
+		.init ( testData )
+		.spreadAll ( 'dt', dt => result = dt.build()   )
+		
+	expect ( result[1].id ).to.be.equal ( 1 )
+}) // it Spread an array of objects
+
+
 
 
 it ( 'Spread value', () => {

@@ -366,9 +366,18 @@ _(Nothing yet)_
 
 
 
+### 2.1.2 (2019-09-12)
+- [x] Fix: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
+- [x] Browser version was updated;
+
+
+
+
+
 ### 2.1.1 (2019-06-06)
 - [x] Fix: Build a ST object with repeating structure;
 - [x] Browser version was updated;
+- [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
 
 
 
@@ -378,6 +387,7 @@ _(Nothing yet)_
 - [x] Modify methods ( add/update/overwrite ) can receive DT data format;
 - [x] Browser version was updated;
 - [ ] Bug: Build a ST object with repeating structure;
+- [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
 
 
 
@@ -387,6 +397,7 @@ _(Nothing yet)_
 - [x] Fix: ST Build regression with boolean values;
 - [x] Browser version was updated;
 - [ ] Bug: Build a ST object with repeating structure;
+- [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
 
 
 
@@ -397,6 +408,7 @@ _(Nothing yet)_
 - [x] Browser version was updated;
 - [ ] Bug: ST Build regression with boolean values;
 - [ ] Bug: Build a ST object with repeating structure;
+- [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11".;
 
 
 
@@ -407,6 +419,7 @@ _(Nothing yet)_
 - [x] Test cases updates;
 - [x] Browser version was updated;
 - [ ] Problems with building heavy ST structures;
+- [ ] Build a wrong ST object when similar namespaces are available. Example: "sample1" and "sample11";
 
 
 

@@ -1203,14 +1203,13 @@ let lib = {
         ,  spaces = []   // Property names on level [1] that are not primitive.
         , keyList = []   // Collection of all property-names for level [0]
         ;
-        
+
         keys.forEach ( k => {  // Find spaces
                         const key = k[0];
                         // if ( k.length == 1 )   return   // means: it's just a property name
                         if ( !spaces.includes(key) )   spaces.push ( key )
                 })
-
-       
+        
         keys.forEach ( k => {   // Find keyList members.
                                                 if ( !keyList.includes(k[0]) )   keyList.push ( k[0] )
                                             })
@@ -1230,15 +1229,14 @@ let lib = {
                                             const x = parseInt(k)
                                             if ( isNaN(x) )   model = {}
                                     })
-                           
+
                         std = words.reduce ( (res,word) => {
                                             const 
                                                   selector = `${sp}/${word}`
-                                                , currentSpace = new RegExp ( `^${selector}` )
+                                                , currentSpace = new RegExp ( `^${selector}\/` )
                                                 , nfo      = data [ selector ]
                                                 , haveNfo  = ( typeof nfo == 'boolean' ) ? true : (nfo != null)
                                                 ;
-                                                  
                                             let updateData = keys.reduce ( (res,k) => {   // Data for next iteration of _build 
                                                                                 if ( k.length == 2 )   return res
                                                                                 let key = k.join ( '/' );
