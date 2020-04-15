@@ -26,7 +26,7 @@
 
 const 
       convertors = require ( './convertors' )
-    , dtlib      = require ( './dt-lib') 
+    , dtlib      = require ( './dt-lib'     ) 
     ;
 
 
@@ -53,6 +53,7 @@ const mainlib = {
                 function simpleDT () {
                             const dt  = Object.create ( API );
                             dt.value     = dt.empty ()
+                            dt.structure = []
                             dt._select   = []
                             dt._error    = []
                             return dt
@@ -70,7 +71,11 @@ const mainlib = {
                   dependencies = mainlib.dependencies () 
                 , dt = dependencies.simpleDT ()
                 ;
-            if ( stData != null )   dt.value = convertors.toFlat ( dependencies, stData )
+            if ( stData != null ) {
+                        const [structure, value] = convertors.toFlat ( dependencies, stData )
+                        dt.structure = structure
+                        dt.value     = value
+                }
             if ( !instruction   )   return dt
             else                    return dtlib.transform ( {instruction}, dt )
         } // init func.
@@ -78,13 +83,9 @@ const mainlib = {
 
 
     , load  ( flatData ) {
-            const vals = ( flatData._select ) ? flatData.value : flatData;
-            let 
-                  theValue = dtlib.loadData ( mainlib.dependencies(), vals )
-                , result   = mainlib.dependencies().simpleDT ()
-                ;
-            result.value = theValue
-            return result
+            return ( flatData._select ) 
+                                        ? dtlib.loadLong  ( mainlib.dependencies(), flatData )
+                                        : dtlib.loadShort ( mainlib.dependencies(), flatData )
         } // load 
 
 

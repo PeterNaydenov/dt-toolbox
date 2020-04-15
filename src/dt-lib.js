@@ -1,12 +1,31 @@
+'use strict'
+
+
+
 const dtlib = {
 
 
 
-    loadData ( dependencies, flatData ) {
-                let res = dependencies.empty ();
-                for ( let k in flatData ) {   res[k] = flatData[k]   }
+    loadLong ( dependencies, flatData ) {
+                let { structure, value } = flatData;
+                return dtlib._loadData ( dependencies, structure, value )
+        } // loadLong func.
+
+    , loadShort ( dependencies, flatData ) {
+                let [structure, value] = flatData;
+                return dtlib._loadData ( dependencies, structure, value )
+        } // loadShort func.
+
+    , _loadData ( dependencies, structure, value ) {
+                let res = dependencies.simpleDT ();
+                for ( const el of structure ) {
+                          res.structure.push ( [...el] )
+                    }
+                for ( const k in value ) {
+                          res.value[k] = value[k]
+                    }
                 return res
-        } // loadData func.
+        } // loadData
 
 
 
@@ -23,15 +42,25 @@ const dtlib = {
             switch ( instruction  ) {
                        case 'reverse':
                                         result = keyList.reduce ( (res,item) => {
-                                                                        let value = dt.value[item];
-                                                                        res[`root/${value}`] = item.substr(5) // remove 'root/' from the item
+                                                                        let 
+                                                                              arr = item.split ( '/' )
+                                                                            , onlyNumbers = /^[0-9]+$/
+                                                                            , pureKey = ( arr[2].match(onlyNumbers) ) ? parseInt(arr[2]) : arr[2]
+                                                                            , value = dt.value[item]
+                                                                            ;
+                                                                        res[`root/${arr[1]}/${value}`] = pureKey
                                                                         return res
                                                        }, {} )
                                         break
                        case 'key':
                        case 'keys':
                                         result = keyList.reduce ( (res,item) => {
-                                                                        res[item] = item.substr(5) // remove 'root/' from the item
+                                                                        let 
+                                                                              arr = item.split ( '/' )
+                                                                            , onlyNumbers = /^[0-9]+$/
+                                                                            , pureKey = arr[2].match(onlyNumbers) ? parseInt(arr[2]) : arr[2]
+                                                                            ;
+                                                                        res[item] = pureKey
                                                                         return res
                                                        },{})
                                         break
