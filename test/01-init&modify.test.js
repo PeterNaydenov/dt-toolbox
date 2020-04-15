@@ -51,8 +51,6 @@ it ( 'Init: Reverse keys and values', () => {
 it ( 'Init: Keys only', () => {
     // * Create key replacement map
     const result = dtbox.init ( sample.test_0, 'keys');
-// console.log ( sample.test_0 )
-// console.log ( result.value )
     expect ( result.value                ).to.have.property ( 'root/0/name'  )
     expect ( result.value['root/0/name'] ).to.be.equal ( 'name' )
     expect ( result.value['root/2/0']    ).to.be.equal ( 0 )
