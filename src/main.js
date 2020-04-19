@@ -28,28 +28,17 @@
 
 
 const 
-      dtlib      = require ( './dt-lib'     ) 
-    , standard = require ( './convertors/standard' )
-    , file      = require ( './convertors/files'     )
-    , convertor = {
-                          std : standard
-                        , file
-                        // Other possible format convertors:
-                        // file[], breadcrumbs, tuples[]
-                    }
-    , importDataTypes = Object.keys ( convertor )
+      dtlib           = require ( './dt-lib'     ) 
+    , help            = require ( './help'                )
+    , convertor       = require ( './convertors/index'    )
+    
+    , INIT_DATA_TYPES = [
+                               'std', 'standard'
+                             , 'tuple', 'tuples'
+                             , 'breadcrumb', 'breadcrumbs'
+                             , 'file', 'files'
+                        ]
     ;
-
-
-// TODO: move it in right place... 
-function sanitizeFlat ( obj ) {
-        return Object.keys(obj).reduce ( (r,k) => {
-                                let newK = k;
-                                if ( !k.includes('root/') )   newK = `root/${k}`
-                                r [newK] = obj[k]
-                                return r
-                    },{})
-    } // sanitizeFlat func.
 
 
 
@@ -60,7 +49,7 @@ const mainlib = {
 
 
     dependencies () {
-                const help  = Object.create ( API );
+                const h  = Object.create ( API );
                 function simpleDT () {
                             const dt  = Object.create ( API );
                             dt.value     = dt.empty ()
@@ -71,7 +60,8 @@ const mainlib = {
                     } // simpleDT func.
                 return {
                           simpleDT
-                        , empty: help.empty
+                        , empty: h.empty
+                        , help
                     }
             } // dependencies func.
 
@@ -90,19 +80,19 @@ const mainlib = {
  *      tuples      - array of tuples
  */
 
-    , init ( stData, options ) {   // dataType is instruction to convertor
+    , init ( inData, options ) {   // dataType is instruction to convertor
             let 
                   dependencies = mainlib.dependencies () 
                 , dt = dependencies.simpleDT ()
                 , defaultOptions = {format:'std', mod:false }
                 , {format='std', mod=false } = { ...defaultOptions,...options }
                 ;
-            if ( !importDataTypes.includes(format)   ) {
+            if ( !INIT_DATA_TYPES.includes(format)   ) {
                         console.error ( "Can't understand your data-type. Please, find what is possible on http://todo.add.documentation.link.here"  )
                         return
                 }
-            if ( stData != null ) {
-                        const [structure, value] = convertor[format].toFlat ( dependencies, stData )
+            if ( inData != null ) {
+                        const [structure, value] = convertor.from(format).toFlat ( dependencies, inData )
                         dt.structure = [...structure]
                         dt.value     = value
                 }

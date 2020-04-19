@@ -1,10 +1,5 @@
 'use strict'
 
-const {
-        hasNumbers
-      , generateObject
-      , sanitizeFlatKeys 
-            } = require ( './help' )
 
 
 /**
@@ -25,30 +20,8 @@ const {
  */
 
 
-function toFlat ( dependencies, d ) {
-            let 
-                  vBuffer = []             // keep values during key's sanitize procedure
-                , rawKeys = d.map ( el => {  // extract keys from files
-                                        let arr = el.split('/');
-                                        vBuffer.push ( arr.pop() )
-                                        return arr.join ( '/' )
-                                })
-                , keyList  = sanitizeFlatKeys ( rawKeys )
-                , rawValue = keyList.reduce ( (res,k,i)  => {
-                                            let arr   = k.split ('/');                                                    
-                                            arr.pop ()
-                                            res[k] = vBuffer[i]
-                                            return res
-                                    }, {} )
-                ;
-            return findObjects ( rawValue )
-    } // toFlat func.
 
-
-
-
-
-function findObjects (rawValue) {
+function toFlat ( dependencies, rawValue) {
         let 
               structure = []
             , value = {}
@@ -59,6 +32,10 @@ function findObjects (rawValue) {
             , maxLength = keyList[0].length - 1
             , buffer = []
             , resultObjects = []
+            , {
+                  hasNumbers
+                , generateObject
+              } = dependencies.help
             ;
         for (let i=maxLength; i >= 0; i--) {  // separate keys on deep levels
                    let selectedKeys = keyList.filter ( k => k.length == i+1 );
@@ -88,7 +65,7 @@ function findObjects (rawValue) {
                     structure.push ( [...record] )
                 }       
         return [ structure, value ]
-} // findObjects func.
+} // toFlat func.
 
 
 

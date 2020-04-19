@@ -1,11 +1,5 @@
 'use strict'
 
-const {
-        findType
-      , isItPrimitive
-      , generateList  
-            } = require ( './help' )
-
 
 
 function toFlat ( dependencies, d ) {
@@ -13,6 +7,11 @@ function toFlat ( dependencies, d ) {
                   deepList = []
                 , isPrimitve = false
                 , value = dependencies.empty ()
+                , {
+                        findType
+                      , isItPrimitive
+                      , generateList  
+                    } = dependencies.help
                 , structure = []
                 ;    
             deepList.push ( generateList (0, d)   )
