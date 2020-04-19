@@ -17,7 +17,8 @@
      - Works in browsers. December 24th, 2017
      - Refactoring and version 3.0.0   April 14th, 2020
          * Much faster and memory efficient algorithms;
-         * Change of internal data-structures;
+         * Smaller library size;
+         * Change of internal data-structures(DT);
          * Old internal data type have new name(breadcrumbData) and is fully supported(import/export);
          * Support for tuples(import and export);
          * Complete code refactoring;

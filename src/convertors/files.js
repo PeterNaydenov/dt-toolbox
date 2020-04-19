@@ -1,11 +1,9 @@
 'use strict'
 
 const {
-        findType
-      , hasNumbers
-      , isItPrimitive
+        hasNumbers
       , generateObject
-      , generateList  
+      , sanitizeFlatKeys 
             } = require ( './help' )
 
 
@@ -32,17 +30,17 @@ function toFlat ( dependencies, d ) {
                   vBuffer = []             // keep values during key's sanitize procedure
                 , rawKeys = d.map ( el => {  // extract keys from files
                                         let arr = el.split('/');
-                                         vBuffer.push ( arr.pop() )
-                                        return arr
+                                        vBuffer.push ( arr.pop() )
+                                        return arr.join ( '/' )
                                 })
-              , keyList = sanitizeFlat ( rawKeys )
-              , rawValue  = keyList.reduce ( (res,k,i)  => {
-                                                let arr   = k.split ('/');                                                    
-                                                arr.pop ()
-                                                res[k] = vBuffer[i]
-                                                return res
-                                        },{} )
-              ;
+                , keyList  = sanitizeFlatKeys ( rawKeys )
+                , rawValue = keyList.reduce ( (res,k,i)  => {
+                                            let arr   = k.split ('/');                                                    
+                                            arr.pop ()
+                                            res[k] = vBuffer[i]
+                                            return res
+                                    }, {} )
+                ;
             return findObjects ( rawValue )
     } // toFlat func.
 
@@ -54,14 +52,13 @@ function findObjects (rawValue) {
         let 
               structure = []
             , value = {}
-            , keyList   = Object // provide keyList in order: from larger to smaller 
+            , keyList   = Object // provide keyList in order: from larger to shorter 
                             .keys(rawValue)
                             .map ( x => x.split('/')   )
                             .sort ( (a,b) => b.length - a.length)
             , maxLength = keyList[0].length - 1
             , buffer = []
             , resultObjects = []
-            , sample = keyList[0]
             ;
         for (let i=maxLength; i >= 0; i--) {  // separate keys on deep levels
                    let selectedKeys = keyList.filter ( k => k.length == i+1 );
@@ -83,7 +80,7 @@ function findObjects (rawValue) {
                                         record [0] = hasNumbers ( item[k]) ? 'array' : 'object'
                                         let prop = k.split('/').pop()
                                         structure[prev].push([actual+count, prop])
-                                        theProps.forEach ( key => {
+                                        theProps.forEach ( key => {  // setup values
                                                         let combinedKey = `${k}/${key}`;
                                                         value[`root/${actual+count}/${key}`] = rawValue[combinedKey]
                                                 })
@@ -92,46 +89,6 @@ function findObjects (rawValue) {
                 }       
         return [ structure, value ]
 } // findObjects func.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function sanitizeFlat ( list ) {
-            let keys = list.map ( x => [ 'root', ...x].join('/')   )
-            let 
-                  usedKeys=[]
-                , duplicatedKeys= new Set()
-                ;
-            keys.forEach ( k => {
-                            if ( usedKeys.includes(k) ) {
-                                        duplicatedKeys.add(k)
-                                }
-                            else {
-                                        usedKeys.push ( k )
-                                }
-                    })
-            for (const marker of duplicatedKeys ) {
-                        let counter = 0;
-                        keys = keys.map ( k => {
-                                            if ( k == marker )   return `${k}/${counter++}`
-                                            else                 return k
-                                        })
-                    }
-            return keys
-    } // sanitizeFlat func.
-
 
 
 

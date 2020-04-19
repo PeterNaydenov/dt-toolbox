@@ -97,14 +97,43 @@ function toFolderFile ( target ) {
 
 
 
+// TODO: Check how different are  sanitizeFlatKeys and toFolderFile functions! Looks like they are very simular...
+function sanitizeFlatKeys ( list ) {
+        let keys = list.map ( x => {
+                        let key = x.split ( '/' )
+                        if ( key[0] != 'root' )   return [ 'root', ...key].join('/')
+                        else                      return key.join ( '/' )
+                })
+        let 
+              usedKeys=[]
+            , duplicatedKeys= new Set()
+            ;
+        keys.forEach ( k => {
+                        if ( usedKeys.includes(k) )    duplicatedKeys.add(k)
+                        else                           usedKeys.push ( k )
+                })
+        for (const marker of duplicatedKeys ) {
+                        let counter = 0;
+                        keys = keys.map ( k => {
+                                            if ( k == marker )   return `${k}/${counter++}`
+                                            else                 return k
+                                    })
+                }
+        return keys
+} // sanitizeFlat func.
+
+
+
+
 
 module.exports = { 
                       findType
-                    , hasNumbers
-                    , isItPrimitive
+                    , hasNumbers         // Check if array contain number members. Returns boolean
+                    , isItPrimitive      // Returns boolean
                     , generateObject
                     , generateList 
                     , toFolderFile
+                    , sanitizeFlatKeys
                 }
 
 
