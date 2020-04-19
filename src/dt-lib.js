@@ -34,12 +34,12 @@ const dtlib = {
     , transform ( dependencies, [structure, value] ) {
       // *** Transformer for DT object. Reverse object key and values, or get only keys/values
             let 
-                  { instruction, empty } = dependencies
+                  { mod, empty } = dependencies
                 , keyList = Object.keys ( value )
                 , result
                 ;
 
-            switch ( instruction  ) {
+            switch ( mod  ) {
                        case 'reverse':
                                         result = keyList.reduce ( (res,item) => {
                                                                         let 

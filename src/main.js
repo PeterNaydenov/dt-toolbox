@@ -30,10 +30,10 @@
 const 
       dtlib      = require ( './dt-lib'     ) 
     , standard = require ( './convertors/standard' )
-    , files     = require ( './convertors/files'     )
+    , file      = require ( './convertors/files'     )
     , convertor = {
                           std : standard
-                        , files
+                        , file
                         // Other possible format convertors:
                         // file[], breadcrumbs, tuples[]
                     }
@@ -75,25 +75,40 @@ const mainlib = {
                     }
             } // dependencies func.
 
+/**
+ *  Init options:
+ *  modifier(mod): 
+ *          keys    - take keys as value. Ignore original values.
+ *          nokeys  - ignore keys. Convert objects to arrays
+ *          values  - use values as keys
+ *        reverse   - keys will become values and values - keys
+ * 
+ *  format(type): 
+ *      std         - standard js object
+ *      breadcrumb  - key as a folder. Separate value
+ *      file         - keys and values in a single string 
+ *      tuples      - array of tuples
+ */
 
-
-    , init ( stData, instruction=false, dataType='std' ) {   // dataType is instruction to convertor
+    , init ( stData, options ) {   // dataType is instruction to convertor
             let 
                   dependencies = mainlib.dependencies () 
                 , dt = dependencies.simpleDT ()
+                , defaultOptions = {format:'std', mod:false }
+                , {format='std', mod=false } = { ...defaultOptions,...options }
                 ;
-            if ( !importDataTypes.includes(dataType)   ) {
+            if ( !importDataTypes.includes(format)   ) {
                         console.error ( "Can't understand your data-type. Please, find what is possible on http://todo.add.documentation.link.here"  )
                         return
                 }
             if ( stData != null ) {
-                        const [structure, value] = convertor[dataType].toFlat ( dependencies, stData )
+                        const [structure, value] = convertor[format].toFlat ( dependencies, stData )
                         dt.structure = [...structure]
                         dt.value     = value
                 }
-            if ( !instruction   )   return dt
+            if ( !mod   )   return dt
             else {                   
-                                    let [structure, value] = dtlib.transform ( {...dependencies, instruction }, [dt.structure, dt.value] )
+                                    let [structure, value] = dtlib.transform ( {...dependencies, mod }, [dt.structure, dt.value] )
                                     dt.structure = structure
                                     dt.value = value
                                     return dt
