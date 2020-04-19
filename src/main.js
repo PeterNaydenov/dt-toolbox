@@ -16,17 +16,27 @@
      - String format support introduces. April 22th, 2017
      - Works in browsers. December 24th, 2017
      - Refactoring and version 3.0.0   April 14th, 2020
-         * Much faster and memory efficient algorithms
-         * Support for tuples
-         * Complete code refactoring
+         * Much faster and memory efficient algorithms;
+         * Change of internal data-structures;
+         * Old internal data type have new name(breadcrumbData) and is fully supported(import/export);
+         * Support for tuples(import and export);
+         * Complete code refactoring;
 */
 
 
 
 
 const 
-      convertors = require ( './convertors' )
-    , dtlib      = require ( './dt-lib'     ) 
+      dtlib      = require ( './dt-lib'     ) 
+    , standard = require ( './convertors/standard' )
+    , files     = require ( './convertors/files'     )
+    , convertor = {
+                          std : standard
+                        , files
+                        // Other possible format convertors:
+                        // file[], breadcrumbs, tuples[]
+                    }
+    , importDataTypes = Object.keys ( convertor )
     ;
 
 
@@ -66,23 +76,32 @@ const mainlib = {
 
 
 
-    , init ( stData, instruction ) {
+    , init ( stData, instruction=false, dataType='std' ) {   // dataType is instruction to convertor
             let 
                   dependencies = mainlib.dependencies () 
                 , dt = dependencies.simpleDT ()
                 ;
+            if ( !importDataTypes.includes(dataType)   ) {
+                        console.error ( "Can't understand your data-type. Please, find what is possible on http://todo.add.documentation.link.here"  )
+                        return
+                }
             if ( stData != null ) {
-                        const [structure, value] = convertors.toFlat ( dependencies, stData )
-                        dt.structure = structure
+                        const [structure, value] = convertor[dataType].toFlat ( dependencies, stData )
+                        dt.structure = [...structure]
                         dt.value     = value
                 }
             if ( !instruction   )   return dt
-            else                    return dtlib.transform ( {instruction}, dt )
+            else {                   
+                                    let [structure, value] = dtlib.transform ( {...dependencies, instruction }, [dt.structure, dt.value] )
+                                    dt.structure = structure
+                                    dt.value = value
+                                    return dt
+                }
         } // init func.
 
 
 
-    , load  ( flatData ) {
+    , load  ( flatData ) {   // Load dt content - dtShort and dtLong data types
             return ( flatData._select ) 
                                         ? dtlib.loadLong  ( mainlib.dependencies(), flatData )
                                         : dtlib.loadShort ( mainlib.dependencies(), flatData )
@@ -119,7 +138,7 @@ const exportAPI = {
 const API = {
     // DT I/O Operations
 		    init       : mainlib.init      // Start chain with data or empty
-	      , load       : mainlib.load        // Load DT object or value.
+	      , load       : mainlib.load      // Load DT object or value.
     //    , loadFast   : dtlib.loadFast    // Use only when no meta-related operations
     //    , preprocess : dtlib.preprocess  // Convert ST to DT object. Change income data before add, update, overwrite.
     //    , add        : dtlib.add         // Add data and keep existing data

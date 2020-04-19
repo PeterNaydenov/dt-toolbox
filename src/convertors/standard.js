@@ -1,12 +1,16 @@
 'use strict'
 
-
+const {
+        findType
+      , isItPrimitive
+      , generateList  
+            } = require ( './help' )
 
 
 
 function toFlat ( dependencies, d ) {
             let 
-                deepList = []
+                  deepList = []
                 , isPrimitve = false
                 , value = dependencies.empty ()
                 , structure = []
@@ -38,9 +42,9 @@ function toFlat ( dependencies, d ) {
 
 function toStandard ([ structure, value ]) {
             let 
-                    keys = Object.keys ( value )
-                , resultObjects = []
-                ;
+                keys = Object.keys ( value )
+              , resultObjects = []
+              ;
             structure.forEach ( ([type, id, ...items]) => {   // Create data-structures
                                     let local;
                                     if ( type == 'array' )   local = []
@@ -73,22 +77,6 @@ function toStandard ([ structure, value ]) {
 
 
 
-function isItPrimitive (d) {
-            if     ( typeof d == 'function' )     return false
-            return ( typeof d != 'object'   )  ?  true : false
-    } // isItPrimitive func.
-
-
-
-const findType =  d =>  ( d instanceof Array ) ? 'array' : 'object'
-    
-
-
-function* generateList ( id, val) {
-        for ( let k in val ) {
-                yield [ id, k, val[k] ]
-            }
-    } // generateList func*.
 
 
 

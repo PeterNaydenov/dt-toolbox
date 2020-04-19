@@ -8,16 +8,14 @@
 - инструкцията при конверсия също
 
 
-# NEW IDEAS
+## NEW IDEAS
 - New internal data-structure
 - Генератор за празни дата структури
-- Old internal data should be used only as import/export format. Format name will be 'breadcrumbs'
+- Old internal data should be used only as import/export format. Format name will be named 'breadcrumbsData'
+- Write own convertors ( possible use: as data-bridge (data-model to data-model), data-modifier, filter, etc...)
 
-```js
-// Use this during working with selections
-a = new Set ([1,2,3])
-[...a.entries()]  // returns -> [ [1,1], [2,2], [3,3] ]
-```
+
+
 
 ```js
 const st = {
@@ -64,4 +62,30 @@ let flatData = {
             , 'root/8/um' : 77
         }
 
+```
+
+
+
+
+
+
+
+
+## SELECTION CHANGES
+
+Обектът за селекция ще трябва да се промени доста:
+1. Трябва да съдържа структура
+      стуктурата може да се базира на оригиналната или да е въведена 
+      експлицитно от ползващия библиотеката по време на селекцията. 
+      Тя е задължителна за процеса на конвертиране
+2. Данните в нова селекция трябва да има два елемента. Единия ще пази оригиналното име на ключа. Него ще       
+      използваме по време на spread процеса, за да извлечем данните от value. 
+      Върху втория елемент може да правим модификации. По време на spread, той ще се използва за формиране
+      името на ключа, съответно и местоположението му. Ако първият елемент е `root/2/name`, а втория е `root/0/updatedName`, означава че сме взели пропъртито `name` от обект `2` и сме прекръстили на `updatedName` и сме го сложили в основния обект `0`.
+ За данните може да използваме следната транформация
+Selection object
+```js
+// Use this during working with selections
+a = new Set ([1,2,3])
+[...a.entries()]  // returns -> [ [1,1], [2,2], [3,3] ]
 ```

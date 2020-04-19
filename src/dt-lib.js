@@ -31,11 +31,11 @@ const dtlib = {
 
 
 
-    , transform ( dependencies, dt ) {
+    , transform ( dependencies, [structure, value] ) {
       // *** Transformer for DT object. Reverse object key and values, or get only keys/values
             let 
-                  { instruction } = dependencies
-                , keyList = Object.keys ( dt.value )
+                  { instruction, empty } = dependencies
+                , keyList = Object.keys ( value )
                 , result
                 ;
 
@@ -46,40 +46,48 @@ const dtlib = {
                                                                               arr = item.split ( '/' )
                                                                             , onlyNumbers = /^[0-9]+$/
                                                                             , pureKey = ( arr[2].match(onlyNumbers) ) ? parseInt(arr[2]) : arr[2]
-                                                                            , value = dt.value[item]
+                                                                            , val = value[item]
                                                                             ;
-                                                                        res[`root/${arr[1]}/${value}`] = pureKey
+                                                                        res[`root/${arr[1]}/${val}`] = pureKey
                                                                         return res
-                                                       }, {} )
+                                                       }, empty() )
                                         break
                        case 'key':
                        case 'keys':
-                                        result = keyList.reduce ( (res,item) => {
+                                        result = keyList.reduce ( (res,key) => {
                                                                         let 
-                                                                              arr = item.split ( '/' )
+                                                                              arr = key.split ( '/' )
                                                                             , onlyNumbers = /^[0-9]+$/
                                                                             , pureKey = arr[2].match(onlyNumbers) ? parseInt(arr[2]) : arr[2]
                                                                             ;
-                                                                        res[item] = pureKey
+                                                                        res[key] = pureKey
                                                                         return res
-                                                       },{})
+                                                       }, empty() )
                                         break
                        case 'value' :
                        case 'values':
-                                        const 
-                                              temp = lib._toFolderFile  ( dtValue.valueList().map(el=>`root/${el}`) )
-                                            , next = simple.getIterator ( temp )
-                                                           .reduce ( (res,el) => {
-                                                                                     let 
-                                                                                          val = temp[el]
-                                                                                        , isNumber = isNaN ( parseInt(val)) ? false : true
-                                                                                        , newKey  = ( isNumber ) ? `${el}/0` : `${el}/${val}`
-                                                                                        ;
-                                                                                     res[newKey] = val
-                                                                                     return res
-                                                                         },{})
-                                            ;
-                                        result = exportlib.build ( next )
+                                        result = empty ()
+                                        let counter = 0;
+                                        for (const v of keyList ) {
+                                                    let 
+                                                          arr = v.split ( '/' )
+                                                        , item = value[v]
+                                                        ;
+                                                    arr[2] = counter++
+                                                    let key = arr.join ('/');
+                                                    result[key] = item
+                                              }
+                                        structure = structure.map ( row => {
+                                                                  let [ type, id, ...members ] = row;
+                                                                  if ( members.length > 0 ) {
+                                                                              counter = 0
+                                                                              members = members.map ( item => {
+                                                                                                      let [ target, prop ] = item;
+                                                                                                      return [ target, target ]
+                                                                                                })
+                                                                      }
+                                                                  return [ 'array', id, ...members ]
+                                                            })
                                         break
                        case 'file'     :
                        case 'files'    :
@@ -91,8 +99,7 @@ const dtlib = {
                        default:
                                         result = {}
                  } //   switch instructions
-                 dt.value = result
-                 return dt
+                 return [structure, result]
         } // transform func.
 
 } // dtlib
