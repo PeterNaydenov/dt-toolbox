@@ -31,14 +31,15 @@ const selectConvertor =
                                                   vBuffer  = rawKeys.forEach ( k => inData[k] )
                                                   keyList  = sanitizeFlatKeys ( rawKeys )
                                                   rawValue = keyList.reduce ( (res,k,i)  => {
-                                                                            res[k] = vBuffer[i]
+                                                                            let  val = Number (vBuffer[i])? parseInt(vBuffer[i]) : vBuffer[i];
+                                                                            res[k]   = val
                                                                             return res
                                                                     }, {} )
                                                   return   breadcrumbs.toFlat ( dependencies, rawValue )
                                 case 'file'    :
                                 case 'files'   :
                                                   // TODO: Move this manipulations in help file
-                                                  // 
+                                                  //  extractKeys, sanitaze, buildRawValue
                                                   rawKeys = inData.map ( el => {  // extract keys from files
                                                                         let arr = el.split('/');
                                                                         vBuffer.push ( arr.pop() )
@@ -46,7 +47,8 @@ const selectConvertor =
                                                                 })
                                                   keyList  = sanitizeFlatKeys ( rawKeys )
                                                   rawValue = keyList.reduce ( (res,k,i)  => {
-                                                                            res[k] = vBuffer[i]
+                                                                            let  val = Number (vBuffer[i])? parseInt(vBuffer[i]) : vBuffer[i];
+                                                                            res[k]   = val
                                                                             return res
                                                                     }, {} )
                                                   return   breadcrumbs.toFlat ( dependencies, rawValue )

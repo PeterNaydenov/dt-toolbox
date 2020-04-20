@@ -26,46 +26,51 @@ function toFlat ( dependencies, rawValue) {
               structure = []
             , value = {}
             , keyList   = Object // provide keyList in order: from larger to shorter 
-                            .keys(rawValue)
+                            .keys ( rawValue )
                             .map ( x => x.split('/')   )
                             .sort ( (a,b) => b.length - a.length)
             , maxLength = keyList[0].length - 1
             , buffer = []
             , resultObjects = []
+            , deepList = []
             , {
-                  hasNumbers
-                , generateObject
+                  generateObject
+                , generateList
+                , hasNumbers
               } = dependencies.help
             ;
         for (let i=maxLength; i >= 0; i--) {  // separate keys on deep levels
                    let selectedKeys = keyList.filter ( k => k.length == i+1 );
                    buffer.push ( generateObject(selectedKeys)   )
             }
-        resultObjects = buffer.map ( x => x.next().value )
-        for (let i=maxLength; i >=0; i-- ) {   // build final data
-                    let   item = resultObjects[i]
-                        , id = structure.length
-                        , type = 'object'
-                        ;
-                    let record = [ type,  id ];
-                    Object.keys(item).forEach ( (k,count) => {
-                                        let 
-                                              prev = id - 2
-                                            , actual = id - 1
-                                            , theProps = item[k]
-                                            ;
-                                        record [0] = hasNumbers ( item[k]) ? 'array' : 'object'
-                                        let prop = k.split('/').pop()
-                                        structure[prev].push([actual+count, prop])
-                                        theProps.forEach ( key => {  // setup values
-                                                        let combinedKey = `${k}/${key}`;
-                                                        value[`root/${actual+count}/${key}`] = rawValue[combinedKey]
-                                                })
-                                    })
-                    structure.push ( [...record] )
-                }       
-        return [ structure, value ]
-} // toFlat func.
+        resultObjects = buffer.map ( x => x.next().value ).reverse ()   // organize keys as objects in right order
+        deepList.push ( generateList ( 0, resultObjects)   )
+
+        let 
+              test = Object.keys(rawValue).map(x => x.split('/')[1])
+            , type = hasNumbers(test) ? 'array' : 'object'
+            ;
+        structure.push ( [type, 0])
+        for ( let list of deepList ) {
+        for (let [id, none, val] of list ) {
+                       for (let v in val ) {
+                                  let 
+                                      name = v.split('/').pop()
+                                    , j = structure.length
+                                    ;
+                                  type = hasNumbers ( val[v] ) ? 'array' : 'object'
+                                  if ( name != 'root' ) {
+                                          structure.push ([ type, j])
+                                          structure[id].push ( [j,name] )
+                                    }
+                                  for (let prop in val[v]) {
+                                              let composedK = `${val[v][prop]}`
+                                              value [`root/${j}/${composedK}`] = rawValue[`${v}/${composedK}`]
+                                        }
+                          } // for val
+            }} // for deepList
+          return [ structure, value ]
+  } // toFlat func.
 
 
 

@@ -113,25 +113,44 @@ it ( 'Init: Value only --> Important Detail', () => {
 
 it ( 'Init: Files', () => {
 	// Create new object from values where we have value with '/' delimiter. Last element of the string will become a value
- 			// const result = dtbox.init ( sample.test_9, {format:'file'} );
-// TODO: Think about provision of params in init. What is data-format and what instructions?
-
- 			// expect ( result.value ).to.have.property ( 'root/rootFolder/profile/name'  )
- 			// expect ( result.value['root/rootFolder/profile/name'] ).to.be.equal ( 'Peter'  )
+ 			const result = dtbox.init ( sample.test_9, {format:'file'} );
+            // TODO: Not tested for boolean!
+ 			expect ( result.value ).to.have.property ( 'root/2/name'  )
+ 			expect ( result.value['root/2/name'] ).to.be.equal ( 'Peter'  )
  			
- 			// expect ( result.value ).to.have.property ( 'root/rootFolder/profile/age'  )
- 			// expect ( result.value['root/rootFolder/profile/age'] ).to.be.equal ( '42'  )
+ 			expect ( result.value ).to.have.property ( 'root/2/age'  )
+ 			expect ( result.value['root/2/age'] ).to.be.equal ( 42  )
 
- 			// expect ( result.value ).to.not.have.property ( 'root/rootFolder/friends' )
-
- 			// expect ( result.structure ).to.have.property ( 'root/rootFolder/friends' )
- 			// expect ( result.structure['root/rootFolder/friends'] ).to.be.equal ( 'array' )
- 			// expect ( result.structure['root/rootFolder/profile'] ).to.be.equal ( 'object' )
-
- 			// expect ( result.namespace ).to.have.property ( 'profile'    )
- 			// expect ( result.namespace ).to.have.property ( 'friends'    )
- 			// expect ( result.namespace ).to.have.property ( 'rootFolder' )
+ 			expect ( result.value ).to.not.have.property ( 'root/1/friends' )
+ 			expect ( result.structure[3][0] ).to.be.equal ( 'array' )
     }) // it files
+
+
+
+
+
+it ( 'Init: Handmade files-like structure', () => {
+        let  result;
+        let data = [
+                          'a/www'
+                        , 'a/www'
+                        , 'a/www'
+                        , 'd/a/www'
+                        , 'd/e/www'
+                      ]
+        
+        result =  dtbox.init ( data, { format:'file'} )
+    
+        expect ( result.value ).to.contain.property ( 'root/1/0' )
+        expect ( result.value ).to.contain.property ( 'root/1/1' )
+        expect ( result.value ).to.contain.property ( 'root/1/2' )
+        expect ( result.value ).to.contain.property ( 'root/2/a' )
+        expect ( result.value ).to.contain.property ( 'root/2/e' )
+
+        expect ( result.structure[0][0] ).to.be.equal ( 'object' )
+        expect ( result.structure[1][0] ).to.be.equal ( 'array' )
+        expect ( result.structure[2][0] ).to.be.equal ( 'object' )
+    }) // it handmade
 
 
 
