@@ -34,7 +34,22 @@ it ( 'Init: ST(standard) object' , () => {
             result = dtbox.load ( dt )   //   result === dt.value
 
             expect ( result.value.hi()  ).to.be.equal ( 'hi' )
- 			expect ( result.value       ).to.have.property ('root/0/name' )
+            expect ( result.value       ).to.have.property ('root/0/name' )
+            expect ( result.structure.length ).to.be.equal ( 1 ) 
+ }) // it ST object
+
+
+
+ it ( 'Init: ST(standard) array' , () => {
+            let dt, result ;
+
+            dt = dtbox.init ([ 'Peter', 'Maria', 'Vessy' ])
+            result = dtbox.load ( dt )   //   result === dt.value
+
+            expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+            expect ( result.value       ).to.have.property ('root/0/0' )
+            expect ( result.structure[0][0]).to.be.equal ( 'array' ) 
+            expect ( result.structure.length ).to.be.equal ( 1 ) 
  }) // it ST object
 
 
@@ -154,4 +169,16 @@ it ( 'Init: Handmade files-like structure', () => {
 
 
 
+
+
+it ( 'Load: shortFlat', () => {
+        // *** Init with DT object. Strip DT mean only dt.value element
+                const result = dtbox.load ( sample.test_12 );
+    
+                expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+                expect ( result.value ).to.have.property ( 'root/1/name' )
+                expect ( result.value ).to.have.property ( 'root/id'     )
+                expect ( result.structure.length ).to.be.equal ( 2 )
+                expect ( result.structure[0][2][1] ).to.be.equal ( 'profile' )
+        }) // it load DT
 }) // describe
