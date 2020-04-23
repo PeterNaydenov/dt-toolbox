@@ -103,9 +103,29 @@ it ( 'Init: Values only', () => {
 
 
 
-it ( 'Init: Value only --> Important Detail', () => {
-	// * Attention! Values that are numbers, will convert to array!
-    //   Avoid this problem by using init with 'files'. See next unit test.
+
+
+it ( 'Init: Values only, Format: std', () => {
+    let result = dtbox.init ({
+                                  user : 'Peter'
+                                , age  : 42
+                                , role : 'admin'
+                              },{ format:'std', mod:'values' });
+
+    // root should be auto append
+    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+    expect ( result.value ).to.have.property ( 'root/0/0'  )
+    expect ( result.value ).to.have.property ( 'root/0/1'  )
+    expect ( result.value ).to.have.property ( 'root/0/2'  )
+    
+    expect ( result.structure[0][0]).to.be.equal ( 'array' )
+}) // it Simple Object as value
+
+
+
+
+
+it ( 'Init: Value only, Format: values', () => {
             const result = dtbox.init ( sample.test_9, {mod:'values', format:'file'} );
 
  			expect ( result.value ).to.have.property ( 'root/1/0'  )
@@ -171,6 +191,7 @@ it ( 'Init: Handmade files-like structure', () => {
 
 
 
+
 it ( 'Load: shortFlat', () => {
         // *** Init with DT object. Strip DT mean only dt.value element
                 const result = dtbox.load ( sample.test_12 );
@@ -181,4 +202,15 @@ it ( 'Load: shortFlat', () => {
                 expect ( result.structure.length ).to.be.equal ( 2 )
                 expect ( result.structure[0][2][1] ).to.be.equal ( 'profile' )
         }) // it load DT
+
+
+
+
+
+
+
+
+
+
+
 }) // describe
