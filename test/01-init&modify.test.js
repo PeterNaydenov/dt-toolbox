@@ -191,6 +191,47 @@ it ( 'Init: Handmade files-like structure', () => {
 
 
 
+it ( 'Init: Preprocess', () => {
+        const result = dtbox
+                        .preprocess ( sample.test_0, ([structure, value]) => {
+                                                                let 
+                                                                      iterator = Object.keys (value)
+                                                                    , result = {}
+                                                                    ;
+                                                                result = iterator.reduce ( (res, el) => {   // remove first level properties
+                                                                                                        let tester = el.split('/');
+                                                                                                        if ( tester[1] != 0 )  res[el] = value[el]
+                                                                                                        return res
+                                                                                             },{})
+                                                                // Important: function must return !
+                                                                return [ structure, result]
+                                        })
+        try {
+                let iterator = Object.keys ( result.value );
+                iterator.forEach ( el => { // check if there are no first level properties
+                                let tester = el.split('/');
+                                expect ( tester[1] ).to.be.not.equal ( 0 )
+                                expect ( tester[2]).to.be.not.equal ( 'name' )
+                                expect ( tester[2]).to.be.not.equal ( 'age'  )
+                        })
+            }
+        catch (error) {
+                    throw error
+            }
+        
+        expect ( result.value ).to.have.property ( 'root/1/active' )
+        expect ( result.value['root/1/active'] ).to.be.true
+        expect ( result.value ).to.have.deep.property ( 'root/2/2' )
+
+        expect ( result.structure.length ).to.be.equal ( 3 )
+        expect ( result.structure[0][0] ).to.be.equal ( 'object' )
+        expect ( result.structure[1][0] ).to.be.equal ( 'object' )
+        expect ( result.structure[2][0] ).to.be.equal ( 'array'  )
+  }) // it preprocess
+
+
+
+
 
 it ( 'Load: shortFlat', () => {
         // *** Init with DT object. Strip DT mean only dt.value element

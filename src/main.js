@@ -111,7 +111,21 @@ const mainlib = {
             return ( flatData._select ) 
                                         ? dtlib.loadLong  ( mainlib.dependencies(), flatData )
                                         : dtlib.loadShort ( mainlib.dependencies(), flatData )
-        } // load 
+        } // load
+        
+        
+
+    , preprocess ( inData, fn ) {
+                let 
+                      shortFlat = convertor.from ('std').toFlat ( mainlib.dependencies(), inData )
+                    , update = fn(shortFlat)
+                    ;
+                if ( !update ) {
+                        console.error ( 'Method "preprocess" should always return a shortFlat structure: [structure, value]' )
+                        return mainlib.init ()
+                    }
+                return dtlib.loadShort ( mainlib.dependencies(), update )
+        } // preprocess func.
 
 
 
@@ -146,7 +160,7 @@ const API = {
 		    init       : mainlib.init      // Start chain with data or empty
 	      , load       : mainlib.load      // Load DT object or value.
     //    , loadFast   : dtlib.loadFast    // Use only when no meta-related operations
-    //    , preprocess : dtlib.preprocess  // Convert ST to DT object. Change income data before add, update, overwrite.
+          , preprocess : mainlib.preprocess  // Convert Std to Flat object. Change income data before add, update, overwrite.
     //    , add        : dtlib.add         // Add data and keep existing data
     //    , update     : dtlib.update      // Updates only existing data
     //    , insert     : dtlib.insert      // Insert data on specified key, when the key represents an array.
