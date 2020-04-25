@@ -376,4 +376,23 @@ it ( 'Modify: Overwrite with instructions', () => {
 })  // it modify: Overwrite
 
 
+
+
+
+it ( 'Modify: Insert', () => {
+    // * Insert data on specified key, when the key represents an array.	
+	const result = dtbox
+	                 .init ()
+	                 .add ( sample.test_10, { format:'file'})
+	                 .insert ( ['root/friends/Misho', 'root/friends/Tosho' ] , {format: 'file'} )
+
+    expect ( result.value.hi()           ).to.be.equal ( 'hi' )
+	expect ( result.value ).to.have.property ( 'root/1/3' )
+	expect ( result.value ).to.have.property ( 'root/1/4' )
+
+	expect ( result.structure.length ).to.have.equal ( 2 )
+	expect ( result.structure[1][0] ).to.be.equal ( 'array' )
+}) // it insert
+
+
 }) // describe

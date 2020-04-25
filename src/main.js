@@ -201,7 +201,36 @@ const mainlib = {
             me.structure = structure
             me.value = value
             return me
-        } // add func.
+        } // overwrite func.
+
+
+
+
+    , insert ( inData, options ) {
+            const
+                  me = this 
+                , addData = mainlib.init ( inData, options )
+                , mainData = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
+                , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
+                , { empty } = mainlib.dependencies ()
+                ;
+
+            for (const updateKey in updates ) {
+                            let 
+                                  mainVals   = Object.values ( mainData[updateKey])
+                                , updateVals = Object.values ( updates[updateKey] )
+                                , mixed      = mainVals.concat ( updateVals )
+                                ;
+                            mainData[updateKey] = mixed.reduce ( (r,item,i) => {
+                                                                r[i] = item
+                                                                return r
+                                                }, {} )
+                }
+            let [structure, value ] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), mainData )
+            me.structure = structure
+            me.value = value
+            return me
+        } // insert func.
 
 
 } // mainlib
@@ -239,7 +268,7 @@ const API = {
           , add        : mainlib.add         // Add data and keep existing data
           , update     : mainlib.update      // Updates only existing data
           , overwrite  : mainlib.overwrite   // Add new data to DT object. Overwrite existing fields
-    //    , insert     : dtlib.insert      // Insert data on specified key, when the key represents an array.
+          , insert     : mainlib.insert      // Insert data on specified key, when the key represents an array.
     //    , spread     : dtlib.spread      // Export DT object
     //    , spreadAll  : dtlib.spreadAll   // Select all and export DT object with one command
     //    , log        : dtlib.errorLog    // Executes callback with errors list as argument
