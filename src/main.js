@@ -30,13 +30,15 @@
 const 
       dtlib           = require ( './dt-lib'     ) 
     , help            = require ( './help'                )
-    , convertor       = require ( './convertors/index'    )
+    , convert         = require ( './convertors/index'    )
     
     , INIT_DATA_TYPES = [
                                'std', 'standard'
                              , 'tuple', 'tuples'
                              , 'breadcrumb', 'breadcrumbs'
                              , 'file', 'files'
+                             , 'midFlat'
+                             , 'shortFlat'
                         ]
     ;
 
@@ -92,7 +94,7 @@ const mainlib = {
                         return
                 }
             if ( inData != null ) {
-                        const [structure, value] = convertor.from(format).toFlat ( dependencies, inData )
+                        const [structure, value] = ( format == 'shortFlat') ? inData : convert.from(format).toFlat ( dependencies, inData )
                         dt.structure = [...structure]
                         dt.value     = value
                 }
@@ -117,7 +119,7 @@ const mainlib = {
 
     , preprocess ( inData, fn ) {   // TODO: Data load options are not available?!
                 let 
-                      shortFlat = convertor.from ('std').toFlat ( mainlib.dependencies(), inData )
+                      shortFlat = convert.from ('std').toFlat ( mainlib.dependencies(), inData )
                     , afterProcess    = fn ( shortFlat )
                     ;
                 if ( !afterProcess ) {
@@ -133,8 +135,8 @@ const mainlib = {
             const
                   me = this 
                 , addData = mainlib.init ( inData, options )
-                , mainData = convertor.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
-                , updates  = convertor.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
+                , mainData = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
+                , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
                 ;
 
             for (const updateKey in updates ) {
@@ -146,11 +148,33 @@ const mainlib = {
                                             }
                             }
                 }
-            let [structure, value ] = convertor.from ( 'midFlat').toFlat ( mainlib.dependencies(), mainData )
+            let [structure, value ] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), mainData )
             me.structure = structure
             me.value = value
             return me
         } // add func.
+
+
+
+    , update ( inData, options ) {
+            let
+                  me = this
+                , updateData = mainlib.init ( inData, options )
+                , mainData   = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value]                 )
+                , updates    = convert.to ( 'midFlat', mainlib.dependencies(), [updateData.structure, updateData.value] )
+                ;
+            for (const updateKey in updates ) {
+                        if ( mainData[updateKey] ) {
+                                    for (let prop in updates[updateKey]) {
+                                                    if ( mainData[updateKey][prop] )   mainData[updateKey][prop] = updates[updateKey][prop]
+                                            }
+                            }
+                }
+            let [structure, value ] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), {...mainData} )
+            me.structure = structure
+            me.value = value
+            return me
+        } // update func.
 
 
 
@@ -182,12 +206,12 @@ const exportAPI = {
 // * Official API
 const API = {
     // DT I/O Operations
-		    init       : mainlib.init      // Start chain with data or empty
-	      , load       : mainlib.load      // Load DT object or value.
-    //    , loadFast   : dtlib.loadFast    // Use only when no meta-related operations
+		    init       : mainlib.init        // Start chain with data or empty
+	      , load       : mainlib.load        // Load DT object or value.
+    //    , loadFast   : dtlib.loadFast      // Use only when no meta-related operations
           , preprocess : mainlib.preprocess  // Convert Std to Flat object. Change income data before add, update, overwrite.
           , add        : mainlib.add         // Add data and keep existing data
-    //    , update     : dtlib.update      // Updates only existing data
+          , update     : mainlib.update      // Updates only existing data
     //    , insert     : dtlib.insert      // Insert data on specified key, when the key represents an array.
     //    , overwrite  : dtlib.overwrite   // Add new data to DT object. Overwrite existing fields
     //    , spread     : dtlib.spread      // Export DT object

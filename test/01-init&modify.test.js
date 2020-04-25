@@ -279,4 +279,34 @@ it ( 'Modify: Add with fake instructions' , () => {
 
 
 
+it ( 'Modify: Add a shortFlat object', () => {
+    const 
+                  start = dtbox.init ({ name:'Peter', age: 45 })
+                , result = dtbox
+                                        .init ()
+                                        .add ( [start.structure, start.value], { format:'shortFlat' } )
+                ;
+    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+    expect ( result.value ).to.have.property ( 'root/0/age' )
+    expect ( result.value ).to.have.property ( 'root/0/name' )
+}) // it modify: Add DT value
+
+
+
+
+
+it ( 'Modify: Update', () => {   // Updates only existing values
+    const result = dtbox 
+                    .init   ( {name : 'Ivan'} )
+                    .update ( sample.test_0   );
+
+        expect ( Object.keys(result.value).length ).to.be.equal ( 1 )
+        expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+        expect ( result.value       ).to.have.property ( 'root/0/name'  )
+        expect ( result.value['root/0/name'] ).to.be.equal ( 'Peter' )
+}) // it modify: Update
+
+
+
+
 }) // describe
