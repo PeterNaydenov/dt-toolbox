@@ -9,10 +9,12 @@
 
 
 ## NEW IDEAS
-- New internal data-structure
+- New internal data-format (main)
 - Генератор за празни дата структури
 - Old internal data should be used only as import/export format. Format name will be named 'breadcrumbsData'
+- Secondary internal data-format: midFlat. Created to facilitate some operations.
 - Write own convertors ( possible use: as data-bridge (data-model to data-model), data-modifier, filter, etc...)
+- Method 'loadFast' was removed. Use 'load' instead. Now all loads are fast.
 
 
 
@@ -89,3 +91,29 @@ Selection object
 a = new Set ([1,2,3])
 [...a.entries()]  // returns -> [ [1,1], [2,2], [3,3] ]
 ```
+
+
+
+
+
+## Midflat format
+
+Той е обект от флат обекти. Изглежда така:
+
+```js
+const midFlat = {
+
+            'root': {
+                        id      : 234
+                    }
+
+            , 'root/profile' : {
+                                  'name'   : 'Peter'
+                                , 'age'    : 46 
+                                , 'gender' : 'male'
+                              }
+          }
+
+```
+
+Всеки обект е флат обект, като описанието на обекта е breadcrumb.

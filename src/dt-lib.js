@@ -97,7 +97,7 @@ const dtlib = {
                                         result = lib._toFolderFile ( dtValue.valueList().map(el=>`root/${el}`)  ).build()
                                         break
                        default:
-                                        result = {}
+                                        result = empty ()
                  } //   switch instructions
                  return [structure, result]
         } // transform func.

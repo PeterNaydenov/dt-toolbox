@@ -247,8 +247,33 @@ it ( 'Load: shortFlat', () => {
 
 
 
+it  ( 'Modify: Add' , () => {			
+			const result = dtbox 
+                                .init ()
+                                .add ( {name : 'Ivan'} )
+                                .add (  sample.test_0  );
+            
+            expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+ 			expect ( result.value ).to.have.property ( 'root/0/name'  )
+ 			expect ( result.value['root/0/name'] ).to.be.equal ( 'Ivan' )
+
+ 			expect ( result.structure.length ).to.be.equal ( 3 )
+    }) // it modify: Add
 
 
+
+
+
+it ( 'Modify: Add with fake instructions' , () => {			
+		const result = dtbox 
+						.init ()
+						.add ( { age: 25} )
+                        .add ( {'name' : 'Ivan'}, { mod:'fakeInstruction'} );   // fake instructions are ignored
+                        
+        expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+		expect ( result.value ).to.have.property ( 'root/0/age' )
+		expect ( result.value ).to.not.have.property ( 'root/0/name' )
+}) // it modify: Add with fake instructions
 
 
 

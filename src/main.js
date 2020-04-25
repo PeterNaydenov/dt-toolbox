@@ -115,17 +115,42 @@ const mainlib = {
         
         
 
-    , preprocess ( inData, fn ) {
+    , preprocess ( inData, fn ) {   // TODO: Data load options are not available?!
                 let 
                       shortFlat = convertor.from ('std').toFlat ( mainlib.dependencies(), inData )
-                    , update = fn(shortFlat)
+                    , afterProcess    = fn ( shortFlat )
                     ;
-                if ( !update ) {
+                if ( !afterProcess ) {
                         console.error ( 'Method "preprocess" should always return a shortFlat structure: [structure, value]' )
                         return mainlib.init ()
                     }
-                return dtlib.loadShort ( mainlib.dependencies(), update )
+                return dtlib.loadShort ( mainlib.dependencies(), afterProcess )
         } // preprocess func.
+
+
+
+    , add ( inData, options ) {
+            const
+                  me = this 
+                , addData = mainlib.init ( inData, options )
+                , mainData = convertor.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
+                , updates  = convertor.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
+                ;
+
+            for (const updateKey in updates ) {
+                        let selectObject = mainData[updateKey]
+                        if ( !selectObject )   mainData[updateKey] = {...updates[updateKey]}
+                        else {
+                                    for (let prop in updates[updateKey]) {
+                                                    if ( !mainData[updateKey][prop] )   mainData[updateKey][prop] = updates[updateKey][prop]
+                                            }
+                            }
+                }
+            let [structure, value ] = convertor.from ( 'midFlat').toFlat ( mainlib.dependencies(), mainData )
+            me.structure = structure
+            me.value = value
+            return me
+        } // add func.
 
 
 
@@ -161,7 +186,7 @@ const API = {
 	      , load       : mainlib.load      // Load DT object or value.
     //    , loadFast   : dtlib.loadFast    // Use only when no meta-related operations
           , preprocess : mainlib.preprocess  // Convert Std to Flat object. Change income data before add, update, overwrite.
-    //    , add        : dtlib.add         // Add data and keep existing data
+          , add        : mainlib.add         // Add data and keep existing data
     //    , update     : dtlib.update      // Updates only existing data
     //    , insert     : dtlib.insert      // Insert data on specified key, when the key represents an array.
     //    , overwrite  : dtlib.overwrite   // Add new data to DT object. Overwrite existing fields

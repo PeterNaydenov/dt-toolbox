@@ -2,12 +2,13 @@
 
 const 
      breadcrumbs = require ( './breadcrumbs' )
-   , std = require  ( './standard' )
+   , std         = require  ( './standard' )
+   , midFlat     = require ('./midflat' )
    ;
 
 
 
-const selectConvertor = 
+const selectConvertorFrom = 
         ( format ) => 
         ( dependencies, inData ) => {
                     let 
@@ -52,24 +53,36 @@ const selectConvertor =
                                                                             return res
                                                                     }, {} )
                                                   return   breadcrumbs.toFlat ( dependencies, rawValue )
+                                case 'midFlat' :
+                                                  return midFlat.toFlat ( dependencies, inData )
                             }
                     return [ ['object', 0], {} ]
             } // toFlat func.
 
 
 
+
+
 function from ( format ) {   // convert from something to flat...
-        return { toFlat: selectConvertor (format)   }
+        return { toFlat: selectConvertorFrom (format)   }
     } // from func.
 
 
 
-function to () {   // convert from flat to something...
 
+
+function to ( format, dependencies, inData ) {   // convert from flat to 'format'...
+        switch ( format ) {
+            case 'midFlat' : return midFlat.toStandard ( dependencies, inData )
+            } //switch format
     } // to func.
 
 
 
+
+
 module.exports = { from, to }
+
+
 
 
