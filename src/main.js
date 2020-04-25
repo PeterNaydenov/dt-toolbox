@@ -178,6 +178,32 @@ const mainlib = {
 
 
 
+
+
+    , overwrite ( inData, options ) {
+            const
+                  me = this 
+                , addData = mainlib.init ( inData, options )
+                , mainData = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
+                , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
+                ;
+
+            for (const updateKey in updates ) {
+                        let selectObject = mainData[updateKey]
+                        if ( !selectObject )   mainData[updateKey] = {...updates[updateKey]}
+                        else {
+                                    for (let prop in updates[updateKey]) {
+                                                    mainData[updateKey][prop] = updates[updateKey][prop]
+                                            }
+                            }
+                }
+            let [structure, value ] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), mainData )
+            me.structure = structure
+            me.value = value
+            return me
+        } // add func.
+
+
 } // mainlib
 
 
@@ -212,8 +238,8 @@ const API = {
           , preprocess : mainlib.preprocess  // Convert Std to Flat object. Change income data before add, update, overwrite.
           , add        : mainlib.add         // Add data and keep existing data
           , update     : mainlib.update      // Updates only existing data
+          , overwrite  : mainlib.overwrite   // Add new data to DT object. Overwrite existing fields
     //    , insert     : dtlib.insert      // Insert data on specified key, when the key represents an array.
-    //    , overwrite  : dtlib.overwrite   // Add new data to DT object. Overwrite existing fields
     //    , spread     : dtlib.spread      // Export DT object
     //    , spreadAll  : dtlib.spreadAll   // Select all and export DT object with one command
     //    , log        : dtlib.errorLog    // Executes callback with errors list as argument

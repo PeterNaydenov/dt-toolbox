@@ -309,4 +309,71 @@ it ( 'Modify: Update', () => {   // Updates only existing values
 
 
 
+
+it ( 'Modify: Update with instructions', () => {   // Updates only existing values
+    const result = dtbox 
+                    .init   ( {name : 'Ivan'} )
+                    .update ( sample.test_0 , {mod:'key'} );
+
+    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+    expect ( result.value              ).to.have.property ( 'root/0/name' )
+    expect ( result.value['root/0/name'] ).to.be.equal ( 'name' )
+}) // it modify: Update
+
+
+
+
+
+it ( 'Modify: Overwrite', () => {  
+    const result = dtbox 
+                    .init      ( sample.test_0 )
+                    .update    ( 
+                                    { 
+                                          name : 'Ivan'
+                                        , 'second-number' : '8899 444 444'
+                               })
+                    .overwrite ( 
+                                    { 
+                                           name : 'Stefan'
+                                        , 'prime-number'  : '8899 222 222'
+                                        , 'dummy' : [12,24,55]
+                              });
+
+     // updates existing values and adds new data including 'namespace' and 'structures'
+     expect ( result.value.hi()           ).to.be.equal ( 'hi' )
+     expect ( result.value['root/0/name'] ).to.be.equal ( 'Stefan' )
+     expect ( result.value                ).to.not.have.property ( 'root/0/second-number' )
+     expect ( result.value                ).to.have.property ( 'root/0/prime-number' )
+     expect ( result.value['root/0/prime-number'] ).to.be.equal ( '8899 222 222' )
+
+     expect ( result.structure.length ).to.be.equal ( 4 )
+})  // it modify: Overwrite
+
+
+
+
+
+it ( 'Modify: Overwrite with instructions', () => {  
+    const result = dtbox 
+                    .init      ( sample.test_0 )
+                    .update    ( 
+                                    { 
+                                          name : 'Ivan'
+                                        , 'second-number' : '8899 444 444'
+                               })
+                    .overwrite ( 
+                                    { 
+                                           name : 'Stefan'
+                                        , 'prime-number'  : '8899 222 222'
+                                        , 'dummy' : [12,24,55]
+                               }, {mod:'key'} );
+
+     // updates existing values and adds new data including 'namespace' and 'structures'
+    expect ( result.value['root/0/name']        ).to.be.equal ( 'name' )
+    expect ( result.value                       ).to.not.have.property ( 'root/second-number' )
+    expect ( result.value                       ).to.have.property ( 'root/0/prime-number' )
+    expect ( result.value['root/0/prime-number']).to.be.equal ( 'prime-number' )
+})  // it modify: Overwrite
+
+
 }) // describe
