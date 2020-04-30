@@ -73,6 +73,9 @@ function from ( format ) {   // convert from something to flat...
 
 function to ( format, dependencies, inData ) {   // convert from flat to 'format'...
         switch ( format ) {
+            case 'std' :
+            case 'standard':
+                             return std.toStandard ( dependencies, inData )
             case 'midFlat' : return midFlat.toStandard ( dependencies, inData )
             } //switch format
     } // to func.

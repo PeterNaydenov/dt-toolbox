@@ -39,7 +39,7 @@ function toFlat ( dependencies, d ) {
 
 
 
-function toStandard ([ structure, value ]) {
+function toStandard ( dependencies, [ structure, value ]) {
             let 
                 keys = Object.keys ( value )
               , resultObjects = []

@@ -1,20 +1,16 @@
 # Upgrade to version 3
 
-- При празна структура (масив или обект) може да се сгреши, защото не се знае какво би трябвало да съдържа.
-
-
-
-- трябва отделна функция, която да генерира структура и неймспейс само при нужда.
 - инструкцията при конверсия също
 
 
 ## NEW IDEAS
 - New internal data-format (main)
 - Генератор за празни дата структури
-- Old internal data should be used only as import/export format. Format name will be named 'breadcrumbsData'
+- Old internal data should be used only as import/export format. Format name will be named 'breadcrumbs'
 - Secondary internal data-format: midFlat. Created to facilitate some operations.
 - Write own convertors ( possible use: as data-bridge (data-model to data-model), data-modifier, filter, etc...)
 - Method 'loadFast' was removed. Use 'load' instead. Now all loads are fast.
+- Method 'spread' has a lot of changes. Instruction 'st' now is available as 'standard' or 'std'. Instruction 'dt' doesn't exists anymore. Instruction 'flat' will return selection in 'shortFlat' format data;
 
 
 

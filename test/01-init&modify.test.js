@@ -394,5 +394,41 @@ it ( 'Modify: Insert', () => {
 	expect ( result.structure[1][0] ).to.be.equal ( 'array' )
 }) // it insert
 
+// TODO: I'm not sure about this method... Looks not good enough.
+it ( 'Modify: Insert text')
+it ( 'Modify: Insert in root')
+
+
+
+
+it ( 'Show Error Log', () => {
+	// * Executes callback with errors list as argument
+	    let result;
+        
+        dtbox 
+            .init ()
+            .add ( { age: 25} )
+            .add ( {'name' : 'Ivan'}, { mod:'fakeInstruction'} )   // fake instructions are ignored
+            .log ( x => result = x )
+
+        expect ( result ).to.be.an ( 'array' )
+        expect ( result ).to.have.length ( 1 )
+}) // it insert
+
+
+
+
+
+it ( 'Get empty DT', () => {
+        const data = dtbox.empty ();
+
+        expect ( data ).to.be.an ( 'object' )
+        expect ( data ).to.be.an.empty
+        expect ( data.hi() ).to.be.equal ( 'hi' )
+}) // it empty value
+
+
 
 }) // describe
+
+

@@ -56,7 +56,7 @@ const mainlib = {
                             const dt  = Object.create ( API );
                             dt.value     = dt.empty ()
                             dt.structure = []
-                            dt._select   = []
+                            dt._select   = { structure:[], value:[] }
                             dt._error    = []
                             return dt
                     } // simpleDT func.
@@ -89,8 +89,8 @@ const mainlib = {
                 , defaultOptions = {format:'std', mod:false }
                 , {format='std', mod=false } = { ...defaultOptions,...options }
                 ;
-            if ( !INIT_DATA_TYPES.includes(format)   ) {
-                        console.error ( "Can't understand your data-type. Please, find what is possible on http://todo.add.documentation.link.here"  )
+            if ( !INIT_DATA_TYPES.includes(format) ) {
+                        this._error.push ( `Can't understand your data-type: ${format}. Please, find what is possible on http://todo.add.documentation.link.here` )
                         return
                 }
             if ( inData != null ) {
@@ -101,6 +101,9 @@ const mainlib = {
             if ( !mod   )   return dt
             else {                   
                                     let [structure, value] = dtlib.transform ( {...dependencies, mod }, [dt.structure, dt.value] )
+                                    if ( !value.hasOwnProperty() ) {  
+                                                dt._error.push ( `Modifier "${mod}" is not a valid modifier and was ignored. Data: ${JSON.stringify(inData)}` )
+                                        }
                                     dt.structure = structure
                                     dt.value = value
                                     return dt
@@ -123,7 +126,7 @@ const mainlib = {
                     , afterProcess    = fn ( shortFlat )
                     ;
                 if ( !afterProcess ) {
-                        console.error ( 'Method "preprocess" should always return a shortFlat structure: [structure, value]' )
+                        this._error.push ( 'Method "preprocess" should always return a shortFlat structure: [structure, value]' )
                         return mainlib.init ()
                     }
                 return dtlib.loadShort ( mainlib.dependencies(), afterProcess )
@@ -138,7 +141,7 @@ const mainlib = {
                 , mainData = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
                 , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
                 ;
-
+            me._error = me._error.concat ( addData._error )
             for (const updateKey in updates ) {
                         let selectObject = mainData[updateKey]
                         if ( !selectObject )   mainData[updateKey] = {...updates[updateKey]}
@@ -163,6 +166,7 @@ const mainlib = {
                 , mainData   = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value]                 )
                 , updates    = convert.to ( 'midFlat', mainlib.dependencies(), [updateData.structure, updateData.value] )
                 ;
+            me._error = me._error.concat ( updateData._error )
             for (const updateKey in updates ) {
                         if ( mainData[updateKey] ) {
                                     for (let prop in updates[updateKey]) {
@@ -187,7 +191,7 @@ const mainlib = {
                 , mainData = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
                 , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
                 ;
-
+            me._error = me._error.concat ( addData._error )
             for (const updateKey in updates ) {
                         let selectObject = mainData[updateKey]
                         if ( !selectObject )   mainData[updateKey] = {...updates[updateKey]}
@@ -214,7 +218,7 @@ const mainlib = {
                 , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
                 , { empty } = mainlib.dependencies ()
                 ;
-
+            me._error = me._error.concat ( addData._error )
             for (const updateKey in updates ) {
                             let 
                                   mainVals   = Object.values ( mainData[updateKey])
@@ -231,6 +235,175 @@ const mainlib = {
             me.value = value
             return me
         } // insert func.
+
+
+
+
+
+    , errorLog ( callback ) {   // Executes callback with errors as argument
+                    callback ( this._error )
+                    return this
+        } // errorLog func.
+
+
+
+    , select () {   // Init new selection
+            this._select = { structure:[], value:[] }
+            return this
+        }
+
+
+
+
+    , folder ( name, deep ) {
+            // * Find if string exists in value attribute name.
+            const me = this;
+            let 
+                  nameDefault = 'root'
+                , deepDefault = 9999
+                , deepMax
+                ;
+                
+                name = name || nameDefault
+                deep = (deep == null) ? deepDefault : deep
+                deep =  deep + 1 // because we add default wrapper 'root'
+                deepMax = name.split('/').length + deep
+            
+                let collection = simple.getIterator ( me.value )
+                                    .filter ( el => el.match (name) )
+                                    .reduce ( (res, el) => {
+                                                                let elDeep = el.split('/').length
+                                                                                        if ( elDeep <= deepMax ) res.push(el)
+                                                                                        return res
+                                                    },[] )
+                me._select = me._select.concat ( collection )
+                return me
+        } // folder
+
+
+
+
+    , parent ( prop, where ) {
+            const me = this;
+            let 
+                  usedNumbers = []
+                , selectedKeys = []
+                , { help } = mainlib.dependencies ()
+                ;
+
+            for (let key in me.value ) {   // collect ids of used objects
+                    let splited = key.split('/');
+                    if ( splited[2] == prop )   usedNumbers.push ( splited[1] )
+                }
+
+            selectedKeys = usedNumbers.reduce ( (res,number) => {
+                                        for (let key in me.value ) {
+                                                    let splited = key.split('/');
+                                                    if ( splited[1] == number )   res.push ( key )
+                                            }
+                                        return res
+                                    },[] )
+            if ( where ) {
+                    let filtered = usedNumbers.reduce ( (res, number) => {
+                                        let 
+                                              local = {}
+                                            , localSelection = []
+                                            ;
+                                        selectedKeys.forEach ( key => {
+                                                        let 
+                                                              splited = key.split('/')
+                                                            , num = splited[1]
+                                                            , prop = splited.pop()
+                                                            ;
+                                                        if ( num == number ) {  
+                                                                    local[prop] = me.value[key]
+                                                                    localSelection.push ( key )
+                                                            }
+                                                })
+                                        let success = where ( local )
+                                        if ( success )   res.push ( ...localSelection )
+                                        return res
+                                    },[])
+                    filtered.forEach ( key => {
+                                    if ( !me._select.value.includes(key) )   me._select.value.push ( key )
+                            })
+                } // where
+            else {
+                    selectedKeys.forEach ( key => {
+                                    if ( !me._select.value.includes(key) )   me._select.value.push ( key )
+                            })
+                }
+            me._select.structure = help.copyStructure ( me.structure )
+            return me
+        } // parent func.
+
+
+
+
+    , spread ( instruction, callback ) {
+      // *** Returns result of selection
+        const 
+               me = this
+            , _selectKeys = me._select.value
+            , { empty, help } = mainlib.dependencies ()
+            ;
+        let selection;
+
+  		switch ( instruction ) {
+  			case 'value'   :
+  			case 'values'  :
+  							selection = _selectKeys.reduce ( (res, el, i) => {
+  																  res[`root/${i}`] = me.value[el]
+  																  return res
+  							               }, empty() )
+                            break
+            case 'key'    : 
+            case 'keys'   : 
+                            selection = _selectKeys.reduce ( (res, el, i ) => {
+                                                                    res[`root/${i}`] = el 
+                                                                    return res
+                                            }, empty() )
+                            break
+  			case 'standard' :  
+  			case 'std'      :  {
+					  		let set = _selectKeys.reduce ( (res, el) => {
+					  											 res[el] = me.value[el]
+					  											 return res
+                                                }, empty() )
+                              selection = convert.to ( 'std', mainlib.dependencies(), [me._select.structure, set] )
+  			                }
+  							break
+  			case 'asJSON'   :  { // * Returns DT.value as JSON
+					  		let set = _selectKeys.reduce ( (res, el) => {
+					  											 res[el] = me.value[el]
+					  											 return res
+					  		          		       }, {} )
+  							selection = JSON.stringify ( set )
+					  		}
+  							break
+            case 'toJSON' : { // * Converts DT.value to ST object and returns JSON
+                            let set = _selectKeys.reduce ( (res, el) => {
+                                                                    res[el] = me.value[el]
+                                                                    return res
+                                                }, empty() )
+                            selection = JSON.stringify ( set.build() )
+                            }
+                        break
+            case 'flat'    : 
+            default       : {
+                            let set = _selectKeys.reduce ( (res, el) => {
+                                                                    res[el] = me.value[el]
+                                                                    return res
+                                                }, empty() )
+                                , struct = help.copyStructure ( me._select.structure )
+                                ;
+                            selection = [struct, set]
+                            }
+  			} // switch instruction
+  		
+  		callback ( selection )
+  		return me
+        } // spread func.
 
 
 } // mainlib
@@ -269,9 +442,9 @@ const API = {
           , update     : mainlib.update      // Updates only existing data
           , overwrite  : mainlib.overwrite   // Add new data to DT object. Overwrite existing fields
           , insert     : mainlib.insert      // Insert data on specified key, when the key represents an array.
-    //    , spread     : dtlib.spread      // Export DT object
-    //    , spreadAll  : dtlib.spreadAll   // Select all and export DT object with one command
-    //    , log        : dtlib.errorLog    // Executes callback with errors list as argument
+          , spread     : mainlib.spread      // Returns result of selection
+    //    , spreadAll  : dtlib.spreadAll   // Select all and returns it with one command
+          , log        : mainlib.errorLog    // Executes callback with errors list as argument
           , empty      : () => Object.create ( exportAPI ) // Empty object with export methods
        
     // // Compare Operations
@@ -282,8 +455,8 @@ const API = {
     //    , missing    :  dtlib.missing   // Key compare. Returns key/value pairs that are missing'
     
     // // Selectors and Filters
-    //    , select     : dtlib.select          // Init new selection.
-    //    , parent     : dtlib.parent          // Selector. Apply conditions starting from parent level
+          , select     : mainlib.select        // Init new selection.
+          , parent     : mainlib.parent        // Selector. Apply conditions starting from parent level
     //    , folder     : dtlib.folder          // Selector. Fullfil select with list of arguments that have specific string
     //    , all        : dtlib.folder          // Selector. Same as folder
     //    , space      : dtlib.space           // Selector. Fullfil select with namespace members
