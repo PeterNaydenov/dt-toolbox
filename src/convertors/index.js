@@ -12,7 +12,7 @@ const selectConvertorFrom =
         ( format ) => 
         ( dependencies, inData ) => {
                     let 
-                          { sanitizeFlatKeys } = dependencies.help
+                          { help } = dependencies
                         , vBuffer = []   // keep values during key's sanitize procedure
                         , rawKeys
                         , keyList
@@ -30,28 +30,18 @@ const selectConvertorFrom =
                                 case 'breadcrumbs' :
                                                   rawKeys  = Object.keys ( inData )
                                                   vBuffer  = rawKeys.forEach ( k => inData[k] )
-                                                  keyList  = sanitizeFlatKeys ( rawKeys )
-                                                  rawValue = keyList.reduce ( (res,k,i)  => {
-                                                                            let  val = Number (vBuffer[i])? parseInt(vBuffer[i]) : vBuffer[i];
-                                                                            res[k]   = val
-                                                                            return res
-                                                                    }, {} )
+                                                  keyList  = help.sanitizeFlatKeys ( rawKeys )
+                                                  rawValue = zipObject ( keyList, vBuffer )
                                                   return   breadcrumbs.toFlat ( dependencies, rawValue )
                                 case 'file'    :
                                 case 'files'   :
-                                                  // TODO: Move this manipulations in help file
-                                                  //  extractKeys, sanitaze, buildRawValue
                                                   rawKeys = inData.map ( el => {  // extract keys from files
                                                                         let arr = el.split('/');
                                                                         vBuffer.push ( arr.pop() )
                                                                         return arr.join ( '/' )
                                                                 })
-                                                  keyList  = sanitizeFlatKeys ( rawKeys )
-                                                  rawValue = keyList.reduce ( (res,k,i)  => {
-                                                                            let  val = Number (vBuffer[i])? parseInt(vBuffer[i]) : vBuffer[i];
-                                                                            res[k]   = val
-                                                                            return res
-                                                                    }, {} )
+                                                  keyList  = help.sanitizeFlatKeys ( rawKeys )
+                                                  rawValue = help.zipObject ( keyList, vBuffer )
                                                   return   breadcrumbs.toFlat ( dependencies, rawValue )
                                 case 'midFlat' :
                                                   return midFlat.toFlat ( dependencies, inData )

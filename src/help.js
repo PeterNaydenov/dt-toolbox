@@ -57,15 +57,16 @@ function* generateObject ( kList ) {
 
 
 
-function sanitizeFlatKeys ( list ) {
-        let keys = list.map ( x => {
+function sanitizeFlatKeys ( list ) {   // fn(string[]) -> string[]
+// *** Sanitize 'file' format keys. Adds 'root/' and indexes where it is needed
+        let keys = list.map ( x => {  // Keys should start with 'root/'
                         let key = x.split ( '/' )
                         if ( key[0] != 'root' )   return [ 'root', ...key].join('/')
                         else                      return key.join ( '/' )
                 })
         let 
-              usedKeys=[]
-            , duplicatedKeys= new Set()
+              usedKeys = []
+            , duplicatedKeys = new Set()
             ;
         keys.forEach ( k => {
                         if ( usedKeys.includes(k) )    duplicatedKeys.add(k)
@@ -79,7 +80,7 @@ function sanitizeFlatKeys ( list ) {
                                     })
                 }
         return keys
-} // sanitizeFlat func.
+} // sanitizeFlatKeys func.
 
 
 
@@ -98,17 +99,30 @@ function copyStructure ( structure ) {
 
 
 
+
+function zipObject ( keys, values ) {   // (string[], string[] ) -> object
+// *** Conect two arrays in a single object
+    return keys.reduce ( (res,k,i)  => {
+                            let  val = Number (values[i]) ? parseInt(values[i]) : values[i];
+                            res[k] = val
+                            return res
+                }, {} )
+} // zipObject func.
+
+
+
+
+
 module.exports = { 
                       findType            // Is it array or object. Returns strings: 'array' | 'object'
                     , hasNumbers         // Check if array contain number members. Returns boolean
                     , isItPrimitive      // Returns boolean
                     , generateObject
                     , generateList 
-                    , sanitizeFlatKeys
+                    , sanitizeFlatKeys   // Sanitize 'file' format keys
                     , copyStructure      // Creates a structure copy. Immutability matters
+                    , zipObject          // Conect two arrays in a single object
                 }
-
-
 
 
                 
