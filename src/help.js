@@ -6,6 +6,8 @@ const findType =  d =>  ( d instanceof Array ) ? 'array' : 'object'
 
 
 
+
+
 function isItPrimitive (d) {
             if     ( typeof d == 'function' )     return false
             return ( typeof d != 'object'   )  ?  true : false
@@ -14,9 +16,11 @@ function isItPrimitive (d) {
 
 
 
+
 function hasNumbers ( arr ) {
     return !arr.every ( el => !Number(el) ? true : false )            
 } // hasNumbers func.
+
 
 
 
@@ -59,7 +63,7 @@ function* generateObject ( kList ) {
 
 
 function sanitizeFlatKeys ( list ) {   // fn(string[]) -> string[]
-// *** Sanitize 'file' format keys. Adds 'root/' and indexes where it is needed
+// *** Sanitize 'file' and 'breadcrumb' format keys. Adds 'root/' and indexes where it is needed
         let keys = list.map ( x => {  // Keys should start with 'root/'
                         let key = x.split ( '/' )
                         if ( key[0] != 'root' )   return [ 'root', ...key].join('/')
@@ -86,6 +90,7 @@ function sanitizeFlatKeys ( list ) {   // fn(string[]) -> string[]
 
 
 
+
 function copyStructure ( structure ) {
  // *** Returns copy of the structure and preserve immutability
     let result = []
@@ -95,7 +100,6 @@ function copyStructure ( structure ) {
             })
     return result
 } // copyStructure func.
-
 
 
 
