@@ -79,13 +79,14 @@ const mainlib = {
  *      std         - standard js object
  *      breadcrumb  - key as a folder. Separate value
  *      file         - keys and values in a single string 
- *      tuples      - array of tuples
+ *      tuples      - array of tuples. Tuple[0] is the key, tuple[1] is the value
  */
 
     , init ( inData, options ) {   // dataType is instruction to convertor
             let 
                   dependencies = mainlib.dependencies () 
                 , dt = dependencies.simpleDT ()
+                , help = dependencies.help
                 , defaultOptions = {format:'std', mod:false }
                 , {format='std', mod=false } = { ...defaultOptions,...options }
                 ;
@@ -95,7 +96,7 @@ const mainlib = {
                 }
             if ( inData != null ) {
                         const [structure, value] = ( format == 'shortFlat') ? inData : convert.from(format).toFlat ( dependencies, inData )
-                        dt.structure = [...structure]
+                        dt.structure = help.copyStructure ( structure ) 
                         dt.value     = value
                 }
             if ( !mod   )   return dt
@@ -122,12 +123,12 @@ const mainlib = {
 
     , preprocess ( inData, fn ) {   // TODO: Data load options are not available?!
                 let 
-                      shortFlat = convert.from ('std').toFlat ( mainlib.dependencies(), inData )
-                    , afterProcess    = fn ( shortFlat )
+                      shortFlat    = convert.from ('std').toFlat ( mainlib.dependencies(), inData )
+                    , afterProcess = fn ( shortFlat )   // afterProcess should be in 'shortFlat' format
                     ;
                 if ( !afterProcess ) {
-                        this._error.push ( 'Method "preprocess" should always return a shortFlat structure: [structure, value]' )
-                        return mainlib.init ()
+                        this._error.push ( 'Method "preprocess" should always return a shortFlat format: [structure, value]' )
+                        return mainlib.init ()   // On preprocess error, create an empty object 
                     }
                 return dtlib.loadShort ( mainlib.dependencies(), afterProcess )
         } // preprocess func.

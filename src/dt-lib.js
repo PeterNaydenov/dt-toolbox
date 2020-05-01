@@ -17,10 +17,9 @@ const dtlib = {
         } // loadShort func.
 
     , _loadData ( dependencies, structure, value ) {
-                let res = dependencies.simpleDT ();
-                for ( const el of structure ) {
-                          res.structure.push ( [...el] )
-                    }
+                const { help, simpleDT } = dependencies;
+                let res = simpleDT ();
+                res.structure = help.copyStructure ( structure )
                 for ( const k in value ) {
                           res.value[k] = value[k]
                     }

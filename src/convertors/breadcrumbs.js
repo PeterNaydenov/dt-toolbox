@@ -15,7 +15,7 @@
         'rootFolder/friends/Grigor'
         ]
  * 
- *   Looks like breadcrumb but last element is the value. Key and value together.
+ *   Looks like breadcrumbs but last element is the value. Key and value together.
  * 
  */
 
@@ -33,22 +33,18 @@ function toFlat ( dependencies, rawValue) {
             , buffer = []
             , resultObjects = []
             , deepList = []
-            , {
-                  generateObject
-                , generateList
-                , hasNumbers
-              } = dependencies.help
+            , help = dependencies.help
             ;
         for (let i=maxLength; i >= 0; i--) {  // separate keys on deep levels
                    let selectedKeys = keyList.filter ( k => k.length == i+1 );
-                   buffer.push ( generateObject(selectedKeys)   )
+                   buffer.push ( help.generateObject(selectedKeys)   )
             }
         resultObjects = buffer.map ( x => x.next().value ).reverse ()   // organize keys as objects in right order
-        deepList.push ( generateList ( 0, resultObjects)   )
+        deepList.push ( help.generateList ( 0, resultObjects)   )
 
         let 
               test = Object.keys(rawValue).map(x => x.split('/')[1])
-            , type = hasNumbers(test) ? 'array' : 'object'
+            , type = help.hasNumbers(test) ? 'array' : 'object'
             ;
         structure.push ( [type, 0])
         for ( let list of deepList ) {
@@ -58,7 +54,7 @@ function toFlat ( dependencies, rawValue) {
                                       name = v.split('/').pop()
                                     , j = structure.length
                                     ;
-                                  type = hasNumbers ( val[v] ) ? 'array' : 'object'
+                                  type = help.hasNumbers ( val[v] ) ? 'array' : 'object'
                                   if ( name != 'root' ) {
                                           structure.push ([ type, j])
                                           structure[id].push ( [j,name] )

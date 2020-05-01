@@ -140,14 +140,14 @@ function copyStructure ( structure ) {
 
 
 module.exports = { 
-                      findType
+                      findType            // Is it array or object. Returns strings: 'array' | 'object'
                     , hasNumbers         // Check if array contain number members. Returns boolean
                     , isItPrimitive      // Returns boolean
                     , generateObject
                     , generateList 
                     , toFolderFile
                     , sanitizeFlatKeys
-                    , copyStructure
+                    , copyStructure      // Creates a structure copy. Immutability matters
                 }
 
 
