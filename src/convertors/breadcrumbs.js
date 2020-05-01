@@ -77,7 +77,7 @@ function toFlat ( dependencies, rawValue) {
 
 
 // TODO: Need attention... Not checked
-function toStandard ([ structure, value ]) {
+function toFormat ([ structure, value ]) {
             let 
                 keys = Object.keys ( value )
               , resultObjects = []
@@ -103,7 +103,7 @@ function toStandard ([ structure, value ]) {
                                             })
                             })
             return resultObjects[0]
-    } // toStandard func.
+    } // toFormat func.
 
 
 
@@ -117,6 +117,6 @@ function toStandard ([ structure, value ]) {
 
 
 
-module.exports = { toFlat, toStandard }
+module.exports = { toFlat, toFormat }
 
 

@@ -27,7 +27,7 @@ function toFlat ( dependencies, d ) {
 
 
 
-function toStandard ( flat ) {
+function toFormat ( flat ) {
     let
       flatKeys   = Object.keys ( flat ).sort ((a,b) => b.split('/').length-a.split('/').length)
     , flatKeyArr = flatKeys.map ( x => x.split('/') ) 
@@ -151,6 +151,6 @@ yield   result
 
 
 
-module.exports = { toFlat, toStandard }
+module.exports = { toFlat, toFormat }
 
 

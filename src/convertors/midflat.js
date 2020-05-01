@@ -37,7 +37,7 @@ function toFlat ( dependencies, d ) {   // Converts data to shortFlat
 
 
 
-function toStandard ( dependencies, [structure, value] ) {   // Converts data to midFlat
+function toFormat ( dependencies, [structure, value] ) {   // Converts data to midFlat
         let
               result = {}
             , keys   = {}
@@ -67,10 +67,10 @@ function toStandard ( dependencies, [structure, value] ) {   // Converts data to
                         result [activeKey] = v
                 })
         return result
-} // toStandard func.
+} // toFormat func.
 
 
 
-module.exports = { toFlat, toStandard }
+module.exports = { toFlat, toFormat }
 
 
