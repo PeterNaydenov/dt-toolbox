@@ -88,13 +88,6 @@ const dtlib = {
                                                                   return [ 'array', id, ...members ]
                                                             })
                                         break
-                       case 'file'     :
-                       case 'files'    :
-                       case 'folders' :
-                       case 'folder'  :
-                                        // Value and key in one '/' separated string. Last element will become a value
-                                        result = lib._toFolderFile ( dtValue.valueList().map(el=>`root/${el}`)  ).build()
-                                        break
                        default:
                                         result = empty ()
                  } //   switch instructions
