@@ -2,8 +2,8 @@
 
 const 
      breadcrumbs = require ( './breadcrumbs' )
-   , std         = require  ( './standard' )
-   , midFlat     = require ('./midflat' )
+   , std         = require ( './standard'    )
+   , midFlat     = require ( './midflat'      )
    ;
 
 

@@ -49,19 +49,19 @@ function toFlat ( dependencies, rawValue) {
         structure.push ( [type, 0])
         for ( let list of deepList ) {
         for (let [id, none, val] of list ) {
-                       for (let v in val ) {
+                       for (let vKey in val ) {
                                   let 
-                                      name = v.split('/').pop()
+                                      name = vKey.split('/').pop()
                                     , j = structure.length
                                     ;
-                                  type = help.hasNumbers ( val[v] ) ? 'array' : 'object'
+                                  type = help.hasNumbers ( val[vKey] ) ? 'array' : 'object'
                                   if ( name != 'root' ) {
                                           structure.push ([ type, j])
                                           structure[id].push ( [j,name] )
                                     }
-                                  for (let prop in val[v]) {
-                                              let composedK = `${val[v][prop]}`
-                                              value [`root/${j}/${composedK}`] = rawValue[`${v}/${composedK}`]
+                                  for (let prop in val[vKey]) {
+                                              let composedK = `${val[vKey][prop]}`
+                                              value [`root/${j}/${composedK}`] = rawValue[`${vKey}/${composedK}`]
                                         }
                           } // for val
             }} // for deepList
