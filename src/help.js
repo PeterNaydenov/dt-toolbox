@@ -105,6 +105,30 @@ function copyStructure ( structure ) {
 
 
 
+function filterObject ( id, keySelection, value={} ) {
+// *** Filter object with by id
+        let 
+              local = {}            // Filtered object
+            , localSelection = []   // List of filtered object props
+            ;
+        keySelection.forEach ( key => {
+                    let 
+                          splited = key.split ( '/' )
+                        , num     = splited [ 1 ]
+                        , prop    = splited.pop()
+                        ;
+                    if ( num == id ) {  
+                                local[prop] = value[key]
+                                localSelection.push ( key )
+                        }
+            })
+        return [ local, localSelection ]
+} // filterObject
+
+
+
+
+
 function zipObject ( keys, values ) {   // (string[], string[] ) -> object
 // *** Conect two arrays in a single object
     return keys.reduce ( (res,k,i)  => {
@@ -126,6 +150,7 @@ module.exports = {
                     , generateList 
                     , sanitizeFlatKeys   // Sanitize 'file' format keys
                     , copyStructure      // Creates a structure copy. Immutability matters
+                    , filterObject        // Find object and object props in a value
                     , zipObject          // Conect two arrays in a single object
                 }
 

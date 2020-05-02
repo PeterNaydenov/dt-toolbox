@@ -170,6 +170,7 @@ const mainlib = {
 
 
     , folder ( name, deep ) {
+            // TODO: Update. It's an old version...
             // * Find if string exists in value attribute name.
             const me = this;
             let 
@@ -204,14 +205,15 @@ const mainlib = {
                   usedNumbers = []
                 , selectedKeys = []
                 , { help } = mainlib.dependencies ()
+                , result
                 ;
 
-            for (let key in me.value ) {   // collect ids of used objects
+            for (let key in me.value ) {   // Collect used parent object(ids)
                     let splited = key.split('/');
                     if ( splited[2] == prop )   usedNumbers.push ( splited[1] )
                 }
 
-            selectedKeys = usedNumbers.reduce ( (res,number) => {
+            selectedKeys = usedNumbers.reduce ( (res,number) => {   // Collect props of used parent objects
                                         for (let key in me.value ) {
                                                     let splited = key.split('/');
                                                     if ( splited[1] == number )   res.push ( key )
@@ -219,35 +221,19 @@ const mainlib = {
                                         return res
                                     },[] )
             if ( where ) {
-                    let filtered = usedNumbers.reduce ( (res, number) => {
-                                        let 
-                                              local = {}
-                                            , localSelection = []
-                                            ;
-                                        selectedKeys.forEach ( key => {
-                                                        let 
-                                                              splited = key.split('/')
-                                                            , num = splited[1]
-                                                            , prop = splited.pop()
-                                                            ;
-                                                        if ( num == number ) {  
-                                                                    local[prop] = me.value[key]
-                                                                    localSelection.push ( key )
-                                                            }
-                                                })
-                                        let success = where ( local )
-                                        if ( success )   res.push ( ...localSelection )
+                    result = usedNumbers.reduce ( (res, number) => {
+                                        let [localObject, localKeysSelection] = help.filterObject ( number, selectedKeys, me.value )
+                                        let success = where ( localObject )
+                                        if ( success )   res.push ( ...localKeysSelection )
                                         return res
                                     },[])
-                    filtered.forEach ( key => {
-                                    if ( !me._select.value.includes(key) )   me._select.value.push ( key )
-                            })
                 } // where
             else {
-                    selectedKeys.forEach ( key => {
-                                    if ( !me._select.value.includes(key) )   me._select.value.push ( key )
-                            })
+                    result = selectedKeys
                 }
+            result.forEach ( key => {
+                        if ( !me._select.value.includes(key) )   me._select.value.push ( key )
+                    })
             me._select.structure = help.copyStructure ( me.structure )
             return me
         } // parent func.
