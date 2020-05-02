@@ -39,6 +39,27 @@ it ( 'Parent', () => {
 
 
 
+it ( 'Parent with array', () => {
+	let updateObject;
+	const testData = {
+						    name : [ 'Ivan', 'Stefan' ]
+					  };
+	const result = dtbox
+				   .init ( testData )
+				   .select ()
+				   .parent ( 'name', item => true  )
+           .spread ( 'flat', flat => updateObject = flat[1] )
+           
+  // Expect DT format:
+	expect ( result.value ).to.have.property ( 'root/1/0' )
+	expect ( result.value ).to.have.property ( 'root/1/1' )
+	// Manipulations on export
+	expect ( updateObject['root/1/0'] ).to.be.equal ( 'Ivan'   )
+	expect ( updateObject['root/1/1'] ).to.be.equal ( 'Stefan' )
+}) // it parent with array
+
+
+
 }) // describe
 
 

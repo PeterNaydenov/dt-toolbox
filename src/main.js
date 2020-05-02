@@ -213,11 +213,21 @@ const mainlib = {
                 , { help } = mainlib.dependencies ()
                 , result
                 ;
-
             for (let key in me.value ) {   // Collect used parent object(ids)
                     let splited = key.split('/');
                     if ( splited[2] == prop )   usedNumbers.push ( splited[1] )
                 }
+            me.structure.forEach ( row => {   // Find array structures
+            row.forEach ( (item,i) => {
+                        if ( i > 1 && item[1]==prop ) {
+                                let 
+                                      id = item[0]
+                                    , objectType = me.structure[id][0]
+                                    ;
+                                if ( objectType == 'array' )   usedNumbers.push(id)
+                            }
+                })                                    
+                })
             selectedKeys = usedNumbers.reduce ( (res,number) => {   // Collect props of used parent objects
                                         for (let key in me.value ) {
                                                     let splited = key.split('/');
@@ -255,7 +265,7 @@ const mainlib = {
             , { empty, help } = mainlib.dependencies ()
             ;
         let selection;
-
+        // TODO: refactoring of instructions. Should work as options in init. ( { mod, format} )
   		switch ( instruction ) {
   			case 'value'   :
   			case 'values'  :
