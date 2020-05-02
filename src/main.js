@@ -213,11 +213,11 @@ const mainlib = {
                 , { help } = mainlib.dependencies ()
                 , result
                 ;
-            for (let key in me.value ) {   // Collect used parent object(ids)
+            for (let key in me.value ) {   // Collect used parent object(ids) from value
                     let splited = key.split('/');
                     if ( splited[2] == prop )   usedNumbers.push ( splited[1] )
                 }
-            me.structure.forEach ( row => {   // Find array structures
+            me.structure.forEach ( row => {   // Find if any array structures
             row.forEach ( (item,i) => {
                         if ( i > 1 && item[1]==prop ) {
                                 let 
