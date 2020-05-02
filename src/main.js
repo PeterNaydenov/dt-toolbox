@@ -63,6 +63,7 @@ const mainlib = {
                 return {
                           simpleDT
                         , empty: h.empty
+                        , convert
                         , help
                     }
             } // dependencies func.
@@ -135,107 +136,16 @@ const mainlib = {
 
 
 
-    , add ( inData, options ) {
-            const
-                  me = this 
-                , addData = mainlib.init ( inData, options )
-                , mainData = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
-                , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
-                ;
-            me._error = me._error.concat ( addData._error )
-            for (const updateKey in updates ) {
-                        let selectObject = mainData[updateKey]
-                        if ( !selectObject )   mainData[updateKey] = {...updates[updateKey]}
-                        else {
-                                    for (let prop in updates[updateKey]) {
-                                                    if ( !mainData[updateKey][prop] )   mainData[updateKey][prop] = updates[updateKey][prop]
-                                            }
-                            }
-                }
-            let [structure, value ] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), mainData )
-            me.structure = structure
-            me.value = value
-            return me
-        } // add func.
 
 
-
-    , update ( inData, options ) {
-            let
-                  me = this
-                , updateData = mainlib.init ( inData, options )
-                , mainData   = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value]                 )
-                , updates    = convert.to ( 'midFlat', mainlib.dependencies(), [updateData.structure, updateData.value] )
-                ;
-            me._error = me._error.concat ( updateData._error )
-            for (const updateKey in updates ) {
-                        if ( mainData[updateKey] ) {
-                                    for (let prop in updates[updateKey]) {
-                                                    if ( mainData[updateKey][prop] )   mainData[updateKey][prop] = updates[updateKey][prop]
-                                            }
-                            }
-                }
-            let [structure, value ] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), {...mainData} )
-            me.structure = structure
-            me.value = value
-            return me
-        } // update func.
-
-
-
-
-
-    , overwrite ( inData, options ) {
-            const
-                  me = this 
-                , addData = mainlib.init ( inData, options )
-                , mainData = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
-                , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
-                ;
-            me._error = me._error.concat ( addData._error )
-            for (const updateKey in updates ) {
-                        let selectObject = mainData[updateKey]
-                        if ( !selectObject )   mainData[updateKey] = {...updates[updateKey]}
-                        else {
-                                    for (let prop in updates[updateKey]) {
-                                                    mainData[updateKey][prop] = updates[updateKey][prop]
-                                            }
-                            }
-                }
-            let [structure, value ] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), mainData )
-            me.structure = structure
-            me.value = value
-            return me
-        } // overwrite func.
-
-
-
-
-    , insert ( inData, options ) {
-            const
-                  me = this 
-                , addData = mainlib.init ( inData, options )
-                , mainData = convert.to ( 'midFlat', mainlib.dependencies(), [me.structure, me.value])
-                , updates  = convert.to ( 'midFlat', mainlib.dependencies(), [addData.structure, addData.value] )
-                , { empty } = mainlib.dependencies ()
-                ;
-            me._error = me._error.concat ( addData._error )
-            for (const updateKey in updates ) {
-                            let 
-                                  mainVals   = Object.values ( mainData[updateKey])
-                                , updateVals = Object.values ( updates[updateKey] )
-                                , mixed      = mainVals.concat ( updateVals )
-                                ;
-                            mainData[updateKey] = mixed.reduce ( (r,item,i) => {
-                                                                r[i] = item
-                                                                return r
-                                                }, {} )
-                }
-            let [structure, value ] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), mainData )
-            me.structure = structure
-            me.value = value
-            return me
-        } // insert func.
+    , modify ( method ) {
+            return function ( inData, options ) {
+                    const
+                          me = this 
+                        , updateData = mainlib.init ( inData, options )
+                        ;
+                    return   dtlib.modify ( { ...mainlib.dependencies(), action:method}, me, updateData )
+        }} // modify func.
 
 
 
@@ -248,10 +158,13 @@ const mainlib = {
 
 
 
+
+
     , select () {   // Init new selection
             this._select = { structure:[], value:[] }
             return this
         }
+
 
 
 
@@ -280,6 +193,7 @@ const mainlib = {
                 me._select = me._select.concat ( collection )
                 return me
         } // folder
+
 
 
 
@@ -337,6 +251,7 @@ const mainlib = {
             me._select.structure = help.copyStructure ( me.structure )
             return me
         } // parent func.
+
 
 
 
@@ -435,17 +350,17 @@ const exportAPI = {
 // * Official API
 const API = {
     // DT I/O Operations
-		    init       : mainlib.init        // Start chain with data or empty
-	      , load       : mainlib.load        // Load DT object or value.
-    //    , loadFast   : dtlib.loadFast      // Use only when no meta-related operations
-          , preprocess : mainlib.preprocess  // Convert Std to Flat object. Change income data before add, update, overwrite.
-          , add        : mainlib.add         // Add data and keep existing data
-          , update     : mainlib.update      // Updates only existing data
-          , overwrite  : mainlib.overwrite   // Add new data to DT object. Overwrite existing fields
-          , insert     : mainlib.insert      // Insert data on specified key, when the key represents an array.
-          , spread     : mainlib.spread      // Returns result of selection
-    //    , spreadAll  : dtlib.spreadAll   // Select all and returns it with one command
-          , log        : mainlib.errorLog    // Executes callback with errors list as argument
+		    init       : mainlib.init                      // Start chain with data or empty
+	      , load       : mainlib.load                      // Load DT object or value.
+    //    , loadFast   : dtlib.loadFast                    // Use only when no meta-related operations
+          , preprocess : mainlib.preprocess                // Convert Std to Flat object. Change income data before add, update, overwrite.
+          , add        : mainlib.modify ( 'add'       )    // Add data and keep existing data
+          , update     : mainlib.modify ( 'update'    )    // Updates only existing data
+          , overwrite  : mainlib.modify ( 'overwrite' )    // Add new data to DT object. Overwrite existing fields
+          , insert     : mainlib.modify ( 'insert'    )    // Insert data on specified key, when the key represents an array.
+          , spread     : mainlib.spread                    // Returns result of selection
+    //    , spreadAll  : dtlib.spreadAll                   // Select all and returns it with one command
+          , log        : mainlib.errorLog                  // Executes callback with errors list as argument
           , empty      : () => Object.create ( exportAPI ) // Empty object with export methods
        
     // // Compare Operations

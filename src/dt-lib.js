@@ -30,6 +30,32 @@ const dtlib = {
 
 
 
+    , modify ( dependencies, main, addData ) {
+      // ***   Modify add | update | overwrite
+              const
+                    { action, convert, help } = dependencies 
+                  , mainData = convert.to ( 'midFlat', dependencies, [main.structure, main.value])
+                  , update   = convert.to ( 'midFlat', dependencies, [addData.structure, addData.value] )
+                  ;
+              let result;
+              main._error = main._error.concat ( addData._error )
+              result = mixMidFlat[action] ( mainData, update )
+              let [structure, value ] = convert.from ( 'midFlat').toFlat ( dependencies, result )
+              main.structure = help.copyStructure ( structure )
+              main.value = value
+              return main
+        } // modify func.
+
+
+
+
+
+      
+
+
+
+
+
     , transform ( dependencies, [structure, value] ) {
       // *** Transformer for DT object. Reverse object key and values, or get only keys/values
             let 
@@ -93,11 +119,83 @@ const dtlib = {
                  } //   switch instructions
                  return [structure, result]
         } // transform func.
-
 } // dtlib
 
 
 
+
+
+
+
+
+
+
+const mixMidFlat = {
+   add ( mainData, update ) {
+            for (const updateKey in update ) {
+                        let   selectObject =   mainData[updateKey];
+                        if ( !selectObject )   mainData[updateKey] = { ...update[updateKey] }
+                        else {
+                                    for (let prop in update[updateKey]) {
+                                                    if ( !mainData[updateKey][prop] )   mainData[updateKey][prop] = update[updateKey][prop]
+                                            }
+                            }
+                }
+            return mainData
+      } // add func.
+
+
+
+  , update ( mainData, update ) {
+            for (const updateKey in update ) {
+                      if ( mainData[updateKey] ) {
+                                  for (let prop in update[updateKey]) {
+                                                  if ( mainData[updateKey][prop] )   mainData[updateKey][prop] = update[updateKey][prop]
+                                          }
+                          }
+              }
+            return mainData
+      } // update func.
+
+
+
+  , overwrite ( mainData, update ) {
+            for (const updateKey in update ) {
+                    let selectObject = mainData[updateKey]
+                    if ( !selectObject )   mainData[updateKey] = {...update[updateKey]}
+                    else {
+                                for (let prop in update[updateKey]) {
+                                                mainData[updateKey][prop] = update[updateKey][prop]
+                                        }
+                        }
+                }
+            return mainData
+      } // overwrite func.
+    
+
+  
+  , insert ( mainData, update ) {
+            for (const updateKey in update ) {
+                            let 
+                                  mainVals   = Object.values ( mainData[updateKey])
+                                , updateVals = Object.values ( update[updateKey] )
+                                , mixed      = mainVals.concat ( updateVals )
+                                ;
+                            mainData[updateKey] = mixed.reduce ( (r,item,i) => {
+                                                                r[i] = item
+                                                                return r
+                                                }, {} )
+                }
+            return mainData
+      } // insert func.
+} // mixMidFlat
+
+
+
+
+
 module.exports = dtlib
+
+
 
 
