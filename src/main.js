@@ -166,7 +166,7 @@ const mainlib = {
 
 
 
-    , select () {   // Init new selection
+    , select () {   // Init a new selection
             this._select = { structure:[], value:[] }
             return this
         }
@@ -218,7 +218,6 @@ const mainlib = {
                     let splited = key.split('/');
                     if ( splited[2] == prop )   usedNumbers.push ( splited[1] )
                 }
-
             selectedKeys = usedNumbers.reduce ( (res,number) => {   // Collect props of used parent objects
                                         for (let key in me.value ) {
                                                     let splited = key.split('/');
@@ -226,7 +225,7 @@ const mainlib = {
                                             }
                                         return res
                                     },[] )
-            if ( where ) {
+            if ( where ) {   // Apply where fn if is defined
                     result = usedNumbers.reduce ( (res, number) => {
                                         let [localObject, localKeysSelection] = help.filterObject ( number, selectedKeys, me.value )
                                         let success = where ( localObject )
@@ -342,10 +341,10 @@ const exportAPI = {
 // * Official API
 const API = {
     // DT I/O Operations
-		    init       : mainlib.init                      // Start chain with data or empty
-	      , load       : mainlib.load                      // Load DT object or value.
-    //    , loadFast   : dtlib.loadFast                    // Use only when no meta-related operations
-          , preprocess : mainlib.preprocess                // Convert Std to Flat object. Change income data before add, update, overwrite.
+		    init       : mainlib.init                      // Convert any object to flat format
+	      , load       : mainlib.load                      // Load a flat format data
+          , loadFast   : mainlib.load                      // Important! Method is depricated. Use load instead
+          , preprocess : mainlib.preprocess                // Apply custom modifier to initial data
           , add        : mainlib.modify ( 'add'       )    // Add data and keep existing data
           , update     : mainlib.modify ( 'update'    )    // Updates only existing data
           , overwrite  : mainlib.modify ( 'overwrite' )    // Add new data to DT object. Overwrite existing fields
@@ -363,7 +362,7 @@ const API = {
     //    , missing    :  dtlib.missing   // Key compare. Returns key/value pairs that are missing'
     
     // // Selectors and Filters
-          , select     : mainlib.select        // Init new selection.
+          , select     : mainlib.select        // Init a new selection.
           , parent     : mainlib.parent        // Selector. Apply conditions starting from parent level
     //    , folder     : dtlib.folder          // Selector. Fullfil select with list of arguments that have specific string
     //    , all        : dtlib.folder          // Selector. Same as folder
