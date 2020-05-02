@@ -114,6 +114,8 @@ const mainlib = {
 
 
 
+
+
     , load  ( flatData ) {   // Load dt content - dtShort and dtLong data types
             return ( flatData._select ) 
                                         ? dtlib.loadLong  ( mainlib.dependencies(), flatData )
@@ -122,9 +124,13 @@ const mainlib = {
         
         
 
-    , preprocess ( inData, fn ) {   // TODO: Data load options are not available?!
+
+
+    , preprocess ( inData, fn, options ) {
                 let 
-                      shortFlat    = convert.from ('std').toFlat ( mainlib.dependencies(), inData )
+                      defaultOptions = { format:'std', mod:false }
+                    , { format='std' } = { ...defaultOptions,...options }
+                    , shortFlat    = convert.from (format).toFlat ( mainlib.dependencies(), inData )
                     , afterProcess = fn ( shortFlat )   // afterProcess should be in 'shortFlat' format
                     ;
                 if ( !afterProcess ) {
