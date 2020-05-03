@@ -50,12 +50,42 @@ const dtlib = {
 
 
 
+    , folder ( dependencies, me ) {
+              // * Find if string exists in value attribute name.
+            let 
+                  folderDefault = 'root'
+                , deepDefault = 9999
+                , deepMax
+                , keys = Object.keys ( me.value )
+                , { help, deep, folder } = dependencies
+                , longKeys = help.toBreadcrumbKeys ( keys, me.structure )
+                ;
+                       
+                folder = folder || folderDefault
+                deep = (deep == null) ? deepDefault : deep
+                deep =  deep + 1 // because we add default wrapper 'root'
+                deepMax = folder.split('/').length + deep
+
+                let collection = longKeys
+                                    .filter ( el => el.match (folder) )
+                                    .reduce ( (res, el) => {
+                                                                let 
+                                                                      index  = longKeys.indexOf(el)
+                                                                    , elDeep = el.split('/').length
+                                                                    ;
+                                                                if ( elDeep <= deepMax )   res.push(keys[index])
+                                                                return res
+                                                    },[] )
+                    
+                me._select.value = me._select.value.concat ( collection )
+                me._select.structure = help.copyStructure ( me.structure )
+                return me
+        } // folder func.
       
 
 
 
-
-
+    
     , transform ( dependencies, [structure, value] ) {
       // *** Transformer for DT object. Reverse object key and values, or get only keys/values
             let 

@@ -175,30 +175,13 @@ const mainlib = {
 
 
 
-    , folder ( name, deep ) {
-            // TODO: Update. It's an old version...
-            // * Find if string exists in value attribute name.
-            const me = this;
-            let 
-                  nameDefault = 'root'
-                , deepDefault = 9999
-                , deepMax
-                ;
-                
-                name = name || nameDefault
-                deep = (deep == null) ? deepDefault : deep
-                deep =  deep + 1 // because we add default wrapper 'root'
-                deepMax = name.split('/').length + deep
-            
-                let collection = simple.getIterator ( me.value )
-                                    .filter ( el => el.match (name) )
-                                    .reduce ( (res, el) => {
-                                                                let elDeep = el.split('/').length
-                                                                                        if ( elDeep <= deepMax ) res.push(el)
-                                                                                        return res
-                                                    },[] )
-                me._select = me._select.concat ( collection )
-                return me
+    , folder ( folder, deep ) {
+      // *** Find if string exists in a bradcrumb keys.
+            const 
+                      me = this
+                    , dependencies = { ...mainlib.dependencies(), folder, deep }
+                    ;
+            return dtlib.folder ( dependencies, me )
         } // folder
 
 
@@ -374,7 +357,7 @@ const API = {
     // // Selectors and Filters
           , select     : mainlib.select        // Init a new selection.
           , parent     : mainlib.parent        // Selector. Apply conditions starting from parent level
-    //    , folder     : dtlib.folder          // Selector. Fullfil select with list of arguments that have specific string
+          , folder     : mainlib.folder        // Selector. Fullfil select with list of arguments that contain specific string
     //    , all        : dtlib.folder          // Selector. Same as folder
     //    , space      : dtlib.space           // Selector. Fullfil select with namespace members
     //    , deepArray  : dtlib.block('array' ) // Selector. Fullfil '_select' with deepest array elements

@@ -127,6 +127,29 @@ function filterObject ( id, keySelection, value={} ) {
 
 
 
+function toBreadcrumbKeys ( keys, structure ) {   // (flatKey[], structure ) => breadcrumbKeys[]
+ // *** Map convertion of flat keys to breadcrumb keys.
+        let containerNames = [ 'root' ];
+        structure.forEach ( level => { 
+        level.forEach ( (obj,i) => {   // Find container names
+                        let 
+                              objectID = level[1]
+                            , container = containerNames[objectID]
+                            ;
+                        if ( i > 1 )   containerNames.push ( `${container}/${obj[1]}`)
+                })
+                })
+        return keys.map ( k => {
+                                let 
+                                      splited     = k.split ( '/' )
+                                    , containerID = splited [ 1 ]
+                                    , prop        = splited [ 2 ]
+                                    , long        = containerNames [ containerID ]
+                                    ;
+                                return `${long}/${prop}`
+                        })
+} // toBreadcrumbKeys func.
+
 
 
 function zipObject ( keys, values ) {   // (string[], string[] ) -> object
@@ -151,6 +174,7 @@ module.exports = {
                     , sanitizeFlatKeys   // Sanitize 'file' format keys
                     , copyStructure      // Creates a structure copy. Immutability matters
                     , filterObject        // Find object and object props in a value
+                    , toBreadcrumbKeys   // Breadcrumbs keys
                     , zipObject          // Conect two arrays in a single object
                 }
 

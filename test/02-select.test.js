@@ -60,6 +60,22 @@ it ( 'Parent with array', () => {
 
 
 
+it ( 'Folder', () => {
+  let result;
+  dtbox
+      .init   ( sample.test_0 )
+      .select ()
+      .folder ( 'profile' ) // no params == select all
+      .spread ( 'flat', flat => result = flat[1]   )
+
+  let list = Object.keys ( result );
+  expect ( list.length ).to.be.equal ( 1 )
+  expect ( result ).has.property ( 'root/1/active' )
+  expect ( result['root/1/active'] ).is.equal ( true )
+}) // it folder
+
+
+
 }) // describe
 
 
