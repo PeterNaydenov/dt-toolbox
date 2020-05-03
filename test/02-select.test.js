@@ -114,6 +114,34 @@ it ( 'Space', () => {
 
 
 
+
+it ( 'Space with no arguments', () => {
+    let x = dtbox
+              .init ( sample.test_0 )
+              .select ()
+              .space  ( )
+    let result = x._select.value;
+
+    expect ( result ).to.have.length ( 3 )
+    expect ( result ).to.contain ( 'root/0/name' )
+    expect ( result ).to.contain ( 'root/0/age'  )
+    expect ( result ).to.contain ( 'root/0/eyes' )
+}) // it namespace with no arguments
+
+
+
+it ( 'Space with fake name', () => {
+  let x = dtbox
+            .init ( sample.test_0 )
+            .select ()
+            .space  ( 'fake' );
+  let result = x._select.value;
+
+  expect ( result ).to.be.empty
+}) // it namespace with fake name
+
+
+
 }) // describe
 
 

@@ -199,7 +199,7 @@ const mainlib = {
 
 
 
-    , space ( prop, where ) {
+    , space ( prop='root', where ) {
             const
                   me = this
                 , dependencies = { ...mainlib.dependencies(), prop, where }
