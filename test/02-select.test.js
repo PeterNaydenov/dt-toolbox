@@ -76,6 +76,18 @@ it ( 'Folder', () => {
 
 
 
+it ( 'Folder with deep', () => {
+  let x = dtbox
+        .init   ( sample.test_1 )
+        .select ()
+        .folder ('set', 1 ) 
+  // Note: deep is absolute, starting from 'root' - 0. Root elements
+  let result = x._select.value
+  expect ( result ).to.have.length ( 4 )
+}) // it folder with deep
+
+
+
 }) // describe
 
 
