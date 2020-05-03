@@ -199,6 +199,17 @@ const mainlib = {
 
 
 
+    , space ( prop, where ) {
+            const
+                  me = this
+                , dependencies = { ...mainlib.dependencies(), prop, where }
+                ;
+            return dtlib.space ( dependencies, me )
+        } // space func.
+
+
+
+
 
     , spread ( instruction, callback ) {
       // *** Returns result of selection
@@ -319,7 +330,7 @@ const API = {
           , parent     : mainlib.parent        // Selector. Apply conditions starting from parent level
           , folder     : mainlib.folder        // Selector. Fullfil select with list of arguments that contain specific string
     //    , all        : dtlib.folder          // Selector. Same as folder
-    //    , space      : dtlib.space           // Selector. Fullfil select with namespace members
+          , space      : mainlib.space         // Selector. Fullfil select with namespace members
     //    , deepArray  : dtlib.block('array' ) // Selector. Fullfil '_select' with deepest array elements
     //    , deepObject : dtlib.block('object') // Selector. Fullfil '_select' with deepest object elements
     //    , invert     : dtlib.invert          // Selector. Invert existing selection

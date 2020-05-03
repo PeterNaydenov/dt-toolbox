@@ -88,6 +88,32 @@ it ( 'Folder with deep', () => {
 
 
 
+it ( 'Folder with regular expression', () => {
+    let x = dtbox
+              .init   ( sample.test_0 )
+              .select ()
+              .folder ('.*/[0-9]$') 
+    let result = x._select.value;
+
+    expect ( result ).contains ( 'root/2/0' )
+    expect ( result ).has.length(3)
+}) // it regexp.
+
+
+
+it ( 'Space', () => {
+    let x = dtbox
+            .init ( sample.test_0 )
+            .select ()
+            .space  ( 'profile' )
+      let result = x._select.value;
+
+      expect ( result.length ).to.be.equal ( 1 )
+      expect ( result ).to.include ( 'root/1/active' )
+}) // it namespace
+
+
+
 }) // describe
 
 
