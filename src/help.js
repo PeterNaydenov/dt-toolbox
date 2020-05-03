@@ -151,6 +151,14 @@ function toBreadcrumbKeys ( keys, structure ) {   // (flatKey[], structure ) => 
 } // toBreadcrumbKeys func.
 
 
+function updateSelection ( [...selection], updates ) {
+    updates.forEach ( key => {
+                if ( !selection.includes(key) )   selection.push ( key )
+            })
+    return selection
+} // updateSelection
+
+
 
 function zipObject ( keys, values ) {   // (string[], string[] ) -> object
 // *** Conect two arrays in a single object
@@ -175,6 +183,7 @@ module.exports = {
                     , copyStructure      // Creates a structure copy. Immutability matters
                     , filterObject        // Find object and object props in a value
                     , toBreadcrumbKeys   // Breadcrumbs keys
+                    , updateSelection    // Updates selection list. Checks if element is already selected
                     , zipObject          // Conect two arrays in a single object
                 }
 

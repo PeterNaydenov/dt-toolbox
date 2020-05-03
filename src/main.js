@@ -189,51 +189,11 @@ const mainlib = {
 
 
     , parent ( prop, where ) {
-            const me = this;
-            let 
-                  usedNumbers = []
-                , selectedKeys = []
-                , { help } = mainlib.dependencies ()
-                , result
+            const 
+                  me = this
+                , dependencies = { ...mainlib.dependencies(), prop, where }
                 ;
-            for (let key in me.value ) {   // Collect used parent object(ids) from value
-                    let splited = key.split('/');
-                    if ( splited[2] == prop )   usedNumbers.push ( splited[1] )
-                }
-            me.structure.forEach ( row => {   // Find if any array structures
-            row.forEach ( (item,i) => {
-                        if ( i > 1 && item[1]==prop ) {
-                                let 
-                                      id = item[0]
-                                    , objectType = me.structure[id][0]
-                                    ;
-                                if ( objectType == 'array' )   usedNumbers.push(id)
-                            }
-                })                                    
-                })
-            selectedKeys = usedNumbers.reduce ( (res,number) => {   // Collect props of used parent objects
-                                        for (let key in me.value ) {
-                                                    let splited = key.split('/');
-                                                    if ( splited[1] == number )   res.push ( key )
-                                            }
-                                        return res
-                                    },[] )
-            if ( where ) {   // Apply where fn if is defined
-                    result = usedNumbers.reduce ( (res, number) => {
-                                        let [localObject, localKeysSelection] = help.filterObject ( number, selectedKeys, me.value )
-                                        let success = where ( localObject )
-                                        if ( success )   res.push ( ...localKeysSelection )
-                                        return res
-                                    },[])
-                } // where
-            else {
-                    result = selectedKeys
-                }
-            result.forEach ( key => {
-                        if ( !me._select.value.includes(key) )   me._select.value.push ( key )
-                    })
-            me._select.structure = help.copyStructure ( me.structure )
-            return me
+            return dtlib.parent ( dependencies, me )
         } // parent func.
 
 
