@@ -251,6 +251,20 @@ it ( 'Deep', () => {
 
 
 
+it ( 'Deep with direction', () => {
+	const x = dtbox
+                .init ( sample.test_0 )
+                .select ()
+                .folder ()
+                .deep ( 0, 'more' ) // read as 'level should be higher then 0'
+  const result = x._select.value;
+	expect ( result ).has.length(4)
+	expect ( result ).contains ( 'root/1/active' )
+	expect ( result ).contains ( 'root/2/0' )
+	expect ( result ).contains ( 'root/2/1' )
+}) // it deep with direction
+
+
 }) // describe
 
 
