@@ -175,7 +175,7 @@ const mainlib = {
 
 
 
-    , folder ( folder, deep ) {
+    , folder ( folder='root', deep ) {
       // *** Find if string exists in a bradcrumb keys.
             const 
                       me = this
@@ -206,6 +206,58 @@ const mainlib = {
                 ;
             return dtlib.space ( dependencies, me )
         } // space func.
+
+
+
+
+
+    , limit ( num ) {
+        // *** Filter. Limit number of selected items
+            this._select.value = this._select.value.slice ( 0, num )
+            return this
+        }
+
+
+
+
+
+    , keep ( fx ) {
+        // *** Filter. Reduce selected item by testing their values. If pass the test will stay.
+            const me = this;
+            if ( fx === undefined   )   return me
+            me._select.value = me._select.value.reduce ( (res, item ) => {
+                                          if ( fx(me.value[item], item) )   res.push ( item )
+                                          return res
+                                 },[])
+            return me
+        } // keep func.
+
+
+
+
+    , remove ( fx ) {
+        // *** Filter. Reduce selected item by testing their values. If pass the test will remove.
+            const me = this;
+            if ( fx === undefined )   return me
+            me._select.value = me._select.value.reduce ( (res, item ) => {
+                                          if ( !fx(me.value[item],item) )   res.push ( item )
+                                          return res
+                                 },[])
+            return me
+        } // remove func.
+
+
+
+
+
+    , deep ( num, direction='less') {
+        // *** Filter. Direction is 'more' or 'less'. Less is by default. Deep '0' mean root members;
+            let 
+                  me = this
+                , dependencies = { ...mainlib.dependencies(), num, direction }
+                ;
+            return dtlib.deep ( dependencies, me )
+        } // deep func.
 
 
 
@@ -329,15 +381,15 @@ const API = {
           , select     : mainlib.select        // Init a new selection.
           , parent     : mainlib.parent        // Selector. Apply conditions starting from parent level
           , folder     : mainlib.folder        // Selector. Fullfil select with list of arguments that contain specific string
-    //    , all        : dtlib.folder          // Selector. Same as folder
+          , all        : mainlib.folder        // Selector. Same as folder ('root')
           , space      : mainlib.space         // Selector. Fullfil select with namespace members
     //    , deepArray  : dtlib.block('array' ) // Selector. Fullfil '_select' with deepest array elements
     //    , deepObject : dtlib.block('object') // Selector. Fullfil '_select' with deepest object elements
     //    , invert     : dtlib.invert          // Selector. Invert existing selection
-    //    , limit      : dtlib.limit           // Filter.   Reduces amount of records in the selection
-    //    , keep       : dtlib.keep            // Filter.   Keeps records in selection if check function returns true
-    //    , remove     : dtlib.remove          // Filter.   Removes records from selection if check function returns true
-    //    , deep       : dtlib.deep            // Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members
+          , limit      : mainlib.limit         // Filter.   Reduces amount of records in the selection
+          , keep       : mainlib.keep          // Filter.   Keeps records in selection if check function returns true
+          , remove     : mainlib.remove        // Filter.   Removes records from selection if check function returns true
+          , deep       : mainlib.deep            // Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members
 }; // API
 
 

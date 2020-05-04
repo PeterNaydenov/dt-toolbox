@@ -131,14 +131,123 @@ it ( 'Space with no arguments', () => {
 
 
 it ( 'Space with fake name', () => {
-  let x = dtbox
-            .init ( sample.test_0 )
-            .select ()
-            .space  ( 'fake' );
-  let result = x._select.value;
+    let x = dtbox
+              .init ( sample.test_0 )
+              .select ()
+              .space  ( 'fake' );
+    let result = x._select.value;
 
-  expect ( result ).to.be.empty
+    expect ( result ).to.be.empty
 }) // it namespace with fake name
+
+
+
+it ( 'Limit', () => {
+    const x = dtbox
+                    .init ( sample.test_0 )
+                    .select ()
+                    .folder ()
+                    .limit (4);
+    let result = x._select.value;
+    expect ( result ).has.length(4)
+}) // it limit
+
+
+
+it ( 'Keep: No arguments' , () => {
+  const result = dtbox
+                  .init ( sample.test_0 )
+                  .select ()
+                  .all ()
+                  .keep ()
+
+  expect( result._select.value ).has.length(7)
+}) // it keep
+
+
+
+it ( 'Keep: Value check' , () => {
+    const x = dtbox
+                .init ( sample.test_0 )
+                .select ()
+                .all ()
+                .keep ( el => typeof el === 'boolean' )
+    const result = x._select.value;
+    expect( result ).has.length(1)
+}) // it keep
+
+
+
+it ( 'Keep: Key check' , () => {
+    const x = dtbox
+                .init ( sample.test_0 )
+                .select ()
+                .all ()
+                .keep ( (el,id) => id.includes ('name') )
+    const result = x._select.value
+    expect( result ).has.length ( 1 )
+    expect( result ).contains ( 'root/0/name' )
+}) // it keep: key check
+
+
+
+it( 'Remove: No arguments' , () => {
+    const x = dtbox
+                .init ( sample.test_0 )
+                .select ()
+                .folder ('array')
+                .remove ();
+    const result = x._select.value;
+    expect ( result ).to.have.length ( 3 )
+}) // it remove
+
+
+
+it ( 'Remove: Value check' , () => {
+    const x = dtbox
+                .init ( sample.test_0 )
+                .select ()
+                .folder ()
+                .remove ( el => el == 'Peter' );
+    const result = x._select.value;
+    expect ( result ).not.contains ( 'root/0/name' )
+}) // it remove: value check
+
+
+
+it ( 'Remove: Key check' , () => {
+    const x = dtbox
+                .init ( sample.test_0 )
+                .select ()
+                .all ()
+                .remove ( (v,k) => {
+                                  let 
+                                      prop  = k.split ( '/' ).pop ()
+                                    , check = isNaN(Number(prop)) ? false : true
+                                    ;
+                                  if ( check )   return true
+                                  else           return false
+                            });
+    const result = x._select.value;
+    expect ( result ).has.length ( 4 )
+    expect ( result ).to.contain ( 'root/0/name' )
+    expect ( result ).to.contain ( 'root/0/age' )
+    expect ( result ).to.contain ( 'root/0/eyes' )
+    expect ( result ).to.contain ( 'root/1/active' )
+}) // it remove: Key check
+
+
+
+it ( 'Deep', () => {
+    const x = dtbox
+                  .init ( sample.test_0 )
+                  .select ()
+                  .folder ()
+                  .deep ( 0 )
+    const result = x._select.value;
+    expect( result ).has.length(3)
+}) // it deep
+
 
 
 
