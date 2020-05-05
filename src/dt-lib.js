@@ -115,7 +115,6 @@ const dtlib = {
                                         return res
                                     },[] )
             if ( where ) {   // Apply where fn if is defined
-                  // TODO: It's a filter. Change reduce with filter
                     result = usedNumbers.reduce ( (res, number) => {
                                         let [localObject, localKeysSelection] = help.filterObject ( number, selectedKeys, me.value )
                                         let success = where ( localObject )
@@ -156,7 +155,7 @@ const dtlib = {
                                             }
                                         return res
                                   },[])
-            if ( where ) {
+            if ( where ) { // TODO: Still not tested. May be 'where' should receive (key,value)
                   result = usedNumbers.reduce ( (res, number) => {
                                         let [localObject, localKeysSelection] = help.filterObject ( number, selectedKeys, me.value )
                                         let success = where ( localObject )
@@ -178,18 +177,69 @@ const dtlib = {
             let 
                   usedNumbers = []
                 , selectedKeys = [ ...me._select.value ]
+                , levels = help.objectsByLevel ( me.structure )
                 ;
-            let levels = help.objectsByLevel ( me.structure )
             levels.forEach ( (level,i) => {
-                      let condition = (direction == 'more') ? ( i > num ) : ( i <= num );
+                      let condition = (direction == 'more') ? ( i >= num ) : ( i <= num );
                       if ( condition )   usedNumbers = usedNumbers.concat ( level )
                 })
             me._select.value = selectedKeys.filter ( key => {
-                                let objectID = parseInt (key.split('/')[1]);
-                                return usedNumbers.includes ( objectID )
-                        })
+                                      let objectID = parseInt (key.split('/')[1]);
+                                      return usedNumbers.includes ( objectID )
+                                  })
             return me
         } // deep func.
+
+
+
+
+    , block ( dependencies, me ) {
+            const 
+                    { type } = dependencies
+                  , keys     = Object.keys ( me.value )
+                  , changeMap = {}
+                  ;
+            let selectedIDs = me.structure.reduce ( (res,row) => {
+                                          let rowType = row[0];
+                                          if ( rowType != type )   return res
+                                          if ( row.length == 2 )   res.push ( row[1] )
+                                          return res
+                                  },[])
+            me._select.value = keys.filter ( key => {
+                                        let objectID = parseInt ( key.split('/')[1]);
+                                        return selectedIDs.includes ( objectID )
+                                    })
+            // Prepare structure as array of objects and update selected keys
+            me._select.structure = [[ 'array', 0 ]]
+            selectedIDs.forEach ( (id,i) => {
+                              let newID = i+1;
+                              me._select.structure[0].push ( [newID, i])
+                              me._select.structure.push ( ['object', newID])
+                              changeMap[id] = newID
+                              me._select.value = me._select.value.map ( key => {
+                                                                let
+                                                                    splited = key.split ( '/' )
+                                                                  , objectID = parseInt ( splited[1])
+                                                                  ;
+                                                                if ( objectID == id )   return `root/${newID}/${splited[2]}`
+                                                                else                    return key
+                                                          })
+                      })
+            // update me.value according changes
+            let valueUpdates = keys.reduce ( (res,key) => {
+                                        let
+                                            splited  = key.split ( '/' )
+                                          , objectID = parseInt ( splited[1])
+                                          , prop     = splited[2]
+                                          , value    = me.value [ key ]
+                                          , newID    = changeMap[objectID]
+                                          ;
+                                        res [`root/${newID}/${prop}`] = value
+                                        return res
+                                    },{})
+            me.value = valueUpdates
+            return me
+        } // block func.
 
 
 

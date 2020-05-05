@@ -256,13 +256,30 @@ it ( 'Deep with direction', () => {
                 .init ( sample.test_0 )
                 .select ()
                 .folder ()
-                .deep ( 0, 'more' ) // read as 'level should be higher then 0'
+                .deep ( 1, 'more' ) // read as 'level should be higher then 0'
   const result = x._select.value;
 	expect ( result ).has.length(4)
 	expect ( result ).contains ( 'root/1/active' )
 	expect ( result ).contains ( 'root/2/0' )
 	expect ( result ).contains ( 'root/2/1' )
 }) // it deep with direction
+
+
+
+it ( 'Deep Objects', () => {
+  let result;
+  let x = dtbox
+            .init ( sample.test_5 )
+            .select ()
+            .deepObject ()
+            .spread ( 'std', std => result = std )
+
+  expect ( result ).to.have.length ( 6 )
+  expect ( result[0] ).to.have.property ('name')
+  expect ( result[0] ).to.have.property ('comments')
+  expect ( result[0] ).to.have.property ('age')
+}) // it deepObject
+
 
 
 }) // describe
