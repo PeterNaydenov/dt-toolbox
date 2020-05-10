@@ -391,18 +391,18 @@ const API = {
     //    , missing    :  dtlib.missing   // Key compare. Returns key/value pairs that are missing'
     
     // // Selectors and Filters
-          , select     : mainlib.select          // Init a new selection.
-          , parent     : mainlib.parent          // Selector. Apply conditions starting from parent level
-          , folder     : mainlib.folder          // Selector. Fullfil select with list of arguments that contain specific string
-          , all        : mainlib.folder          // Selector. Same as folder ('root')
-          , space      : mainlib.space           // Selector. Fullfil select with namespace members
-    //    , deepArray  : dtlib.block('array' )   // Selector. Fullfil '_select' with deepest array elements
-          , deepObject : mainlib.block('object') // Selector. Fullfil '_select' with deepest object elements
-    //    , invert     : dtlib.invert            // Selector. Invert existing selection
-          , limit      : mainlib.limit           // Filter.   Reduces amount of records in the selection
-          , keep       : mainlib.keep            // Filter.   Keeps records in selection if check function returns true
-          , remove     : mainlib.remove          // Filter.   Removes records from selection if check function returns true
-          , deep       : mainlib.deep            // Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members
+          , select     : mainlib.select             // Init a new selection.
+          , parent     : mainlib.parent             // Selector. Apply conditions starting from parent level
+          , folder     : mainlib.folder             // Selector. Fullfil select with list of arguments that contain specific string
+          , all        : mainlib.folder             // Selector. Same as folder ('root')
+          , space      : mainlib.space              // Selector. Fullfil select with namespace members
+          , deepObject : mainlib.block ( 'object' ) // Selector. Fullfil '_select' with deepest object elements
+          , deepArray  : mainlib.block ( 'array'  ) // Selector. Fullfil '_select' with deepest array elements
+    //    , invert     : dtlib.invert               // Selector. Invert existing selection
+          , limit      : mainlib.limit              // Filter.   Reduces amount of records in the selection
+          , keep       : mainlib.keep               // Filter.   Keeps records in selection if check function returns true
+          , remove     : mainlib.remove             // Filter.   Removes records from selection if check function returns true
+          , deep       : mainlib.deep               // Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members
 }; // API
 
 

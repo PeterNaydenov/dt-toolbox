@@ -268,16 +268,68 @@ it ( 'Deep with direction', () => {
 
 it ( 'Deep Objects', () => {
   let result;
-  let x = dtbox
-            .init ( sample.test_5 )
-            .select ()
-            .deepObject ()
-            .spread ( 'std', std => result = std )
+  dtbox
+      .init ( sample.test_5 )
+      .select ()
+      .deepObject ()
+      .spread ( 'std', std => result = std )
+
   expect ( result ).to.have.length ( 6 )
   expect ( result[0] ).to.have.property ('name')
   expect ( result[0] ).to.have.property ('comments')
   expect ( result[0] ).to.have.property ('age')
 }) // it deepObject
+
+
+
+it ( 'Deep Array fail', () => {
+  let result;
+  dtbox
+    .init ( sample.test_5 )
+    .select()
+    .deepArray ()
+    .spread ( 'std', std => result = std )
+
+  expect ( result ).to.be.an( 'array' )
+  expect ( result.length ).to.be.equal ( 0 )
+}) // it deepArray fail
+
+
+
+it ( 'Deep Array', () => {
+	let result
+
+	let ttt = [
+               { name: 'Peter', age:42 }
+             , { name: 'Stefan', age: 41 }
+             , [
+                    {
+                         name: 'Andrey'
+                       , age : 33 
+	                   , l   : [
+	                               [ 13, 44, 43]
+	                             , [ 66, 77, 88]
+	                           ]
+                    }
+
+               ]
+              , [ 22, 33, 26 ]
+          ]
+
+	dtbox
+	  .init( ttt )
+	  .select ()
+	  .deepArray ()
+    .spread ( 'std', std => result = std   )
+    
+	expect ( result ).to.be.an ( 'array' )
+	expect ( result ).to.have.length ( 3 )
+
+	expect ( result[0] ).to.be.an ( 'array' )
+	expect ( result[0] ).to.have.length ( 3 )
+	expect ( result[1] ).to.be.an ( 'array' )
+	expect ( result[2] ).to.be.an ( 'array' )
+})
 
 
 
