@@ -333,6 +333,32 @@ it ( 'Deep Array', () => {
 
 
 
+it ( 'Invert: Empty Selection', () => {
+  const result = dtbox
+                    .init ( sample.test_0 )
+                    .select ()
+                    .invert ();
+  expect ( result._select.value ).to.have.length ( 7 )
+}) // it invert empty selection
+
+
+
+it ( 'Invert: Selection', () => {
+  const result = dtbox
+           .init ( sample.test_0 )
+           .select ()
+           .folder ( 'array' )
+           .invert ()
+
+ expect ( result._select.value ).to.have.length(4)
+}) // it invert selected items
+
+
+
+
+
+
+
 }) // describe
 
 

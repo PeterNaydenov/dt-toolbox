@@ -263,7 +263,7 @@ const mainlib = {
 
 
     , block ( type ) {
-        // *** Filter. Fullfil '_select' with deepest structure elements
+        // *** Selector. Fullfil '_select' with deepest structure elements
             return function () {
                     const 
                           me           = this
@@ -271,6 +271,24 @@ const mainlib = {
                         ;
                     return dtlib.block ( dependencies, me )
         }} // block func.
+
+
+
+
+        
+    , invert ( ) {
+        // *** Selector. Invert the selection
+                const
+                      me        = this
+                    , selection = me._select.value
+                    , valueKeys = Object.keys ( me.value )
+                    ;
+                me._select.value = valueKeys.reduce ( (res,item) => {
+                                                if ( !selection.includes(item) ) res.push(item)
+                                                return res
+                                        }, [] )
+                return me
+        } // invert func.
 
 
 
@@ -398,7 +416,7 @@ const API = {
           , space      : mainlib.space              // Selector. Fullfil select with namespace members
           , deepObject : mainlib.block ( 'object' ) // Selector. Fullfil '_select' with deepest object elements
           , deepArray  : mainlib.block ( 'array'  ) // Selector. Fullfil '_select' with deepest array elements
-    //    , invert     : dtlib.invert               // Selector. Invert existing selection
+          , invert     : mainlib.invert             // Selector. Invert existing selection
           , limit      : mainlib.limit              // Filter.   Reduces amount of records in the selection
           , keep       : mainlib.keep               // Filter.   Keeps records in selection if check function returns true
           , remove     : mainlib.remove             // Filter.   Removes records from selection if check function returns true
