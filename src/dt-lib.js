@@ -197,7 +197,6 @@ const dtlib = {
             const 
                     { type } = dependencies
                   , keys     = Object.keys ( me.value )
-                  , changeMap = {}
                   ;
             let selectedIDs = me.structure.reduce ( (res,row) => {
                                           let rowType = row[0];
@@ -212,32 +211,10 @@ const dtlib = {
             // Prepare structure as array of objects and update selected keys
             me._select.structure = [[ 'array', 0 ]]
             selectedIDs.forEach ( (id,i) => {
-                              let newID = i+1;
-                              me._select.structure[0].push ( [newID, i])
-                              me._select.structure.push ( ['object', newID])
-                              changeMap[id] = newID
-                              me._select.value = me._select.value.map ( key => {
-                                                                let
-                                                                    splited = key.split ( '/' )
-                                                                  , objectID = parseInt ( splited[1])
-                                                                  ;
-                                                                if ( objectID == id )   return `root/${newID}/${splited[2]}`
-                                                                else                    return key
-                                                          })
+                              let localType = me.structure[id][0];
+                              me._select.structure[0].push ( [id, i])
+                              me._select.structure.push ( [localType, id])
                       })
-            // update me.value according changes
-            let valueUpdates = keys.reduce ( (res,key) => {
-                                        let
-                                            splited  = key.split ( '/' )
-                                          , objectID = parseInt ( splited[1])
-                                          , prop     = splited[2]
-                                          , value    = me.value [ key ]
-                                          , newID    = changeMap[objectID]
-                                          ;
-                                        res [`root/${newID}/${prop}`] = value
-                                        return res
-                                    },{})
-            me.value = valueUpdates
             return me
         } // block func.
 

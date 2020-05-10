@@ -273,7 +273,6 @@ it ( 'Deep Objects', () => {
             .select ()
             .deepObject ()
             .spread ( 'std', std => result = std )
-
   expect ( result ).to.have.length ( 6 )
   expect ( result[0] ).to.have.property ('name')
   expect ( result[0] ).to.have.property ('comments')

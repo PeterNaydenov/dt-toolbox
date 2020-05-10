@@ -51,7 +51,7 @@ function toFormat ( dependencies, [ structure, value ]) {
                                     let selectedKeys = keys.filter ( k => k.includes(`root/${id}`));
                                     selectedKeys.forEach ( k => {   // Fill with primitive data
                                                             let 
-                                                                    arr = k.split ( '/' )
+                                                                  arr      = k.split ( '/' )
                                                                 , propName = arr [arr.length-1]
                                                                 ;
                                                             local [propName]  = value[k]
@@ -59,9 +59,9 @@ function toFormat ( dependencies, [ structure, value ]) {
                                     resultObjects.push ( local )
                             })
             structure.forEach ( ([type, id, ...items]) => {  // Conect data-structures
-                                    items.forEach ( ([link, propName]) => {
+                                    items.forEach ( ([link, propName],i) => {
                                                     link = Number(link) || link
-                                                    resultObjects[id][propName] = resultObjects[link]
+                                                    resultObjects[id][propName] = resultObjects[i+1]
                                             })
                             })
             return resultObjects[0]
