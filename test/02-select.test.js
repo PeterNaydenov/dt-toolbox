@@ -355,7 +355,15 @@ it ( 'Invert: Selection', () => {
 
 
 
+it ( 'Invert: Select All', () => { 
+  const result = dtbox
+           .init ( sample.test_0 )
+           .select ()
+           .all ()
+           .invert ()
 
+ expect ( result._select.value ).to.be.an.empty
+}) // it invert select all
 
 
 
