@@ -332,7 +332,7 @@ const mainlib = {
     , change ( data, callback ) {
         // *** Compare values. Reduce to key/value pairs with different values.
                 let
-                    me = this
+                      me = this
                     , mainData  = convert.to ( 'breadcrumbs', mainlib.dependencies(), [me.structure, me.value]        )
                     , checkData = convert.to  ( 'breadcrumb', mainlib.dependencies(), [ data.structure, data.value]   ) 
                     , result    = {}
@@ -340,7 +340,7 @@ const mainlib = {
                     ;
                 mainKeys.forEach ( k => {
                                 let
-                                    HAS_KEY = ( checkData.hasOwnProperty(k)   )
+                                       HAS_KEY = ( checkData.hasOwnProperty(k)   )
                                     ,  EQUAL_VALUES = HAS_KEY && ( mainData[k] === checkData[k]   )
                                     ;
                                 if ( !EQUAL_VALUES )   result[k] = checkData[k]
@@ -358,7 +358,34 @@ const mainlib = {
 
 
 
-        
+
+    , same ( data, callback ) {
+        // *** Compare keys. Returns key/value pairs where keys are the same.
+                let
+                      me = this
+                    , mainData  = convert.to ( 'breadcrumbs', mainlib.dependencies(), [me.structure, me.value]        )
+                    , checkData = convert.to  ( 'breadcrumb', mainlib.dependencies(), [ data.structure, data.value]   ) 
+                    , result    = {}
+                    , mainKeys = Object.keys ( mainData )
+                    ;
+                mainKeys.forEach ( k => {
+                                let HAS_KEY = checkData.hasOwnProperty(k);
+                                if ( HAS_KEY )   result[k] = checkData[k]
+                        })
+                let
+                    [ structure, value ] = convert.from ( 'breadcrumb').toFlat ( mainlib.dependencies(), result )
+                    , dt = mainlib.dependencies().simpleDT ()
+                    ;
+                dt.structure = structure
+                dt.value     = value
+                callback ( dt )
+                return me
+        } // same func.
+
+
+
+
+
     , spread ( instruction, callback ) {
       // *** Returns result of selection
         const 
@@ -467,11 +494,11 @@ const API = {
           , empty      : () => Object.create ( exportAPI ) // Empty object with export methods
        
     // // Compare Operations
-         , identical  :  mainlib.identical // Value compare. Reduce data to identical key/value pairs.
-         , change     :  mainlib.change      // Value compare. Reduce to key/value pairs with different values.
-    //    , same       :  dtlib.same       // Key compare. Returns key/value pairs where keys are the same.
-    //    , different  :  dtlib.different  // Key compare. Returns key/value pairs where key does not exist.
-    //    , missing    :  dtlib.missing    // Key compare. Returns key/value pairs that are missing'
+         , identical  :  mainlib.identical  // Value compare. Reduce data to identical key/value pairs.
+         , change     :  mainlib.change     // Value compare. Reduce to key/value pairs with different values.
+         , same       :  mainlib.same         // Key compare. Returns key/value pairs where keys are the same.
+    //    , different  :  dtlib.different   // Key compare. Returns key/value pairs where key does not exist.
+    //    , missing    :  dtlib.missing     // Key compare. Returns key/value pairs that are missing'
     
     // // Selectors and Filters
           , select     : mainlib.select             // Init a new selection.

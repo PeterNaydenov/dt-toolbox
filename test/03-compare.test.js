@@ -76,38 +76,33 @@ describe ( 'Compare Operations', () => {
 
 
 
-//  it ('Same' , () => {
-//      let 
-//            result
-//          , result_ST
-//          ;
-     
-//      const
-//           a =  { 
-//                    name : 'Peter'
-//                  , age  : 42
-//                }
-//          , b = {
-//                    name   : 'Ivan'
-//                  , age    : 41
-//                  , gender : 'male'
-//                }
-//          ;
-
-//     const sampleDT = dtbox.init(b).value
-
-//     dtbox
-//        .init ( a )
-//        .same ( sampleDT, dt => result    = dt )
-//        .same ( b,        dt => result_ST = dt )
-
-//      expect ( result['root/age'] ).to.be.equal(41)
-//      expect ( result['root/name']).to.be.equal('Ivan')
-//      expect ( result).to.not.have.property ( 'gender' )
-
-//      expect ( result_ST ).to.be.empty
-//      expect ( result_ST ).to.be.an ( 'object' )
-//  }) // it same
+ it ( 'Same' , () => {
+     const
+          a =  { 
+                   name : 'Peter'
+                 , age  : 42
+               }
+         , b = {
+                   name   : 'Ivan'
+                 , age    : 41
+                 , gender : 'male'
+               }
+         , c = { check : 'yes' }
+         , sampleDT = dtbox.init ( b )
+         ;
+    dtbox.init ( a )
+            .same ( sampleDT, dt => {
+                              const val = dt.value;
+                              expect ( val['root/0/age'] ).to.be.equal ( 41 )
+                              expect ( val['root/0/name']).to.be.equal ( 'Ivan' )
+                              expect ( val ).to.not.have.property ( 'gender' )
+                      })
+            .same ( dtbox.init(c), dt => {
+                              const val = dt.value;
+                              expect ( val ).to.be.empty
+                              expect ( val ).to.be.an ( 'object' )
+                      })
+ }) // it same
 
 
 
