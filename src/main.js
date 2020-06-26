@@ -89,7 +89,7 @@ const mainlib = {
                 , dt = dependencies.simpleDT ()
                 , help = dependencies.help
                 , defaultOptions = {format:'std', mod:false }
-                , {format='std', mod=false } = { ...defaultOptions,...options }
+                , { format, mod } = { ...defaultOptions,...options }
                 ;
             if ( !INIT_DATA_TYPES.includes(format) ) {
                         this._error.push ( `Can't understand your data-type: ${format}. Please, find what is possible on http://todo.add.documentation.link.here` )
@@ -294,6 +294,41 @@ const mainlib = {
 
 
 
+
+
+
+
+
+
+    , identical ( data, callback ) {
+        // *** Compare values. Reduce data to identical key/value pairs.
+            let
+                    me         = this
+                  , mainData   = convert.to ( 'breadcrumb', mainlib.dependencies(), [me.structure, me.value]       )
+                  , checkData  = convert.to ( 'breadcrumb', mainlib.dependencies(), [data.structure, data.value]   )
+                  , result     = {}
+                  , mainKeys   = Object.keys ( mainData )
+                  ;
+            mainKeys.forEach ( k => {
+                            let
+                                  HAS_KEY = ( checkData.hasOwnProperty(k) )
+                                , EQUAL_VALUES = HAS_KEY && ( mainData[k] === checkData[k] )
+                                ;
+                                if ( EQUAL_VALUES )   result[k] = mainData[k]
+                    })
+            let 
+                  [ structure, value ] = convert.from ( 'breadcrumb' ).toFlat ( mainlib.dependencies(), result )
+                , dt = mainlib.dependencies().simpleDT ()
+                ;
+            dt.structure = structure
+            dt.value     = value
+            callback ( dt )
+        }  // identical func.
+
+
+
+
+        
     , spread ( instruction, callback ) {
       // *** Returns result of selection
         const 
@@ -402,7 +437,7 @@ const API = {
           , empty      : () => Object.create ( exportAPI ) // Empty object with export methods
        
     // // Compare Operations
-    //    , identical  :  dtlib.identical // Value compare. Reduce data to identical key/value pairs.
+         , identical  :  mainlib.identical // Value compare. Reduce data to identical key/value pairs.
     //    , change     :  dtlib.change    // Value compare. Reduce to key/value pairs with different values.
     //    , same       :  dtlib.same      // Key compare. Returns key/value pairs where keys are the same.
     //    , different  :  dtlib.different // Key compare. Returns key/value pairs where key does not exist.

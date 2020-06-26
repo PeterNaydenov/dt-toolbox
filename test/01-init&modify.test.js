@@ -175,14 +175,14 @@ it ( 'Init: Handmade files-like structure', () => {
                       ]
         
         result =  dtbox.init ( data, { format:'file'} )
-    
+
         expect ( result.value ).to.contain.property ( 'root/1/0' )
         expect ( result.value ).to.contain.property ( 'root/1/1' )
         expect ( result.value ).to.contain.property ( 'root/1/2' )
         expect ( result.value ).to.contain.property ( 'root/2/a' )
         expect ( result.value ).to.contain.property ( 'root/2/e' )
 
-        expect ( result.structure[0][0] ).to.be.equal ( 'object' )
+        expect ( result.structure[0][0] ).to.be.equal ( 'array' )
         expect ( result.structure[1][0] ).to.be.equal ( 'array' )
         expect ( result.structure[2][0] ).to.be.equal ( 'object' )
     }) // it handmade

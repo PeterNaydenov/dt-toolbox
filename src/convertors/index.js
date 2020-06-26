@@ -29,9 +29,9 @@ const selectConvertorFrom =
                                 case 'breadcrumb'  :
                                 case 'breadcrumbs' :
                                                   rawKeys  = Object.keys ( inData )
-                                                  vBuffer  = rawKeys.forEach ( k => inData[k] )
+                                                  vBuffer  = rawKeys.map ( k => inData[k] )
                                                   keyList  = help.sanitizeFlatKeys ( rawKeys )
-                                                  rawValue = zipObject ( keyList, vBuffer )
+                                                  rawValue = help.zipObject ( keyList, vBuffer )
                                                   return   breadcrumbs.toFlat ( dependencies, rawValue )
                                 case 'file'    :
                                 case 'files'   :
@@ -66,7 +66,11 @@ function to ( format, dependencies, inData ) {   // convert from flat to 'format
             case 'std' :
             case 'standard':
                              return std.toFormat ( dependencies, inData )
-            case 'midFlat' : return midFlat.toFormat ( dependencies, inData )
+            case 'midFlat' : 
+                             return midFlat.toFormat ( dependencies, inData )
+            case 'breadcrumb' :
+            case 'breadcrumbs':
+                             return breadcrumbs.toFormat ( dependencies,inData )
             } //switch format
     } // to func.
 

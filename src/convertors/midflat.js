@@ -43,6 +43,7 @@ function toFormat ( dependencies, [structure, value] ) {   // Converts data to m
             , keys   = {}
             , activeKey
             ;
+            console.log ( 'MID FLAT' )
         structure.forEach ( (row,i) => {
                         let 
                               v = {}
