@@ -20,6 +20,14 @@
  */
 
 function toFlat ( dependencies, rawValue ) {
+          if ( Object.keys(rawValue).length === 0 ) {
+                    let 
+                          structure = [ [ 'object', 0 ]   ]
+                        , value = {}
+                        ;
+                    return [ structure, value ]
+              }
+              
           let
                 { help }   = dependencies
               , structure  = []

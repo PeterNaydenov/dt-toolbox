@@ -46,37 +46,31 @@ describe ( 'Compare Operations', () => {
 
 
 
-//  it ( 'Change', () => {
-//      let 
-//            result
-//          , result_ST
-//          ;
-     
-//      const
-//           a =  { 
-//                    name : 'Peter'
-//                  , age  : 42
-//                }
-//          , b = {
-//                    name : 'Peter'
-//                  , age  : 43
-//                }
-//          ;
-
-//     const sampleDT = dtbox.init(b).value
-
-//     dtbox
-//        .init ( a )
-//        .change ( sampleDT, dt => result    = dt )
-//        .change ( b,        dt => result_ST = dt )
-
-//      expect ( result ).to.have.property ( 'root/age' )
-//      expect ( result['root/age']).to.be.equal(43)
-//      expect ( result ).to.not.have.property ( 'root/name' )
-
-//      expect ( result_ST ).to.be.empty
-//      expect ( result_ST ).to.be.an ( 'object' )
-//  }) // it change
+ it ( 'Change', () => {
+    const
+          a =  { 
+                   name : 'Peter'
+                 , age  : 42
+               }
+         , b = {
+                   name : 'Peter'
+                 , age  : 43
+               }
+         , sampleDT = dtbox.init ( b )
+         ;
+    dtbox
+       .init ( a )
+       .change ( sampleDT, dt => {   // Compare objects with single change
+                         const val = dt.value
+                         expect ( val ).to.have.property ( 'root/0/age' )
+                         expect ( val['root/0/age']).to.be.equal(43)
+                         expect ( val ).to.not.have.property ( 'root/name' )
+                    })
+       .change ( dtbox.init(a), dt => {   // Compare identical objects
+                         const val = dt.value
+                         expect ( val ).to.be.empty
+                    })
+ }) // it change
 
 
 
