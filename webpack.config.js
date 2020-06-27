@@ -3,13 +3,13 @@
 const webpack = require ( 'webpack' );
 
 module.exports = {
-      entry: "./src/dt-toolbox.js"
+      entry: "./src/main.js"
     , mode: 'production'
     , output: {
               filename: "dt-toolbox.min.js"
             , path: __dirname + "/dist"
             , library: 'dtbox'
-            , libraryTarget: "umd"
+            , libraryTarget: "var"
             , umdNamedDefine : true
        }
     , optimization: {}

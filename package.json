@@ -2,7 +2,7 @@
   "name": "dt-toolbox",
   "version": "2.1.2",
   "description": "Data manipulation tool",
-  "main": "src/dt-toolbox.js",
+  "main": "src/main.js",
   "scripts": {
     "test": "mocha test",
     "build": "webpack",
@@ -13,15 +13,15 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "7.9.6",
-    "@babel/preset-env": "7.9.6",
+    "@babel/core": "7.10.3",
+    "@babel/preset-env": "7.10.3",
     "babel-loader": "8.1.0",
     "chai": "4.2.0",
-    "mocha": "7.1.2",
-    "nyc": "15.0.1",
+    "mocha": "8.0.1",
+    "nyc": "15.1.0",
     "uglifyjs-webpack-plugin": "2.2.0",
     "webpack": "4.43.0",
-    "webpack-cli": "3.3.11"
+    "webpack-cli": "3.3.12"
   },
   "repository": {
     "type": "git",
@@ -54,5 +54,6 @@
       "lcov",
       "text-summary"
     ]
-  }
+  },
+  "browserslist": "> 2%, not dead"
 }

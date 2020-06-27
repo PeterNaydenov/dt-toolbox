@@ -18,12 +18,12 @@
      - Refactoring and version 3.0.0   April 14th, 2020
          * Much faster and memory efficient algorithms;
          * Smaller library size;
-         * Change of internal data-structures(DT);
+         * Multiple convertors for switching among different data-structures;
+         * Change of internal data-description;
          * Old internal data type have new name(breadcrumbData) and is fully supported(import/export);
          * Support for tuples(import and export);
          * Complete code refactoring;
 */
-
 
 
 

@@ -48,14 +48,17 @@
                             name: 'Peter'
                           , age : 43
                       }
-           }]
-    
-    let result;
-    dtbox
-        .init ( user )
+                }];
+    let 
+          result
+        , data = dtbox.init ( user )
+        ;
+    data
         .select ()
-        .all()
-        .spread ( 'dt', dt => result = dt.assemble().build()   )
+        .space ( 'profile' )        
+    data._select.structure = [ ['object', 2]]
+    data.spread ( 'std', x => result = x)
+    
     hookNode.innerHTML = `${result.name} is ${result.age} years old.`
 </script>
 </body>
