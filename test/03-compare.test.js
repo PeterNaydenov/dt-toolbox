@@ -148,6 +148,20 @@ describe ( 'Compare Operations', () => {
 
 
 
+
+
+ it ( 'Compare with a non-flat object', () => {
+      const testDT = { 
+                        'name'   : 'Ivan'
+                      , 'age'    : 33
+                      , 'gender' : 'male'
+                };
+      dtbox
+          .init ( sample.test_0 )
+          .missing ( testDT, dt => expect (dt).to.be.equal ( null )   )
+ }) // it compare with non-flat
+
+
 }) // describe
 
 

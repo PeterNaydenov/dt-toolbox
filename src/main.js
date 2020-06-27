@@ -299,6 +299,16 @@ const mainlib = {
 
     , compare ( methodName) {
       return function ( data, callback ) {
+                if ( 
+                        !data.hasOwnProperty ( 'value' )
+                           ||
+                        !data.hasOwnProperty ( 'structure' )
+                   ) {
+                        const errorMsg = 'Error: Compared object should be with a flat structure'; 
+                        callback ( null )
+                        return this
+                    }
+
                 let 
                       me = this
                     , mainData   = convert.to ( 'breadcrumb', mainlib.dependencies(), [me.structure, me.value]       )
