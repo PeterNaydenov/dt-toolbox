@@ -430,14 +430,14 @@ const API = {
           , log        : mainlib.errorLog                  // Executes callback with errors list as argument
           , empty      : () => Object.create ( exportAPI ) // Empty object with export methods
        
-    // // Compare Operations
+    // Compare Operations
          , identical  :  mainlib.compare ( 'identical' )   // Value compare. Reduce data to identical key/value pairs.
          , change     :  mainlib.compare ( 'change'    )   // Value compare. Reduce to key/value pairs with different values.
          , same       :  mainlib.compare ( 'same'      )   // Key compare. Returns key/value pairs where keys are the same.
          , different  :  mainlib.compare ( 'different' )   // Key compare. Returns key/value pairs where key does not exist.
          , missing    :  mainlib.compare ( 'missing'   )   // Key compare. Returns key/value pairs that are missing.
     
-    // // Selectors and Filters
+    // Selectors
           , select     : mainlib.select             // Init a new selection.
           , parent     : mainlib.parent             // Selector. Apply conditions starting from parent level
           , folder     : mainlib.folder             // Selector. Fullfil select with list of arguments that contain specific string
@@ -446,6 +446,8 @@ const API = {
           , deepObject : mainlib.block ( 'object' ) // Selector. Fullfil '_select' with deepest object elements
           , deepArray  : mainlib.block ( 'array'  ) // Selector. Fullfil '_select' with deepest array elements
           , invert     : mainlib.invert             // Selector. Invert existing selection
+
+    // Filters      
           , limit      : mainlib.limit              // Filter.   Reduces amount of records in the selection
           , keep       : mainlib.keep               // Filter.   Keeps records in selection if check function returns true
           , remove     : mainlib.remove             // Filter.   Removes records from selection if check function returns true
