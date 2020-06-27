@@ -386,6 +386,33 @@ const mainlib = {
 
 
 
+    , different ( data, callback ) {
+                // *** Key compare. Returns key/value pairs where key does not exist.
+                let
+                        me = this
+                        , mainData  = convert.to ( 'breadcrumbs', mainlib.dependencies(), [me.structure, me.value]        )
+                        , checkData = convert.to  ( 'breadcrumb', mainlib.dependencies(), [ data.structure, data.value]   ) 
+                        , result    = {}
+                        , checkKeys = Object.keys ( checkData )
+                        ;
+                checkKeys.forEach ( k => {
+                                    let HAS_KEY = mainData.hasOwnProperty(k);
+                                    if ( !HAS_KEY )   result[k] = checkData[k]
+                            })
+                let
+                    [ structure, value ] = convert.from ( 'breadcrumb').toFlat ( mainlib.dependencies(), result )
+                    , dt = mainlib.dependencies().simpleDT ()
+                    ;
+                dt.structure = structure
+                dt.value     = value
+                callback ( dt )
+                return me
+        } // different func.
+
+
+
+
+
     , spread ( instruction, callback ) {
       // *** Returns result of selection
         const 
@@ -496,8 +523,8 @@ const API = {
     // // Compare Operations
          , identical  :  mainlib.identical  // Value compare. Reduce data to identical key/value pairs.
          , change     :  mainlib.change     // Value compare. Reduce to key/value pairs with different values.
-         , same       :  mainlib.same         // Key compare. Returns key/value pairs where keys are the same.
-    //    , different  :  dtlib.different   // Key compare. Returns key/value pairs where key does not exist.
+         , same       :  mainlib.same       // Key compare. Returns key/value pairs where keys are the same.
+         , different  :  mainlib.different  // Key compare. Returns key/value pairs where key does not exist.
     //    , missing    :  dtlib.missing     // Key compare. Returns key/value pairs that are missing'
     
     // // Selectors and Filters

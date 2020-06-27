@@ -108,24 +108,23 @@ describe ( 'Compare Operations', () => {
 
 
 
-//  it ( 'Different', () => {
-//    let result;
-//    const 
-//            testDT = { 
-//                       'root/name'   : 'Ivan'
-//                     , 'root/age'    : 33
-//                     , 'root/gender' : 'male'
-//                   }
-//          ;
-
-//     dtbox
-//         .init ( sample.test_0 )
-//         .different ( testDT, dt => result = dt   )
-
-//     expect ( result ).to.have.property     ( 'root/gender' )
-//     expect ( result ).to.not.have.property ( 'root/name'   )
-//     expect ( result ).to.not.have.property ( 'root/age'    )
-//  }) // it different
+ it ( 'Different', () => {
+   const 
+           testDT = { 
+                      'name'   : 'Ivan'
+                    , 'age'    : 33
+                    , 'gender' : 'male'
+                  }
+         ;
+    dtbox
+         .init ( sample.test_0 )
+         .different ( dtbox.init(testDT), dt => {
+                          const val = dt.value
+                          expect ( val ).to.have.property     ( 'root/0/gender' )
+                          expect ( val ).to.not.have.property ( 'root/0/name'   )
+                          expect ( val ).to.not.have.property ( 'root/0/age'    )
+                })
+ }) // it different
 
 
 
