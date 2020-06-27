@@ -130,24 +130,21 @@ describe ( 'Compare Operations', () => {
 
 
 
-//  it ( 'Missing', () => {
-//    let result;
-//    const 
-//            testDT = { 
-//                       'root/name'   : 'Ivan'
-//                     , 'root/age'    : 33
-//                     , 'root/gender' : 'male'
-//                   }
-//          ;
-
-//     dtbox
-//         .init ( sample.test_0 )
-//         .missing ( testDT, dt => result = dt   )
-
-//    expect ( result ).to.have.property     ( 'root/eyes' )
-//    expect ( result ).to.not.have.property ( 'root/name' )
-//    expect ( result ).to.not.have.property ( 'root/age'  )
-//  }) // it missing
+ it ( 'Missing', () => {
+   const testDT = { 
+                      'name'   : 'Ivan'
+                    , 'age'    : 33
+                    , 'gender' : 'male'
+                  };
+    dtbox
+        .init ( sample.test_0 )
+        .missing ( dtbox.init(testDT), dt => {
+                          const val = dt.value;
+                          expect ( val ).to.have.property     ( 'root/0/eyes' )
+                          expect ( val ).to.not.have.property ( 'root/0/name' )
+                          expect ( val ).to.not.have.property ( 'root/0/age'  )
+                })
+ }) // it missing
 
 
 
