@@ -4,9 +4,7 @@
 
 const dtlib = {
 
-
-
-    loadLong ( dependencies, flatData ) {
+      loadLong ( dependencies, flatData ) {
                 let { structure, value } = flatData;
                 return dtlib._loadData ( dependencies, structure, value )
         } // loadLong func.

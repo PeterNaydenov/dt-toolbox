@@ -448,7 +448,7 @@ const API = {
          , missing    :  mainlib.compare ( 'missing'   )   // Key compare. Returns key/value pairs that are missing.
     
     // Selectors
-          , select     : mainlib.select             // Init a new selection.
+          , select     : mainlib.select             // Initialize a new selection.
           , parent     : mainlib.parent             // Selector. Apply conditions starting from parent level
           , folder     : mainlib.folder             // Selector. Fullfil select with list of arguments that contain specific string
           , all        : mainlib.folder             // Selector. Same as folder ('root')
