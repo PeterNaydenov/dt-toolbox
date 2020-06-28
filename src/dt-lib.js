@@ -1,6 +1,9 @@
 'use strict'
 
 const modifier = require ( './modifiers' );
+
+
+
 const dtlib = {
 
       loadLong ( dependencies, flatData ) {
@@ -28,7 +31,7 @@ const dtlib = {
 
 
     , modify ( dependencies, main, addData ) {
-      // ***   Modify add | update | overwrite
+      // ***   Modify add | update | overwrite | insert | append | prepend
               const
                     { action, convert, help } = dependencies 
                   , mainData = convert.to ( 'midFlat', dependencies, [main.structure, main.value])

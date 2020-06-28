@@ -446,6 +446,8 @@ const API = {
           , update     : mainlib.modify ( 'update'    )    // Updates only existing data
           , overwrite  : mainlib.modify ( 'overwrite' )    // Add new data to DT object. Overwrite existing fields
           , insert     : mainlib.modify ( 'insert'    )    // Insert data on specified key, when the key represents an array.
+          , append     : mainlib.modify ( 'append'    )    // Combine values for duplicated keys. main + update
+          , prepend    : mainlib.modify ( 'prepend'   )    // Combine values for duplicated keys. update + main
           , spread     : mainlib.spread                    // Returns result of selection
           , spreadAll  : mainlib.spreadAll                 // Select all and returns it with one command
           , log        : mainlib.errorLog                  // Executes callback with errors list as argument

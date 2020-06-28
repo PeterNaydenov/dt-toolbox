@@ -394,6 +394,44 @@ it ( 'Modify: Insert', () => {
 	expect ( result.structure[1][0] ).to.be.equal ( 'array' )
 }) // it insert
 
+
+
+it ( 'Modify: Prepend', () => {
+    let 
+          a = { name: ' Peter', items:4 }
+        , b = { name: 'Naydenov', items: 6 }
+        ;
+    const 
+          result = dtbox.init ( a )
+                  .prepend ( b, {format:'std'}   )
+        , val = result.value
+        ;
+    expect ( val ).to.have.property ( 'root/0/name' )
+    expect ( val ).to.have.property ( 'root/0/items' )
+    expect ( val['root/0/name']).to.be.equal ('Naydenov Peter')
+    expect ( val['root/0/items']).to.be.equal (10)    
+}) // it prepend
+
+
+
+it ( 'Modify: Append', () => {
+    let 
+          a = { name: 'Peter'    , items:4  }
+        , b = { name: ' Naydenov', items: 6 }
+        ;
+    const 
+          result = dtbox.init ( a )
+                  .append ( b, {format:'std'}   )
+        , val = result.value
+        ;
+    expect ( val ).to.have.property ( 'root/0/name' )
+    expect ( val ).to.have.property ( 'root/0/items' )
+    expect ( val['root/0/name']).to.be.equal ('Peter Naydenov')
+    expect ( val['root/0/items']).to.be.equal (10)    
+ }) // it append
+
+
+
 // TODO: I'm not sure about this method... Looks not good enough.
 it ( 'Modify: Insert text')
 it ( 'Modify: Insert in root')
