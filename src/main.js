@@ -399,6 +399,12 @@ const mainlib = {
         } // spread func.
 
 
+
+    , spreadAll () {
+                this.folder ()
+                return this.spread
+        } // spreadAll func..
+
 } // mainlib
 
 
@@ -436,7 +442,7 @@ const API = {
           , overwrite  : mainlib.modify ( 'overwrite' )    // Add new data to DT object. Overwrite existing fields
           , insert     : mainlib.modify ( 'insert'    )    // Insert data on specified key, when the key represents an array.
           , spread     : mainlib.spread                    // Returns result of selection
-    //    , spreadAll  : dtlib.spreadAll                   // Select all and returns it with one command
+          , spreadAll  : mainlib.spreadAll                 // Select all and returns it with one command
           , log        : mainlib.errorLog                  // Executes callback with errors list as argument
           , empty      : () => Object.create ( exportAPI ) // Empty object with export methods
        
