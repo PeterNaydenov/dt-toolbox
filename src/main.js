@@ -149,7 +149,7 @@ const mainlib = {
             return function ( inData, options ) {
                     const
                           me = this 
-                        , updateData = mainlib.init ( inData, options )
+                        , updateData = mainlib.init ( inData, options )                        
                         ;
                     return   dtlib.modify ( { ...mainlib.dependencies(), action:method}, me, updateData )
         }} // modify func.
@@ -263,6 +263,7 @@ const mainlib = {
 
 
 
+
     , block ( type ) {
         // *** Selector. Fullfil '_select' with deepest structure elements
             return function () {
@@ -297,6 +298,9 @@ const mainlib = {
 
 
 
+
+
+
     , compare ( methodName) {
       return function ( data, callback ) {
                 if ( 
@@ -304,7 +308,7 @@ const mainlib = {
                            ||
                         !data.hasOwnProperty ( 'structure' )
                    ) {
-                        const errorMsg = 'Error: Compared object should be with a flat structure'; 
+                        const errorMsg = 'Error: Compared object should be model "flat"'; 
                         callback ( null )
                         return this
                     }
@@ -342,6 +346,23 @@ const mainlib = {
             ;
         let selection;
         // TODO: refactoring of instructions. Should work as options in init. ( { mod, format} )
+        /**
+         *   
+         *   format:
+         *      - standard/std: standard js object;
+         *      - breadcrumb: keys position described as breadcrumb and values are primitives(number,boolean,string);
+         *      - file: Array of combined breadcrumb keys and value in single string;
+         *      - midFlat: Mix. Breadcrumb keys and values are object with primitive properties;
+         *      - tuples: Object described as array of arrays with two elements. First is the key, second is the value;
+         *      - flat: Library internal description of the object 
+         *      
+         *   mod:
+         *        keys    - take keys as value. Ignore original values.
+         *        nokeys  - ignore keys. Convert objects to arrays
+         *        values  - use values as keys
+         *        reverse - keys will become values and values - keys
+         *        
+         */
   		switch ( instruction ) {
   			case 'value'   :
   			case 'values'  :
@@ -366,22 +387,6 @@ const mainlib = {
                               selection = convert.to ( 'std', mainlib.dependencies(), [me._select.structure, set] )
   			                }
   							break
-  			case 'asJSON'   :  { // * Returns DT.value as JSON
-					  		let set = _selectKeys.reduce ( (res, el) => {
-					  											 res[el] = me.value[el]
-					  											 return res
-					  		          		       }, {} )
-  							selection = JSON.stringify ( set )
-					  		}
-  							break
-            case 'toJSON' : { // * Converts DT.value to ST object and returns JSON
-                            let set = _selectKeys.reduce ( (res, el) => {
-                                                                    res[el] = me.value[el]
-                                                                    return res
-                                                }, empty() )
-                            selection = JSON.stringify ( set.build() )
-                            }
-                        break
             case 'flat'    : 
             default       : {
                             let set = _selectKeys.reduce ( (res, el) => {

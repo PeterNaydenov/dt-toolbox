@@ -1,7 +1,6 @@
 'use strict'
 
-
-
+const modifier = require ( './modifiers' );
 const dtlib = {
 
       loadLong ( dependencies, flatData ) {
@@ -37,7 +36,7 @@ const dtlib = {
                   ;
               let result;
               main._error = main._error.concat ( addData._error )
-              result = mixMidFlat[action] ( mainData, update )
+              result = modifier[action] ( mainData, update )
               let [structure, value ] = convert.from ( 'midFlat').toFlat ( dependencies, result )
               main.structure = help.copyStructure ( structure )
               main.value = value
@@ -283,77 +282,6 @@ const dtlib = {
                  return [structure, result]
         } // transform func.
 } // dtlib
-
-
-
-
-
-
-
-
-
-
-const mixMidFlat = {
-   add ( mainData, update ) {
-            for (const updateKey in update ) {
-                        let   selectObject =   mainData[updateKey];
-                        if ( !selectObject )   mainData[updateKey] = { ...update[updateKey] }
-                        else {
-                                    for (let prop in update[updateKey]) {
-                                                    if ( !mainData[updateKey][prop] )   mainData[updateKey][prop] = update[updateKey][prop]
-                                            }
-                            }
-                }
-            return mainData
-      } // add func.
-
-
-
-  , update ( mainData, update ) {
-            for (const updateKey in update ) {
-                      if ( mainData[updateKey] ) {
-                                  for (let prop in update[updateKey]) {
-                                                  if ( mainData[updateKey][prop] )   mainData[updateKey][prop] = update[updateKey][prop]
-                                          }
-                          }
-              }
-            return mainData
-      } // update func.
-
-
-
-  , overwrite ( mainData, update ) {
-            for (const updateKey in update ) {
-                    let selectObject = mainData[updateKey]
-                    if ( !selectObject )   mainData[updateKey] = {...update[updateKey]}
-                    else {
-                                for (let prop in update[updateKey]) {
-                                                mainData[updateKey][prop] = update[updateKey][prop]
-                                        }
-                        }
-                }
-            return mainData
-      } // overwrite func.
-    
-
-  
-  , insert ( mainData, update ) {
-            for (const updateKey in update ) {
-                            let 
-                                  mainVals   = Object.values ( mainData[updateKey])
-                                , updateVals = Object.values ( update[updateKey] )
-                                , mixed      = mainVals.concat ( updateVals )
-                                ;
-                            mainData[updateKey] = mixed.reduce ( (r,item,i) => {
-                                                                r[i] = item
-                                                                return r
-                                                }, {} )
-                }
-            return mainData
-      } // insert func.
-} // mixMidFlat
-
-
 
 
 
