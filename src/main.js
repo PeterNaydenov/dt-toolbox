@@ -30,6 +30,7 @@
 const 
       dtlib           = require ( './dt-lib'              ) 
     , help            = require ( './help'                )
+    , modifier         = require ( './modifiers'   )
     , convert         = require ( './convertors/index'    )
     , compareMethod   = require ( './compareMethod/index' )
     
@@ -66,6 +67,7 @@ const mainlib = {
                         , empty: h.empty
                         , convert
                         , help
+                        , modifier
                     }
             } // dependencies func.
 
