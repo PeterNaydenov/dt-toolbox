@@ -215,11 +215,11 @@ const mainlib = {
 
 
 
-    , find ( folder='root', deep ) {
+    , find ( search='root', deep ) {
       // *** Find if string exists in a bradcrumb keys.
             const 
                       me = this
-                    , dependencies = { ...mainlib.dependencies(), folder, deep }
+                    , dependencies = { ...mainlib.dependencies(), search, deep }
                     ;
             me._select.result = null
             return dtlib.find ( dependencies, me )

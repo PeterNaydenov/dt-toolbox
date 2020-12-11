@@ -53,21 +53,21 @@ const dtlib = {
     , find ( dependencies, me ) {
               // * Find if string exists in value attribute name.
             let 
-                  folderDefault = 'root'
+                  searchDefault = 'root'
                 , deepDefault = 9999
                 , deepMax
                 , keys = Object.keys ( me.value )
-                , { help, deep, folder } = dependencies
+                , { help, deep, search } = dependencies
                 , longKeys = help.toBreadcrumbKeys ( keys, me.structure )
                 ;
                        
-                folder = folder || folderDefault
+                search = search || searchDefault
                 deep = (deep == null) ? deepDefault : deep
                 deep =  deep + 1 // because we add default wrapper 'root'
-                deepMax = folder.split('/').length + deep
+                deepMax = search.split('/').length + deep
 
                 let collection = longKeys
-                                    .filter ( el => el.match (folder) )
+                                    .filter ( el => el.match (search) )
                                     .reduce ( (res, el) => {
                                                                 let 
                                                                       index  = longKeys.indexOf(el)
