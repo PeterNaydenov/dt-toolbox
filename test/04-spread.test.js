@@ -119,7 +119,7 @@ describe ( 'Spread and SpreadAll', () => {
         dtbox
           .init ( test )
           .select ()
-          .folder ( 'arr' )
+          .find ( 'arr' )
           .assemble ()
           .spread ( 'std', x => {
                     expect ( x ).to.have.length ( 2 )

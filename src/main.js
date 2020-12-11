@@ -215,15 +215,15 @@ const mainlib = {
 
 
 
-    , folder ( folder='root', deep ) {
+    , find ( folder='root', deep ) {
       // *** Find if string exists in a bradcrumb keys.
             const 
                       me = this
                     , dependencies = { ...mainlib.dependencies(), folder, deep }
                     ;
             me._select.result = null
-            return dtlib.folder ( dependencies, me )
-        } // folder
+            return dtlib.find ( dependencies, me )
+        } // find func.
 
 
 
@@ -612,8 +612,8 @@ const API = {
     // Selectors
           , select     : mainlib.select             // Initialize a new selection.
           , parent     : mainlib.parent             // Selector. Apply conditions starting from parent level
-          , folder     : mainlib.folder             // Selector. Fullfil select with list of arguments that contain specific string
-          , all        : mainlib.folder             // Selector. Same as folder ('root')
+          , find        : mainlib.find                // Selector. Fullfil select with list of arguments that contain specific string
+          , all        : mainlib.find                // Selector. Same as find ('root')
           , space      : mainlib.space              // Selector. Fullfil select with namespace members
           , deepObject : mainlib.block ( 'object' ) // Selector. Fullfil '_select' with deepest object elements
           , deepArray  : mainlib.block ( 'array'  ) // Selector. Fullfil '_select' with deepest array elements

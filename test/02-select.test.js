@@ -60,44 +60,44 @@ it ( 'Parent with array', () => {
 
 
 
-it ( 'Folder', () => {
+it ( 'Find', () => {
   let result;
   dtbox
       .init   ( sample.test_0 )
       .select ()
-      .folder ( 'profile' ) // no params == select all
+      .find ( 'profile' ) // no params == select all
       .spread ( 'flat', flat => result = flat[1]   )
 
   let list = Object.keys ( result );
   expect ( list.length ).to.be.equal ( 1 )
   expect ( result ).has.property ( 'root/1/active' )
   expect ( result['root/1/active'] ).is.equal ( true )
-}) // it folder
+}) // it find
 
 
 
-it ( 'Folder with deep', () => {
+it ( 'Find with deep', () => {
   let x = dtbox
         .init   ( sample.test_1 )
         .select ()
-        .folder ('set', 1 ) 
+        .find ('set', 1 ) 
   // Note: deep is absolute, starting from 'root' - 0.
   let result = x._select.value
   expect ( result ).to.have.length ( 4 )
-}) // it folder with deep
+}) // it find with deep
 
 
 
-it ( 'Folder with regular expression', () => {
+it ( 'Find with regular expression', () => {
     let x = dtbox
               .init   ( sample.test_0 )
               .select ()
-              .folder ('.*/[0-9]$') 
+              .find ('.*/[0-9]$') 
     let result = x._select.value;
 
     expect ( result ).contains ( 'root/2/0' )
     expect ( result ).has.length(3)
-}) // it regexp.
+}) // it find with regexp.
 
 
 
@@ -146,7 +146,7 @@ it ( 'Limit', () => {
     const x = dtbox
                     .init ( sample.test_0 )
                     .select ()
-                    .folder ()
+                    .find ()
                     .limit (4);
     let result = x._select.value;
     expect ( result ).has.length(4)
@@ -195,7 +195,7 @@ it( 'Remove: No arguments' , () => {
     const x = dtbox
                 .init ( sample.test_0 )
                 .select ()
-                .folder ('array')
+                .find ('array')
                 .remove ();
     const result = x._select.value;
     expect ( result ).to.have.length ( 3 )
@@ -207,7 +207,7 @@ it ( 'Remove: Value check' , () => {
     const x = dtbox
                 .init ( sample.test_0 )
                 .select ()
-                .folder ()
+                .find ()
                 .remove ( el => el == 'Peter' );
     const result = x._select.value;
     expect ( result ).not.contains ( 'root/0/name' )
@@ -242,7 +242,7 @@ it ( 'Deep', () => {
     const x = dtbox
                   .init ( sample.test_0 )
                   .select ()
-                  .folder ()
+                  .find ()
                   .deep ( 0 )
     const result = x._select.value;
     expect( result ).has.length(3)
@@ -255,7 +255,7 @@ it ( 'Deep with direction', () => {
 	const x = dtbox
                 .init ( sample.test_0 )
                 .select ()
-                .folder ()
+                .find ()
                 .deep ( 1, 'more' ) // read as 'level should be higher then 0'
   const result = x._select.value;
 	expect ( result ).has.length(4)
@@ -347,7 +347,7 @@ it ( 'Invert: Selection', () => {
   const result = dtbox
            .init ( sample.test_0 )
            .select ()
-           .folder ( 'array' )
+           .find ( 'array' )
            .invert ()
 
  expect ( result._select.value ).to.have.length(4)

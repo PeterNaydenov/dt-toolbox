@@ -50,7 +50,7 @@ const dtlib = {
 
 
 
-    , folder ( dependencies, me ) {
+    , find ( dependencies, me ) {
               // * Find if string exists in value attribute name.
             let 
                   folderDefault = 'root'
@@ -79,7 +79,7 @@ const dtlib = {
                 me._select.value     = help.updateSelection ( me._select.value,  collection )
                 me._select.structure = help.copyStructure ( me.structure )
                 return me
-        } // folder func.
+        } // find func.
 
 
 
