@@ -140,14 +140,15 @@ const dtlib = {
                 , result = []
                 ;
             if ( prop == 'root' )   usedNumbers.push ( 0 )
+
             me.structure.forEach ( row => {   // Find if structures
             row.forEach ( (item,i) => {
                           if ( i > 1 ) {
                                 let [id, name] = item;
                                 if ( name==prop )   usedNumbers.push(id)
                             }
-                  })                                    
-                  })
+                })})
+
             selectedKeys = usedNumbers.reduce ( (res,number) => {
                                         for (let key in me.value ) {
                                                     let splited = key.split('/');

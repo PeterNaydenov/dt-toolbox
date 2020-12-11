@@ -316,7 +316,7 @@ it ( 'Modify: Update with instructions', () => {   // Updates only existing valu
                     .update ( sample.test_0 , {mod:'key'} );
 
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
-    expect ( result.value              ).to.have.property ( 'root/0/name' )
+    expect ( result.value                ).to.have.property ( 'root/0/name' )
     expect ( result.value['root/0/name'] ).to.be.equal ( 'name' )
 }) // it modify: Update
 

@@ -190,6 +190,16 @@ function zipObject ( keys, values ) {   // (string[], string[] ) -> object
 
 
 
+function extractSelection ( data ) {
+    let selectionKeys = data._select.value;
+    return selectionKeys.reduce ( (res,key) => {
+                            res[key] = data.value[key]
+                            return res     
+                },{})
+} // extractSelection func.
+
+
+
 
 
 module.exports = { 
@@ -205,6 +215,7 @@ module.exports = {
                     , toBreadcrumbKeys   // Breadcrumbs keys
                     , updateSelection    // Updates selection list. Checks if element is already selected
                     , zipObject          // Conect two arrays in a single object
+                    , extractSelection   // Creates 'value' object with selected keys only
                 }
 
 
