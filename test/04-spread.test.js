@@ -1,9 +1,9 @@
 'use strict'
 
 const		 
-		  dtbox  = require ( '../src/main'   )
-		, sample = require ( '../test-data/sample' )
-    , chai   = require ( 'chai'                )
+		  dtbox  = require ( '../src/main'        )
+		, sample = require ( '../test-data/index' )
+    , chai   = require ( 'chai'               )
 		, expect = chai.expect
 		;
 

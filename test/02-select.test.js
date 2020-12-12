@@ -2,7 +2,7 @@
 
 const		 
 		  dtbox  = require ( '../src/main'         )
-		, sample = require ( '../test-data/sample' )
+		, sample = require ( '../test-data/index'  )
 		, chai   = require ( 'chai'                )
 		, expect = chai.expect
 		;
