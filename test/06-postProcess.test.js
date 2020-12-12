@@ -1,0 +1,74 @@
+'use strict'
+
+const		 
+      dtbox  = require ( '../src/main'        )
+    , sample = require ( '../test-data/index' )
+    , chai   = require ( 'chai'               )
+    , expect = chai.expect
+    ;
+
+
+
+describe ( 'Post Processes', () => {
+
+it ( 'withSelection', () => {
+      const test = {
+                        name : 'Peter'
+                      , arr  : [ 1, 15, ['one', 'two'], {'joy': 'music', 'style': 'metal'} ]
+                };
+      let dt = dtbox
+                .init ( test )
+                .select ()
+                .all ()
+                .withSelection ();
+
+      expect ( dt._select.result['root'] ).to.have.property ( 'name' )
+      expect ( dt._select.result['root/arr'][1]).to.be.equal ( 15 )
+  }) // it withSelection
+
+
+
+it ( 'Modifier -> flatten', () => {
+        const test = {
+                          name : 'Peter'
+                        , arr  : [ 1, 15, ['one', 'two'], {'joy': 'music', 'style': 'metal'} ]
+                    };
+        dtbox
+            .init ( test )
+            .select ()
+            .all ()
+            .withSelection ()
+            .flatten ()
+            .spread ( 'std', x => {
+                        expect ( x ).has.property ( '1' )
+                        expect ( x['1']).is.equal ( 15 )  // external ones will overwrite internal ones
+                        expect ( x['1']).is.not.equal ( 'two' )
+                        expect ( x ).has.property ( 'name' )
+                        expect ( x ).has.property ( 'joy'  )
+                        expect ( x ).has.property ( 'style' )
+                })
+    }) // it modifier -> flatten
+
+
+
+it ( 'modifier -> keyPrefix', () => {
+        const test = {
+                      name : 'Peter'
+                    , arr  : [ 1, 15, ['one', 'two'], {'joy': 'music', 'style': 'metal'} ]
+                };
+        dtbox
+           .init ( test )
+           .select ()
+           .all ()
+           .withSelection ()
+           .keyPrefix ('-')
+           .flatten ()
+           .spread ( 'std', x => {
+                      expect ( x ).to.have.property ( 'arr-3-joy')
+                      expect ( x ).to.have.property ( 'arr-2-0'  )
+                      expect ( x ).to.have.property ( 'arr-0'    )
+                      expect ( x ).to.have.property ( 'name'     )
+                })
+    }) // it modifier -> keyPrefix
+
+}) // describe
