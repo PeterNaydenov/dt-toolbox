@@ -29,7 +29,7 @@
 
 const 
       dtlib           = require ( './lib/index'           ) 
-    , help            = require ( './help'                )
+    , help            = require ( './help/index'          )
     , modifier         = require ( './modifiers/index'      )
     , convert         = require ( './convertors/index'    )
     , compareMethod   = require ( './compareMethod/index' )
