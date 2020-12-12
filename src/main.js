@@ -28,9 +28,9 @@
 
 
 const 
-      dtlib           = require ( './dt-lib'              ) 
+      dtlib           = require ( './lib/index'           ) 
     , help            = require ( './help'                )
-    , modifier         = require ( './modifiers'   )
+    , modifier         = require ( './modifiers/index'      )
     , convert         = require ( './convertors/index'    )
     , compareMethod   = require ( './compareMethod/index' )
     

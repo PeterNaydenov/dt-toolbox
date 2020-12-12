@@ -1,11 +1,11 @@
 // NOTE: modifiers require a midFlat format for mainData and update
 const
-    overwrite = require ( './modifiers/overwrite' )
-  , update    = require ( './modifiers/update'    )
-  , add       = require ( './modifiers/add'       )
-  , insert    = require ( './modifiers/insert'    )
-  , append    = require ( './modifiers/append'    )
-  , prepend   = require ( './modifiers/prepend'   )
+    overwrite = require ( './overwrite' )
+  , update    = require ( './update'    )
+  , add       = require ( './add'       )
+  , insert    = require ( './insert'    )
+  , append    = require ( './append'    )
+  , prepend   = require ( './prepend'   )
   ;
 
 const modifier = {

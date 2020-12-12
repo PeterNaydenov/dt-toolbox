@@ -1,13 +1,13 @@
 'use strict'
 
 const 
-      find       = require ( './lib/find'    )
-    , parent    = require ( './lib/parent' )
-    , block     = require ( './lib/block'  )
-    , deep      = require ( './lib/deep'   )
-    , space     = require ( './lib/space'  )
-    , modify    = require ( './lib/modify' )
-    , transform = require ( './lib/transform' )
+      find       = require ( './find'    )
+    , parent    = require ( './parent' )
+    , block     = require ( './block'  )
+    , deep      = require ( './deep'   )
+    , space     = require ( './space'  )
+    , modify    = require ( './modify' )
+    , transform = require ( './transform' )
     ;
 
 
