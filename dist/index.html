@@ -33,8 +33,8 @@
         dtbox
             .init ( user )
             .select ()
-            .all()
-            .spread ( 'dt', dt => result = dt.assemble().build()   )
+            .space('profile')
+            .spread ( 'std', std => result = {...std}   )
 
         hookNode.innerHTML = `${result.name} is ${result.age} years old.`
     </pre>
@@ -55,10 +55,10 @@
         ;
     data
         .select ()
-        .space ( 'profile' )        
-    data._select.structure = [ ['object', 2]]
-    data.spread ( 'std', x => result = x)
-    
+        .space ( 'profile' )
+        .assemble ()
+        .spread ( 'std', x => result = {...x})
+        
     hookNode.innerHTML = `${result.name} is ${result.age} years old.`
 </script>
 </body>
