@@ -17,7 +17,6 @@ function toFlat ( dependencies, d ) {   // Converts data to shortFlat
                         , kLength = kSplit.length
                         , kProp  
                         ;
-
                     if ( kLength > 1 ) {
                             kProp = kSplit.pop ()
                             structure[kLength-2].push ( [i, kProp] )
@@ -57,7 +56,7 @@ function toFormat ( dependencies, [structure, value] ) {   // Converts data to m
                                         let [objNumber, objName ] = el;
                                         keys[objNumber] = `${activeKey}/${objName}`
                                 })
-                        testKey = `root/${i}`
+                        testKey = `root/${row[1]}`
                         for (let k in value ) {    // collect values per object
                                 if ( k.includes(testKey) ) {
                                             let prop = k.split('/').pop();

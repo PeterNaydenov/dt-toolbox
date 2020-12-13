@@ -128,7 +128,31 @@ it ( 'Replace', () => {
   }) // it replace
 
 
+ it ( 'Attach', () => {
+        const test = {
+                      name : 'Peter'
+                    , arr  : [ 1, 15, ['one', 'two'], {'joy': 'music', 'style': 'metal'} ]
+                };
+        let res = dtbox
+                      .init ( test )
+                      .select ()
+                      .parent ( 'joy')
+                      .withSelection ()
+                      .flatten ()
+                      .attach ( 'root/pleasure' )
+           expect ( res.structure[0][3][1] ).to.be.equal ( 'pleasure' )
 
+           let 
+                id = res.structure[0][3][0]
+              , keys = Object.keys ( res.value )
+              , keyList = keys.reduce ( (res, item) => {
+                                      if ( item.includes(id) )   res.push(item)
+                                      return res
+                                  },[])
+              ;
+              expect ( keyList.length ).to.be.equal ( 2 )
+          //  expect () 
+ }) // it attach
 
 
  // Tuples sould more like a modifier?! 

@@ -187,20 +187,14 @@ const mainlib = {
 
 
     , attach ( location ) {
-            const
-                    me = this
-                , { result } = me._select
+            const 
+                  me = this
+                , dependencies = { ...mainlib.dependencies(), location }
                 ;
-            if ( !result )   return me
-            let keys = Object.keys ( result );
-            let resUpdate = keys.reduce ( (res,k) => {
-                                    if ( k == 'root' )   res[location] = {...result[k]}
-                                    else                 res [ k ] = {...result[k]}
-                                },{'root':{}})
-            /**
-             *  TODO: Create something like dtlib.modify that will call modifiers
-             * ... mix resUpdate with me.value and me.structure. 
-             */
+            let [structure, value ] = dtlib.attach ( dependencies, me )
+            me.structure = help.copyStructure ( structure )
+            me.value     = {...value}
+            me._select.result = null
             return me
         } // attach func.
 
@@ -394,7 +388,7 @@ const mainlib = {
                 const
                       me        = this
                     , selection = me._select.value
-                    , struct    = me._select.structure
+                    , struct    = help.copyStructure (me._select.structure)
                     ;
             let small = selection.reduce ( (res, k) => {
                                         let num = k.split ( '/' )[1]

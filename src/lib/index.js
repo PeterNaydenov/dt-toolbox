@@ -1,13 +1,14 @@
 'use strict'
 
 const 
-      find       = require ( './find'    )
-    , parent    = require ( './parent' )
-    , block     = require ( './block'  )
-    , deep      = require ( './deep'   )
-    , space     = require ( './space'  )
-    , modify    = require ( './modify' )
+      find       = require ( './find'       )
+    , parent    = require ( './parent'    )
+    , block     = require ( './block'     )
+    , deep      = require ( './deep'      )
+    , space     = require ( './space'     )
+    , modify    = require ( './modify'    )
     , transform = require ( './transform' )
+    , attach    = require ( './attach'    )
     ;
 
 
@@ -41,6 +42,7 @@ const dtlib = {
     , deep
     , block
     , transform
+    , attach
 } // dtlib
 
 
