@@ -6,6 +6,8 @@ const
   , insert    = require ( './insert'    )
   , append    = require ( './append'    )
   , prepend   = require ( './prepend'   )
+  , keyPrefix  = require ( './keyPrefix'  )
+  , flatten    = require ( './flatten'    )
   ;
 
 const modifier = {
@@ -15,6 +17,8 @@ const modifier = {
                     , insert
                     , append
                     , prepend
+                    , keyPrefix
+                    , flatten
                 }
 
 

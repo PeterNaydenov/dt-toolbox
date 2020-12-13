@@ -106,13 +106,13 @@ const mainlib = {
                 }
             if ( !mod   )   return dt
             else {                   
-                                    let [structure, value] = dtlib.transform ( {...dependencies, mod }, [dt.structure, dt.value] )
-                                    if ( !value.hasOwnProperty() ) {  
-                                                dt._error.push ( `Modifier "${mod}" is not a valid modifier and was ignored. Data: ${JSON.stringify(inData)}` )
-                                        }
-                                    dt.structure = structure
-                                    dt.value = value
-                                    return dt
+                            let [structure, value] = dtlib.transform ( {...dependencies, mod }, [dt.structure, dt.value] )
+                            if ( !value.hasOwnProperty() ) {  
+                                        dt._error.push ( `Modifier "${mod}" is not a valid modifier and was ignored. Data: ${JSON.stringify(inData)}` )
+                                }
+                            dt.structure = structure
+                            dt.value = value
+                            return dt
                 }
         } // init func.
 
@@ -310,6 +310,12 @@ const mainlib = {
 
 
 
+    , withData () {
+            let me = this;
+            me._select.result = convert.to ( 'midFlat', mainlib.dependencies(), [ me.structure, me.value] )
+            return me
+        } // withData func.
+
 
 
     , withSelection () {
@@ -331,12 +337,7 @@ const mainlib = {
                 , { result } = me._select
                 ;
             if ( !result )   return me
-            let keyList = Object.keys ( result );
-            let theFlatten = keyList.reduce (  (res,k) => {
-                                            res['root'] = { ...result[k], ...res['root'] }
-                                            return res
-                                        }, {} )
-            me._select.result = theFlatten
+            me._select.result = modifier['flatten'] ( result, {})
             return me
         } // flatten func.
 
@@ -348,22 +349,7 @@ const mainlib = {
                   , { result } = me._select
                   ;
             if ( !result )   return me
-            let keyList = Object.keys ( result )
-            me._select.result = keyList.reduce ( (res,k) => {
-                                        let 
-                                            name = k
-                                                    .substr ( 5 )
-                                                    .split ( '/' )
-                                                    .join ( separationSymbol )
-                                            ;
-                                        res[k] = {}
-                                        let localList = Object.keys ( result[k]);
-                                        localList.forEach ( kk => {
-                                                            if ( k == 'root' )   res[k][kk] = result['root'][kk]
-                                                            else                 res[k][`${name}${separationSymbol}${kk}`] = result[k][kk]
-                                                    })
-                                        return res
-                                    }, {})
+            me._select.result = modifier['keyPrefix'] ( result, {separationSymbol})
             return me
         } // keyPrefix func.
 
@@ -629,6 +615,7 @@ const API = {
           , deep       : mainlib.deep               // Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members
 
     // Modifiers
+          , withData      : mainlib.withData        // Generate "this._select.result" from the official data. Modifier will work with this data
           , withSelection : mainlib.withSelection   // Generate "this._select.result" content. Modifier will work with this data
           , flatten        : mainlib.flatten          // Mix existing objects in a single object. Directives available: insert, prepend, append, overwrite, update
           , mix           : 'Mix objects in order. Start with a host and provide guests list and directives. Default directive is overwrite'

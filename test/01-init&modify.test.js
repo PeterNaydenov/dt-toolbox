@@ -388,11 +388,29 @@ it ( 'Modify: Insert', () => {
 
     expect ( result.value.hi()           ).to.be.equal ( 'hi' )
 	expect ( result.value ).to.have.property ( 'root/1/3' )
-	expect ( result.value ).to.have.property ( 'root/1/4' )
-
+    expect ( result.value ).to.have.property ( 'root/1/4' )
+    
 	expect ( result.structure.length ).to.have.equal ( 2 )
 	expect ( result.structure[1][0] ).to.be.equal ( 'array' )
 }) // it insert
+
+
+// TODO: It's wrong
+// Current result is [one, two ]
+// instead of { link: [one,two] }
+/**
+ *
+it ( 'Modify: Insert simular', () => {
+    const
+         a = { link: 'one' }
+       , b = { link: 'two' }
+       ;
+    const result = dtbox
+                        .init ( a )
+                        .insert ( b, {format:'std'})
+                        .spreadAll ( 'std', x => console.log ( x ))
+})
+*/
 
 
 
