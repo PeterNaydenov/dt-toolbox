@@ -41,8 +41,8 @@ it ( 'Modifier -> flatten', () => {
             .flatten ()
             .spread ( 'std', x => {
                         expect ( x ).has.property ( '1' )
-                        expect ( x['1']).is.equal ( 15 )  // external ones will overwrite internal ones
-                        expect ( x['1']).is.not.equal ( 'two' )
+                        expect ( x['1']).is.equal ( '15;two' ) // Flatten will combine values 
+                        expect ( x['1']).is.not.equal ( '15' )
                         expect ( x ).has.property ( 'name' )
                         expect ( x ).has.property ( 'joy'  )
                         expect ( x ).has.property ( 'style' )

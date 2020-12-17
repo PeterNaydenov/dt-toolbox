@@ -395,22 +395,23 @@ it ( 'Modify: Insert', () => {
 }) // it insert
 
 
-// TODO: It's wrong
-// Current result is [one, two ]
-// instead of { link: [one,two] }
-/**
- *
-it ( 'Modify: Insert simular', () => {
+it ( 'Modify: Combine', () => {
     const
          a = { link: 'one' }
        , b = { link: 'two' }
+       , c = { link: 'three'}
        ;
-    const result = dtbox
-                        .init ( a )
-                        .insert ( b, {format:'std'})
-                        .spreadAll ( 'std', x => console.log ( x ))
-})
-*/
+    dtbox
+        .init ( a )
+        .combine ( b, {format:'std'})
+        .combine ( c, {format:'std'})
+        .spreadAll ( 'std', x => {
+                            expect ( x ).to.have.property ( 'link' )
+                            expect ( x['link'] instanceof Array )
+                            expect ( x['link'].length ).to.be.equal ( 3 )
+                    })
+}) // it modify Insert simular
+
 
 
 
