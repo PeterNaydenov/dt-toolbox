@@ -50,6 +50,39 @@ it ( 'Modifier -> flatten', () => {
     }) // it modifier -> flatten
 
 
+it ( 'Modifier -> mix', () => {
+        const test = {
+                    x : 'someX'
+                  , person : {
+                              name: 'Peter'
+                        }
+                  , extendedData : {
+                              age : 46
+                        }
+                  , other : {
+                              sport : 'fencing'
+                        }
+            };
+      dtbox
+          .init ( test )
+          .select ()
+          .all ()
+          .withSelection ()
+          .mix ( 'root/person', [ 'root/extendedData', 'root/other'] )
+          .spread ( 'std', x => {
+                          expect ( x ).to.have.property ( 'x' )
+                          expect ( x ).to.have.property ( 'person' )
+
+                          expect ( x ).to.not.have.property ( 'extendedData' )
+                          expect ( x ).to.not.have.property ( 'other'        )
+
+                          expect ( x.person ).to.have.property ( 'name'  )
+                          expect ( x.person ).to.have.property ( 'age'   )
+                          expect ( x.person ).to.have.property ( 'sport' )
+                })
+    }) // it modifier -> mix
+
+
 
 it ( 'modifier -> keyPrefix', () => {
         const test = {

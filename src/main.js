@@ -337,6 +337,19 @@ const mainlib = {
 
 
 
+
+    , mix ( host='root', guestList=[] ) {
+                const
+                        me       = this
+                    , { result } = me._select
+                    ;
+                if ( !result )   return me
+                me._select.result = modifier ['mix'] ( result, [...guestList,host])
+                return me
+        } // mix func.
+
+
+
     , keyPrefix ( separationSymbol='' ) {
             const
                     me = this
@@ -452,7 +465,7 @@ const mainlib = {
         const 
                me = this
             , _selectKeys     = me._select.value
-            , hasSelection    = me._select.result
+            , hasSelection    = me._select.result ? true : false
             , { empty, help } = mainlib.dependencies ()
             ;
         let selection;
@@ -492,7 +505,10 @@ const mainlib = {
                                 break
                 case 'standard' :  
                 case 'std'      :
-                                if ( hasSelection )  selection = hasSelection['root']
+                                if ( hasSelection ) { 
+                                                    let temp = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), me._select.result );
+                                                    selection = convert.to ( 'std', mainlib.dependencies(), temp )
+                                        }
                                 else                 selection = convert.to ( 'std', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)] )
                                 break
                 case 'breadcrumb'  :
@@ -613,7 +629,7 @@ const API = {
           , withData      : mainlib.withData        // Generate "this._select.result" from the official data. Modifier will work with this data
           , withSelection : mainlib.withSelection   // Generate "this._select.result" content. Modifier will work with this data
           , flatten        : mainlib.flatten          // Mix existing objects in a single object. Directives available: insert, prepend, append, overwrite, update
-          , mix           : 'Mix objects in order. Start with a host and provide guests list and directives. Default directive is overwrite'
+          , mix           : mainlib.mix             // Mix objects in order. Start with a host and provide guests list and directives. Default directive is overwrite
           , keyPrefix      : mainlib.keyPrefix        // Modify key as object name+key. Separator-symbol default: emptySpace. It can be modified.
           // TODO: Do I need this? 
         //   , keys          : 'Converts the object to array of key-names'

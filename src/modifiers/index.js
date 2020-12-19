@@ -9,6 +9,7 @@ const
   , keyPrefix  = require ( './keyPrefix'  )
   , flatten    = require ( './flatten'    )
   , combine   = require ( './combine'   )
+  , mix       = require ( './mix'       )
   ;
 
 const modifier = {
@@ -21,6 +22,7 @@ const modifier = {
                     , keyPrefix
                     , flatten
                     , combine
+                    , mix
                 }
 
 
