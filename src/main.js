@@ -628,8 +628,8 @@ const API = {
     // Modifiers
           , withData      : mainlib.withData        // Generate "this._select.result" from the official data. Modifier will work with this data
           , withSelection : mainlib.withSelection   // Generate "this._select.result" content. Modifier will work with this data
-          , flatten        : mainlib.flatten          // Mix existing objects in a single object. Directives available: insert, prepend, append, overwrite, update
-          , mix           : mainlib.mix             // Mix objects in order. Start with a host and provide guests list and directives. Default directive is overwrite
+          , flatten        : mainlib.flatten          // Mix existing objects in a single object.
+          , mix           : mainlib.mix             // Mix objects in order. Start with a host and provide guests list [].
           , keyPrefix      : mainlib.keyPrefix        // Modify key as object name+key. Separator-symbol default: emptySpace. It can be modified.
           // TODO: Do I need this? 
         //   , keys          : 'Converts the object to array of key-names'
