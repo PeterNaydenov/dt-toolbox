@@ -310,14 +310,22 @@ let other = {
 
 ## List of modifiers
 
+            start       modify    
            
-- add         +
-- append      +
-- combine     +
-- flatten      -
-- insert      +
-- keyPrefix    -
-- mix         - 
-- overwrite   +
-- prepend     +
-- update      +
+- add         +           -
+- append      +           -
+- combine     +           -
+- flatten      -           + 
+- insert      +           -
+- keyPrefix    -           +
+- mix         -           +
+- overwrite   +           -
+- prepend     +           -
+- update      +           -
+
+
+
+### Spread
+
+ - Check if object is array and we have 'spread' as 'file'. Remove numbers from keys
+ - Spread 'keys' or 'values' should return what?! [] of keys/values?

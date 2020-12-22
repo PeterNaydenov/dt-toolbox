@@ -79,26 +79,20 @@ it ( 'Init: Keys only', () => {
 
 it ( 'Init: Values only', () => {
     // * Ignore keys and convert data-structure to list of values (arrays)
-    let result = dtbox.init ( sample.test_0, {mod:'value'} );
+    let 
+            result = dtbox.init ( sample.test_0, {mod:'value'} )
+        , { value, structure } = result
+        ;
 
-    expect ( result.value.hi()  ).to.be.equal ( 'hi' )    
+    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+
+    expect ( structure.length ).to.be.equal ( 3 )
+    expect ( structure[0][0]).to.be.equal ( 'array' )
+
     expect ( result.value ).to.have.property ( 'root/0/0'  )
-    expect ( result.value ).to.have.property ( 'root/0/1'  )
-
-    try {
-            result.structure.forEach ( row => {
-                                let [ type, id, ... members ] = row;
-                                expect ( type ).to.be.equal ( 'array' )
-                        
-                                members.forEach ( member => {
-                                                    let [ target, name ] = member;
-                                                    expect ( target ).is.equal ( name )
-                                            })
-                        })
-        }
-    catch ( e ) {
-            console.error ( 'Something went wrong with "Init: Values only"' )
-        }
+    expect ( result.value ).to.have.property ( 'root/0/2'  )
+    
+    expect ( result._error.length ).to.be.be.equal ( 0 )
 }) // it values only
 
 

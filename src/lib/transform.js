@@ -1,5 +1,5 @@
 function transform ( dependencies, [structure, value] ) {
-    // *** Transformer for DT object. Reverse object key and values, or get only keys/values
+    // *** Transformer for 'flat' object. Reverse object key and values, or get only keys/values
           let 
                 { mod, empty } = dependencies
               , keyList = Object.keys ( value )
@@ -33,24 +33,29 @@ function transform ( dependencies, [structure, value] ) {
                                       break
                      case 'value' :
                      case 'values':
-                                      result = empty ()
-                                      let counter = 0;
-                                      for (const v of keyList ) {
-                                                  let 
-                                                        arr = v.split ( '/' )
-                                                      , item = value[v]
-                                                      ;
-                                                  arr[2] = counter++
-                                                  let key = arr.join ('/');
-                                                  result[key] = item
-                                            }
-                                      structure = structure.map ( row => {
+                                      let counters = []
+                                      result = keyList.reduce ( (res,k)=>{
+                                                            let 
+                                                                arr = k.split ( '/' )
+                                                              , item = value [k]
+                                                              , count = counters [ arr[1] ]
+                                                              ;
+                                                            if ( count == null )  count = counters [ arr[1] ] = 0
+                                                            else                  counters [ arr[1] ] = ++count
+                                                            arr[2] = count
+                                                            let key = arr.join ( '/' );
+                                                            res[key] = item
+                                                            return res
+                                                      }, empty())
+                                      structure = structure.map ( (row,i) => {
                                                                 let [ type, id, ...members ] = row;
                                                                 if ( members.length > 0 ) {
-                                                                            counter = 0
                                                                             members = members.map ( item => {
-                                                                                                    let [ target, prop ] = item;
-                                                                                                    return [ target, target ]
+                                                                                                    let 
+                                                                                                        [ target, prop ] = item
+                                                                                                      , name = ++counters[i]
+                                                                                                      ;
+                                                                                                    return [ target, name ]
                                                                                               })
                                                                     }
                                                                 return [ 'array', id, ...members ]

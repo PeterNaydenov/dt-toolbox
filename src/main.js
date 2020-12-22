@@ -106,8 +106,9 @@ const mainlib = {
                 }
             if ( !mod   )   return dt
             else {                   
-                            let [structure, value] = dtlib.transform ( {...dependencies, mod }, [dt.structure, dt.value] )
-                            if ( !value.hasOwnProperty() ) {  
+                            let [structure, value] = dtlib.transform ( {...dependencies, mod }, [dt.structure, dt.value] );
+                            let missingValues = ( Object.keys ( value ).length <= 0 );
+                            if ( missingValues ) {  
                                         dt._error.push ( `Modifier "${mod}" is not a valid modifier and was ignored. Data: ${JSON.stringify(inData)}` )
                                 }
                             dt.structure = structure
@@ -468,7 +469,7 @@ const mainlib = {
             , hasSelection    = me._select.result ? true : false
             , { empty, help } = mainlib.dependencies ()
             ;
-        let selection;
+        let selection, mod;
             // TODO: refactoring of instructions. Should work as options in init. ( { mod, model} )
             /**
              *   
@@ -491,10 +492,16 @@ const mainlib = {
                 // TODO: Values and keys are mostly modifiers! Should not be here...
                 case 'value'   :
                 case 'values'  :
-                                selection = _selectKeys.reduce ( (res, el, i) => {
-                                                                    res[`root/${i}`] = me.value[el]
-                                                                    return res
-                                            }, empty() )
+                                let vals;
+                                mod = 'values'
+                                if ( hasSelection ) {
+                                        let data = convert.from ( 'midFlat' ).toFlat ( mainlib.dependencies(), me._select.result );
+                                        vals = dtlib.transform ( {...mainlib.dependencies(),mod}, data )
+                                    }
+                                else {
+                                        vals = dtlib.transform ( {...mainlib.dependencies(), mod }, [me.structure, me.value] );
+                                    }
+                                selection = convert.to ( 'std', mainlib.dependencies(), vals )
                                 break
                 case 'key'    : 
                 case 'keys'   : 
@@ -585,6 +592,7 @@ const API = {
 		    init       : mainlib.init                      // Convert any object to flat data-model
 	      , load       : mainlib.load                      // Load a flat data-model
           , loadFast   : mainlib.load                      // Important! Method is depricated. Use load instead
+
           , preprocess : mainlib.preprocess                // Apply custom modifier to initial data. TODO: Depricate? Just create as another data and modify. Then execute (add, update, overwrite, insert, append, prepend)  
           , add        : mainlib.modify ( 'add'       )    // Add data and keep existing data
           , update     : mainlib.modify ( 'update'    )    // Updates only existing data

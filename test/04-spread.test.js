@@ -155,6 +155,18 @@ it ( 'Replace', () => {
  }) // it attach
 
 
+
+ it ( 'Spread -> values', () => {
+      dtbox
+          .init ( sample.test_0 )
+          .spread ( 'values', x => {
+                        expect ( x.length ).to.be.equal ( 5 )
+                        expect ( x[3][0]).to.be.true
+                        expect ( x[4].length).to.be.equal ( 3 )
+                  })
+ }) // it spread -> values
+
+
  // Tuples sould more like a modifier?! 
  it ( 'Spread -> tuples'      )
 
