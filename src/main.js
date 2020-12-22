@@ -237,14 +237,14 @@ const mainlib = {
 
 
 
-    , space ( prop='root', where ) {
+    , folder ( prop='root', where ) {
             const
                   me = this
                 , dependencies = { ...mainlib.dependencies(), prop, where }
                 ;
             me._select.result = null
-            return dtlib.space ( dependencies, me )
-        } // space func.
+            return dtlib.folder ( dependencies, me )
+        } // folder func.
 
 
 
@@ -593,14 +593,15 @@ const API = {
           , combine    : mainlib.modify ( 'combine'   )    // Combine values for simular keys in arrays
           , append     : mainlib.modify ( 'append'    )    // Combine values for duplicated keys. main + update
           , prepend    : mainlib.modify ( 'prepend'   )    // Combine values for duplicated keys. update + main
-          , spread     : mainlib.spread                    // Returns result of selection
-          , spreadAll  : mainlib.spreadAll                 // Select all and returns it with one command
           , log        : mainlib.errorLog                  // Executes callback with errors list as argument
           , empty      : () => Object.create ( exportAPI ) // Empty object with export methods
+
+    // Provide Results      
           , replace    : mainlib.replace                   // Get this._selection.result as a main data
           , attach     : mainlib.attach                    // Attach this._selection.result to the main data. Set point of connection
-          
-       
+          , spread     : mainlib.spread                    // Returns result of selection
+          , spreadAll  : mainlib.spreadAll                 // Select all and returns it with one command
+
     // Compare Operations
          , identical  :  mainlib.compare ( 'identical' )   // Value compare. Reduce data to identical key/value pairs.
          , change     :  mainlib.compare ( 'change'    )   // Value compare. Reduce to key/value pairs with different values.
@@ -613,7 +614,8 @@ const API = {
           , parent     : mainlib.parent             // Selector. Apply conditions starting from parent level
           , find        : mainlib.find                // Selector. Fullfil select with list of arguments that contain specific string
           , all        : mainlib.find                // Selector. Same as find ('root')
-          , space      : mainlib.space              // Selector. Fullfil select with namespace members
+          , folder     : mainlib.folder             // Selector. Fullfil selection with 'midFlat' object props
+          , space      : mainlib.folder             // Selector. Same as 'folder'
           , deepObject : mainlib.block ( 'object' ) // Selector. Fullfil '_select' with deepest object elements
           , deepArray  : mainlib.block ( 'array'  ) // Selector. Fullfil '_select' with deepest array elements
           , invert     : mainlib.invert             // Selector. Invert existing selection

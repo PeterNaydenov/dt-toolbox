@@ -305,3 +305,19 @@ let other = {
  *  }
  * /
 ```
+
+
+
+## List of modifiers
+
+           
+- add         +
+- append      +
+- combine     +
+- flatten      -
+- insert      +
+- keyPrefix    -
+- mix         - 
+- overwrite   +
+- prepend     +
+- update      +

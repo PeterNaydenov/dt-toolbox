@@ -5,7 +5,7 @@ const
     , parent    = require ( './parent'    )
     , block     = require ( './block'     )
     , deep      = require ( './deep'      )
-    , space     = require ( './space'     )
+    , folder    = require ( './folder'    )
     , modify    = require ( './modify'    )
     , transform = require ( './transform' )
     , attach    = require ( './attach'    )
@@ -38,7 +38,7 @@ const dtlib = {
     , modify
     , find
     , parent
-    , space
+    , folder
     , deep
     , block
     , transform

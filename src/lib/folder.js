@@ -1,4 +1,4 @@
-function space ( dependencies, me ) {
+function folder ( dependencies, me ) {
     const { help, prop, where } = dependencies;
     let 
           usedNumbers = []
@@ -34,10 +34,10 @@ function space ( dependencies, me ) {
     me._select.value     = help.updateSelection ( me._select.value, result )
     me._select.structure = help.copyStructure ( me.structure )
     return me
-} // space func.
+} // folder func.
 
 
 
-module.exports = space
+module.exports = folder
 
 
