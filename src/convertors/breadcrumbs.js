@@ -90,7 +90,7 @@ function toFlat ( dependencies, rawValue ) {
 
 
 
-function toFormat ( dependencies, [ structure, value ]) {
+function toModel ( dependencies, [ structure, value ]) {
             let 
                 keys = Object.keys ( value )
               , breadcrumbObject = {}
@@ -131,10 +131,10 @@ function toFormat ( dependencies, [ structure, value ]) {
                                 breadcrumbObject [ keyArray.join('/') ] = value [key]    
                             })
             return breadcrumbObject
-    } // toFormat func.
+    } // toModel func.
 
 
 
-module.exports = { toFlat, toFormat }
+module.exports = { toFlat, toModel }
 
 

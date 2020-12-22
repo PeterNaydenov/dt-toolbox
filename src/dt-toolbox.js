@@ -1509,8 +1509,8 @@ exportAPI = {
                 , valueList    : exportlib.valueList  // Returns array of DT object values;
                 , list         : exportlib.list       // Returns array of items;
                 , map          : exportlib.map        // Standard map function
-                , json         : exportlib.json       // Returns JSON format of DT object;
-                , file         : exportlib.file       // Returns file format array;
+                , json         : exportlib.json       // Returns JSON model of DT object;
+                , file         : exportlib.file         // Returns file model array;
                 , keyValue     : exportlib.keyValue   // Returns key-value string
                 , build        : exportlib.build      // Build ST object;
                 

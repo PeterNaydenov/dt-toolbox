@@ -20,7 +20,7 @@ Deliberately designed to work nicely with JSON and simplify data creation, searc
 
 ## What is DT?
 
-DT format is a flatten version of the standard javascript object. **Keys** are structured like folders - `'root/sub_object/property'`. **Values** are always primitives. In this documentation are mentioned two formats - ST(standard) and DT(data). ST means non-flatten version of the object. Convertion between ST and DT is possible in both direction with one important note: If ST object contains empty structure like `key: []` (*key with empty array value*), then this structure will be lost. **Purpose of DT is to strip all boilerplate structure and keep only that is value related**.
+DT model is a flatten version of the standard javascript object. **Keys** are structured like folders - `'root/sub_object/property'`. **Values** are always primitives. In this documentation are mentioned two models - ST(standard) and DT(data). ST means non-flatten version of the object. Convertion between ST and DT is possible in both direction with one important note: If ST object contains empty structure like `key: []` (*key with empty array value*), then this structure will be lost. **Purpose of DT is to strip all boilerplate structure and keep only that is value related**.
 
 
 
@@ -97,8 +97,8 @@ exportAPI = {
    , valueList    : 'Returns array of DT object values'
    , list         : 'Returns array of items'
    , map          : 'Standard map function'
-   , json         : 'Return JSON format of DT object'
-   , file         : 'Returns file format array'
+   , json         : 'Return JSON model of DT object'
+   , file          : 'Returns file model array'
    , keyValue     : 'Returns key-value string'
    , build        : 'Build ST object'
 
@@ -329,7 +329,7 @@ Let me know what you think by using twitter tag #dttoolbox.
 
 ## Tips
 
-- DT format not depends on DT Toolbox. Use toolbox when language cannot provide better tools;
+- DT model not depends on DT Toolbox. Use toolbox when language cannot provide better tools;
 - Iteration on data with DT Toolbox could bring performance issues(anti-pattern). Iterate over data first and then use DT Toolbox;
 - Working with flat objects (DT) could be relieving experience with extras - performance and readability gain;
 
@@ -384,7 +384,7 @@ _(Nothing yet)_
 
 
 ### 2.1.0 (2019-06-02)
-- [x] Modify methods ( add/update/overwrite ) can receive DT data format;
+- [x] Modify methods ( add/update/overwrite ) can receive DT data model;
 - [x] Browser version was updated;
 - [ ] Bug: Build a ST object with repeating structure;
 - [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
@@ -446,7 +446,7 @@ _(Nothing yet)_
 
 ### 1.5.0 (2017-04-17)
 - [x] ExportAPI method 'cut' will cut out number of key elements;
-- [x] ExportAPI method 'file' will convert dt data to file format;
+- [x] ExportAPI method 'file' will convert dt data to a 'file' model;
 - [x] Fix: ExportAPI method 'map' could break the app if callback function does not return a string;
 
 

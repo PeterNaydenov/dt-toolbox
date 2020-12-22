@@ -105,12 +105,12 @@ it ( 'Init: Values only', () => {
 
 
 
-it ( 'Init: Values only, Format: std', () => {
+it ( 'Init: Values only, Model: std', () => {
     let result = dtbox.init ({
                                   user : 'Peter'
                                 , age  : 42
                                 , role : 'admin'
-                              },{ format:'std', mod:'values' });
+                              },{ model:'std', mod:'values' });
 
     // root should be auto append
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
@@ -125,8 +125,8 @@ it ( 'Init: Values only, Format: std', () => {
 
 
 
-it ( 'Init: Value only, Format: values', () => {
-            const result = dtbox.init ( sample.test_9, {mod:'values', format:'file'} );
+it ( 'Init: Value only, Model: values', () => {
+            const result = dtbox.init ( sample.test_9, {mod:'values', model:'file'} );
 
  			expect ( result.value ).to.have.property ( 'root/1/0'  )
             expect ( result.value ).to.have.property ( 'root/2/1'  )
@@ -148,7 +148,7 @@ it ( 'Init: Value only, Format: values', () => {
 
 it ( 'Init: Files', () => {
 	// Create new object from values where we have value with '/' delimiter. Last element of the string will become a value
- 			const result = dtbox.init ( sample.test_9, {format:'file'} );
+ 			const result = dtbox.init ( sample.test_9, {model:'file'} );
             // TODO: Not tested for boolean!
  			expect ( result.value ).to.have.property ( 'root/2/name'  )
  			expect ( result.value['root/2/name'] ).to.be.equal ( 'Peter'  )
@@ -174,7 +174,7 @@ it ( 'Init: Handmade files-like structure', () => {
                         , 'd/e/www'
                       ]
         
-        result =  dtbox.init ( data, { format:'file'} )
+        result =  dtbox.init ( data, { model:'file'} )
 
         expect ( result.value ).to.contain.property ( 'root/1/0' )
         expect ( result.value ).to.contain.property ( 'root/1/1' )
@@ -284,7 +284,7 @@ it ( 'Modify: Add a shortFlat object', () => {
                   start = dtbox.init ({ name:'Peter', age: 45 })
                 , result = dtbox
                                         .init ()
-                                        .add ( [start.structure, start.value], { format:'shortFlat' } )
+                                        .add ( [start.structure, start.value], { model:'shortFlat' } )
                 ;
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
     expect ( result.value ).to.have.property ( 'root/0/age' )
@@ -383,8 +383,8 @@ it ( 'Modify: Insert', () => {
     // * Insert data on specified key, when the key represents an array.	
 	const result = dtbox
 	                 .init ()
-	                 .add ( sample.test_10, { format:'file'})
-	                 .insert ( ['root/friends/Misho', 'root/friends/Tosho' ] , {format: 'file'} )
+	                 .add ( sample.test_10, { model:'file'})
+	                 .insert ( ['root/friends/Misho', 'root/friends/Tosho' ] , {model: 'file'} )
 
     expect ( result.value.hi()           ).to.be.equal ( 'hi' )
 	expect ( result.value ).to.have.property ( 'root/1/3' )
@@ -403,8 +403,8 @@ it ( 'Modify: Combine', () => {
        ;
     dtbox
         .init ( a )
-        .combine ( b, {format:'std'})
-        .combine ( c, {format:'std'})
+        .combine ( b, {model:'std'})
+        .combine ( c, {model:'std'})
         .spreadAll ( 'std', x => {
                             expect ( x ).to.have.property ( 'link' )
                             expect ( x['link'] instanceof Array )
@@ -422,7 +422,7 @@ it ( 'Modify: Prepend', () => {
         ;
     const 
           result = dtbox.init ( a )
-                  .prepend ( b, {format:'std'}   )
+                  .prepend ( b, {model:'std'}   )
         , val = result.value
         ;
     expect ( val ).to.have.property ( 'root/0/name' )
@@ -440,7 +440,7 @@ it ( 'Modify: Append', () => {
         ;
     const 
           result = dtbox.init ( a )
-                  .append ( b, {format:'std'}   )
+                  .append ( b, {model:'std'}   )
         , val = result.value
         ;
     expect ( val ).to.have.property ( 'root/0/name' )

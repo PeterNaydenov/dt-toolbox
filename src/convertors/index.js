@@ -9,7 +9,7 @@ const
 
 
 const selectConvertorFrom = 
-        ( format ) => 
+        ( model ) => 
         ( dependencies, inData ) => {
                     let 
                           { help } = dependencies
@@ -18,7 +18,7 @@ const selectConvertorFrom =
                         , keyList
                         , rawValue
                         ;
-                    switch ( format ) {
+                    switch ( model ) {
                                 case 'std'     :
                                 case 'standard':
                                                   return   std.toFlat ( dependencies, inData )
@@ -53,25 +53,25 @@ const selectConvertorFrom =
 
 
 
-function from ( format ) {   // convert from something to flat...
-        return { toFlat: selectConvertorFrom (format)   }
+function from ( model ) {   // convert from something to flat...
+        return { toFlat: selectConvertorFrom (model)   }
     } // from func.
 
 
 
 
 
-function to ( format, dependencies, inData ) {   // convert from flat to 'format'...
-        switch ( format ) {
+function to ( model, dependencies, inData ) {   // convert from flat to 'data-model'...
+        switch ( model ) {
             case 'std' :
             case 'standard':
-                             return std.toFormat ( dependencies, inData )
+                             return std.toModel ( dependencies, inData )
             case 'midFlat' : 
-                             return midFlat.toFormat ( dependencies, inData )
+                             return midFlat.toModel ( dependencies, inData )
             case 'breadcrumb' :
             case 'breadcrumbs':
-                             return breadcrumbs.toFormat ( dependencies,inData )
-            } //switch format
+                             return breadcrumbs.toModel ( dependencies,inData )
+            } //switch model
     } // to func.
 
 

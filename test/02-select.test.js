@@ -21,7 +21,7 @@ it ( 'Parent', () => {
             .spread ( 'flat', flat => result = flat[1]   )
   
         let keyList = Object.keys ( result );
-        // Expect result to be a shortFlat format:
+        // Expect result to be a 'shortFlat' data-model:
         expect ( result ).to.be.an ( 'object' )
         expect ( keyList.length ).to.be.equal ( 6 )
         keyList.forEach ( key => {
@@ -50,7 +50,7 @@ it ( 'Parent with array', () => {
 				   .parent ( 'name', item => true  )
            .spread ( 'flat', flat => updateObject = flat[1] )
            
-  // Expect DT format:
+  // Expect 'flat' data-model:
 	expect ( result.value ).to.have.property ( 'root/1/0' )
 	expect ( result.value ).to.have.property ( 'root/1/1' )
 	// Manipulations on export

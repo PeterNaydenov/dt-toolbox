@@ -39,7 +39,7 @@ function toFlat ( dependencies, d ) {
 
 
 
-function toFormat ( dependencies, [ structure, value ]) {
+function toModel ( dependencies, [ structure, value ]) {
             let 
                 keys = Object.keys ( value )
               , resultObjects = []
@@ -65,7 +65,7 @@ function toFormat ( dependencies, [ structure, value ]) {
                                             })
                             })
             return resultObjects[0]
-    } // toFormat func.
+    } // toModel func.
 
 
 
@@ -79,6 +79,6 @@ function toFormat ( dependencies, [ structure, value ]) {
 
 
 
-module.exports = { toFlat, toFormat }
+module.exports = { toFlat, toModel }
 
 

@@ -1,5 +1,5 @@
 function sanitizeFlatKeys ( list ) {   // fn(string[]) -> string[]
-    // *** Sanitize 'file' and 'breadcrumb' format keys. Adds 'root/' and indexes where it is needed
+    // *** Sanitize 'file' and 'breadcrumb' data-model keys. Adds 'root/' and indexes where it is needed
             let keys = list.map ( x => {  // Keys should start with 'root/'
                             let key = x.split ( '/' )
                             if ( key[0] != 'root' )   return [ 'root', ...key].join('/')

@@ -79,7 +79,7 @@ const mainlib = {
  *          values  - use values as keys
  *        reverse   - keys will become values and values - keys
  * 
- *  format(type): 
+ *  data-models(type): 
  *      std         - standard js object
  *      breadcrumb  - key as a folder. Separate value
  *      file         - keys and values in a single string 
@@ -91,16 +91,16 @@ const mainlib = {
                   dependencies = mainlib.dependencies () 
                 , dt = dependencies.simpleDT ()
                 , help = dependencies.help
-                , defaultOptions = {format:'std', mod:false }
-                , { format, mod } = { ...defaultOptions,...options }
+                , defaultOptions = {model:'std', mod:false }
+                , { model, mod } = { ...defaultOptions,...options }
                 ;
-            if ( !INIT_DATA_TYPES.includes(format) ) {
-                        this._error.push ( `Can't understand your data-type: ${format}. Please, find what is possible on http://todo.add.documentation.link.here` )
+            if ( !INIT_DATA_TYPES.includes(model) ) {
+                        this._error.push ( `Can't understand your data-type: ${model}. Please, find what is possible on http://todo.add.documentation.link.here` )
                         return
                 }
             if ( inData != null ) {
                         // Note: Use method 'load' instead of 'init' if your data is 'flat'
-                        const [structure, value] = ( format == 'shortFlat') ? inData : convert.from(format).toFlat ( dependencies, inData )
+                        const [structure, value] = ( model == 'shortFlat') ? inData : convert.from(model).toFlat ( dependencies, inData )
                         dt.structure = help.copyStructure ( structure ) 
                         dt.value     = value
                 }
@@ -132,13 +132,13 @@ const mainlib = {
 
     , preprocess ( inData, fn, options ) {
                 let 
-                      defaultOptions = { format:'std', mod:false }
-                    , { format='std' } = { ...defaultOptions,...options }
-                    , shortFlat    = convert.from (format).toFlat ( mainlib.dependencies(), inData )
-                    , afterProcess = fn ( shortFlat )   // afterProcess should be in 'shortFlat' format
+                      defaultOptions = { model:'std', mod:false }
+                    , { model='std' } = { ...defaultOptions,...options }
+                    , shortFlat    = convert.from (model).toFlat ( mainlib.dependencies(), inData )
+                    , afterProcess = fn ( shortFlat )   // afterProcess should be in 'shortFlat' data-model
                     ;
                 if ( !afterProcess ) {
-                        this._error.push ( 'Method "preprocess" should always return a shortFlat format: [structure, value]' )
+                        this._error.push ( 'Method "preprocess" should always return a shortFlat model: [structure, value]' )
                         return mainlib.init ()   // On preprocess error, create an empty object 
                     }
                 return dtlib.loadShort ( mainlib.dependencies(), afterProcess )
@@ -469,10 +469,10 @@ const mainlib = {
             , { empty, help } = mainlib.dependencies ()
             ;
         let selection;
-            // TODO: refactoring of instructions. Should work as options in init. ( { mod, format} )
+            // TODO: refactoring of instructions. Should work as options in init. ( { mod, model} )
             /**
              *   
-             *   format:
+             *   model:
              *      - standard/std: standard js object;
              *      - breadcrumb: keys position described as breadcrumb and values are primitives(number,boolean,string);
              *      - file: Array of combined breadcrumb keys and value in single string;
@@ -531,7 +531,7 @@ const mainlib = {
                                 break
                 case 'flat'       : 
                                 // NOTE: 
-                                // The 'flat' is internal only format. Export and import 'flat'
+                                // The 'flat' is internal only data-model. Export and import 'flat'
                                 // operations is always means 'shortFlat'.
                                 // 
                 case 'shortFlat' : 
@@ -582,8 +582,8 @@ const exportAPI = {
 // * Official API
 const API = {
     // DT I/O Operations
-		    init       : mainlib.init                      // Convert any object to flat format
-	      , load       : mainlib.load                      // Load a flat format data
+		    init       : mainlib.init                      // Convert any object to flat data-model
+	      , load       : mainlib.load                      // Load a flat data-model
           , loadFast   : mainlib.load                      // Important! Method is depricated. Use load instead
           , preprocess : mainlib.preprocess                // Apply custom modifier to initial data. TODO: Depricate? Just create as another data and modify. Then execute (add, update, overwrite, insert, append, prepend)  
           , add        : mainlib.modify ( 'add'       )    // Add data and keep existing data

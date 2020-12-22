@@ -12,11 +12,11 @@
       - standard - standard JS object;
       - file - Array of breadcrumb/value;
 - Генератор за празни дата структури
-- Old internal data should be used only as import/export format. Format name will be named 'breadcrumbs'
-- Secondary internal data-format: midFlat. Created to facilitate some operations.
+- Old internal data should be used only as import/export model. Model name will be named 'breadcrumbs'
+- Secondary internal data-model: midFlat. Created to facilitate some operations.
 - Write own convertors ( possible use: as data-bridge (data-model to data-model), data-modifier, filter, etc...)
 - Method 'loadFast' was removed. Use 'load' instead. Now all loads are fast.
-- Method 'spread' has a lot of changes. Instruction 'st' now is available as 'standard' or 'std'. Instruction 'dt' doesn't exists anymore. Instruction 'flat' will return selection in 'shortFlat' format data;
+- Method 'spread' has a lot of changes. Instruction 'st' now is available as 'standard' or 'std'. Instruction 'dt' doesn't exists anymore. Instruction 'flat' will return selection in 'shortFlat' data-model;
 - Rename method 'folder' to 'find';
 - Rename method 'namespace' to 'folder'. Namespace could be depricated;
 
@@ -108,7 +108,7 @@ a = new Set ([1,2,3])
 
 
 
-## Midflat format
+## Midflat model
 
 Той е обект от флат обекти. Изглежда така:
 
@@ -149,7 +149,7 @@ const midFlat = {
 
 Модифициране на информацията при spread
 
-- какъв да е формата ( format )
+- какъв да е формата ( data-model )
 - как да постъпваме при повтарящи се имена на пропъртита
 - налагане на модифайъри (  )
 

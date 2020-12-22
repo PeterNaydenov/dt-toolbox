@@ -45,8 +45,8 @@ describe ( 'Provide results', () => {
                         name : 'Peter'
                       , arr : [ 1,15 ]
                 };
-      // Format 'flat' in spread always mean 'shortFlat'
-      // Real flat format is internal only format.
+      // Data-model 'flat' in spread always mean 'shortFlat'
+      // Real flat data-model is internal only model.
       const dt = dtbox.init ( test );
       dt.select ()
         .all ()
