@@ -534,8 +534,15 @@ const mainlib = {
                                     }
                                 break
                 case 'tuples' :
-                                let data = convert.to  ( 'breadcrumbs', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)]);
-                                selection = help.reduceTuples ( mainlib.dependencies(), data )
+                                let tupleData;
+                                if ( hasSelection ) {
+                                        let tupSelect = convert.from ( 'midFlat' ).toFlat ( mainlib.dependencies(), me._select.result );
+                                        tupleData = convert.to ( 'breadcrumbs', mainlib.dependencies(), tupSelect )
+                                    }
+                                else {
+                                        tupleData = convert.to  ( 'breadcrumbs', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)]);
+                                    }
+                                selection = help.reduceTuples ( mainlib.dependencies(), tupleData )
                                 break
                 case 'file'       :
                                 let 

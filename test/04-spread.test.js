@@ -231,6 +231,22 @@ it ( 'Spread -> tuples', () => {
 
 
 
+it ( 'Spread -> tuples with selection', () => {
+        dtbox
+            .init ( sample.test_0 )
+            .select ()
+            .folder ('array')
+            .withSelection ()
+            .spread ( 'tuples', x => {
+                      expect ( x.length ).to.be.equal ( 3 )
+                      expect ( x[0][0] ).to.be.equal ( 'array' )
+                      expect ( x[1][0] ).to.be.equal ( 'array' )
+                      expect ( x[2][0] ).to.be.equal ( 'array' )
+                })
+}) // it spread -> tuples with selection
+
+
+
 it ( 'Replace', () => {
         const test = {
                       name : 'Peter'
