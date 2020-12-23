@@ -167,6 +167,24 @@ it ( 'Replace', () => {
  }) // it spread -> values
 
 
+
+ it ( 'Spread -> values with selection', () => {
+      dtbox
+          .init ( sample.test_0 )
+          .select ()
+          .all ()
+          .withSelection ()
+          .flatten ()
+          .spread ( 'values', x => {
+                        expect ( x.length ).to.be.equal ( 7 )
+                        expect (x).to.contain ( 'Peter' )
+                        expect (x).to.contain ( '42' )
+                        expect (x).to.contain ( 'blue' )
+                        expect (x).to.contain ( true )
+                  })
+ }) // it spread -> values
+
+
  // Tuples sould more like a modifier?! 
  it ( 'Spread -> tuples'      )
 
