@@ -109,6 +109,95 @@ describe ( 'Provide results', () => {
  }) // it spread -> midFlat
 
 
+
+it ( 'Spread -> midFlat with selection', () => {
+      const test = {
+                        name : 'Peter'
+                      , arr  : [ 1, 15 ]
+              };
+      dtbox
+        .init ( test )
+        .select ()
+        .all ()
+        .withSelection ()
+        .spread ( 'midFlat', x => {
+                  expect ( x ).to.have.property ( 'root' )
+                  expect ( x ).to.have.property ( 'root/arr' )
+                  expect ( x['root'] ).has.property ( 'name' )
+            })
+ }) // it spread -> midFlat with selection
+
+
+
+it ( 'Spread -> values', () => {
+  dtbox
+      .init ( sample.test_0 )
+      .spread ( 'values', x => {
+                    expect ( x.length ).to.be.equal ( 5 )
+                    expect ( x[3][0]).to.be.true
+                    expect ( x[4].length).to.be.equal ( 3 )
+              })
+}) // it spread -> values
+
+
+
+it ( 'Spread -> values with selection', () => {
+  dtbox
+      .init ( sample.test_0 )
+      .select ()
+      .all ()
+      .withSelection ()
+      .flatten ()
+      .spread ( 'values', x => {
+                    expect ( x.length ).to.be.equal ( 7 )
+                    expect (x).to.contain ( 'Peter' )
+                    expect (x).to.contain ( '42' )
+                    expect (x).to.contain ( 'blue' )
+                    expect (x).to.contain ( true )
+              })
+}) // it spread -> values
+
+
+
+it ( 'Spread -> keys', () => {
+dtbox
+  .init ( sample.test_0 )
+  .spread ( 'keys', x => {
+                expect ( x      ).to.have.property ( 'name' )
+                expect ( x.name ).to.be.equal ( 'name' )
+                expect ( x      ).to.have.property ( 'age' )
+                expect ( x      ).to.have.property ( 'eyes' )
+                expect ( x.age  ).to.be.equal ( 'age' )
+                expect ( x.eyes ).to.be.equal ( 'eyes' )
+                expect ( x.array.length ).to.be.equal ( 3 )
+          })
+}) // it spread -> keys
+
+
+
+it ( 'Spread -> keys with selection', () => {
+  dtbox
+      .init ( sample.test_0 )
+      .select ()
+      .all ()
+      .withSelection ()
+      .flatten ()
+      .spread ( 'keys', x => {
+                    expect ( x.length ).to.be.equal ( 7 )
+                    expect ( x      ).to.contain ( 'name' )
+                    expect ( x      ).to.contain ( 'age' )
+                    expect ( x      ).to.contain ( 'eyes' )
+                    expect ( x      ).to.contain ( 0 )
+                    expect ( x      ).to.contain ( 2 )
+                    expect ( x      ).to.contain ( 'active' )
+              })
+}) // it spread -> keys
+
+
+
+it ( 'Spread -> tuples'      )
+
+
   
 it ( 'Replace', () => {
         const test = {
@@ -126,6 +215,7 @@ it ( 'Replace', () => {
         expect ( res._select.result ).to.be.equal ( null )
         expect ( res.structure ).to.have.length ( 1 )
   }) // it replace
+
 
 
  it ( 'Attach', () => {
@@ -153,42 +243,6 @@ it ( 'Replace', () => {
               expect ( keyList.length ).to.be.equal ( 2 )
           //  expect () 
  }) // it attach
-
-
-
- it ( 'Spread -> values', () => {
-      dtbox
-          .init ( sample.test_0 )
-          .spread ( 'values', x => {
-                        expect ( x.length ).to.be.equal ( 5 )
-                        expect ( x[3][0]).to.be.true
-                        expect ( x[4].length).to.be.equal ( 3 )
-                  })
- }) // it spread -> values
-
-
-
- it ( 'Spread -> values with selection', () => {
-      dtbox
-          .init ( sample.test_0 )
-          .select ()
-          .all ()
-          .withSelection ()
-          .flatten ()
-          .spread ( 'values', x => {
-                        expect ( x.length ).to.be.equal ( 7 )
-                        expect (x).to.contain ( 'Peter' )
-                        expect (x).to.contain ( '42' )
-                        expect (x).to.contain ( 'blue' )
-                        expect (x).to.contain ( true )
-                  })
- }) // it spread -> values
-
-
- // Tuples sould more like a modifier?! 
- it ( 'Spread -> tuples'      )
-
-
 
 }) // describe
 

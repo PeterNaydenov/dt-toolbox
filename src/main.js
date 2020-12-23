@@ -465,11 +465,10 @@ const mainlib = {
       // *** Returns result of selection
         const 
                me = this
-            , _selectKeys     = me._select.value
             , hasSelection    = me._select.result ? true : false
-            , { empty, help } = mainlib.dependencies ()
+            , { help } = mainlib.dependencies ()
             ;
-        let selection, mod;
+        let selection, mod, vals;
             // TODO: refactoring of instructions. Should work as options in init. ( { mod, model} )
             /**
              *   
@@ -492,7 +491,6 @@ const mainlib = {
                 // TODO: Values and keys are mostly modifiers! Should not be here...
                 case 'value'   :
                 case 'values'  :
-                                let vals;
                                 mod = 'values'
                                 if ( hasSelection ) {
                                         let data = convert.from ( 'midFlat' ).toFlat ( mainlib.dependencies(), me._select.result );
@@ -505,10 +503,17 @@ const mainlib = {
                                 break
                 case 'key'    : 
                 case 'keys'   : 
-                                selection = _selectKeys.reduce ( (res, el, i ) => {
-                                                                        res[`root/${i}`] = el 
-                                                                        return res
-                                                }, empty() )
+                                mod = 'keys'
+                                if ( hasSelection ) {
+                                            let data = convert.from ( 'midFlat' ).toFlat ( mainlib.dependencies(), me._select.result )
+                                            vals = dtlib.transform ( {...mainlib.dependencies(), mod}, data )
+                                            mod = 'values'
+                                            vals = dtlib.transform ( {...mainlib.dependencies(), mod}, vals )
+                                    }
+                                else {
+                                            vals = dtlib.transform ( {...mainlib.dependencies(),mod},[me.structure, me.value])
+                                    }
+                                selection = convert.to ( 'std', mainlib.dependencies(), vals )
                                 break
                 case 'standard' :  
                 case 'std'      :
@@ -533,7 +538,7 @@ const mainlib = {
                                                 }, [])
                                 break
                 case 'midFlat'   :
-                                if ( hasSelection )   selection = { ...hasSelection }
+                                if ( hasSelection )   selection = { ...me._select.result }
                                 else                  selection = convert.to ( 'midFlat', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)])
                                 break
                 case 'flat'       : 
