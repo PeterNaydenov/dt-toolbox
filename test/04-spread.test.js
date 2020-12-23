@@ -78,6 +78,24 @@ describe ( 'Provide results', () => {
 
 
 
+ it ( 'Spread -> breadcrumbs with selection', () => {
+      const test = {
+                        name : 'Peter'
+                      , arr  : [ 1, 15 ]
+              };
+      dtbox
+          .init ( test )
+          .folder ('arr')
+          .withSelection ()
+          .flatten ()
+          .spread ( 'breadcrumbs', x => {
+                        expect ( x ).to.have.property ( 'root/1' )
+                        expect ( x['root/1']).to.be.be.equal ( 15 )
+                })
+ }) // it spread -> breadcrumbs with selection
+
+
+
  it ( 'Spread -> file' , () => {
       const test = {
                         name : 'Peter'

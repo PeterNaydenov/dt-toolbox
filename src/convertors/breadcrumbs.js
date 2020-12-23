@@ -122,11 +122,10 @@ function toModel ( dependencies, [ structure, value ]) {
                                     , breadcrumb = flatNames [ breadcrumbKey ]
                                     ;
                                 if ( breadcrumbKey == '0' ) {
-                                        keyArray = keyArray.filter ( segment => segment!=0   )                                        
+                                        keyArray = keyArray.filter ( (segment,i) => i!=1   )  
                                     }
                                 else {
                                         keyArray[1] = breadcrumb
-                                        
                                     }
                                 breadcrumbObject [ keyArray.join('/') ] = value [key]    
                             })
