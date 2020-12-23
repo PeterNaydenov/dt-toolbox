@@ -1,5 +1,7 @@
 'use strict'
 
+const { c } = require('../test-data/test_1');
+
 const		 
 		  dtbox  = require ( '../src/main'        )
 		, sample = require ( '../test-data/index' )
@@ -86,8 +88,8 @@ describe ( 'Provide results', () => {
         .all ()
         .spread ( 'file', x => {
                   expect (x.length).to.be.equal ( 3 )
-                  expect ( x[0]).to.be.equal ( 'root/name/Peter' )
-                  expect ( x[2]).to.be.equal ( 'root/arr/1/15'   )
+                  expect ( x[0]).to.be.equal ( 'name/Peter' )
+                  expect ( x[2]).to.be.equal ( 'arr/15'   )
             })
  }) // it spread -> file
 
@@ -195,10 +197,22 @@ it ( 'Spread -> keys with selection', () => {
 
 
 
-it ( 'Spread -> tuples'      )
+it ( 'Spread -> tuples', () => {
+  let r = dtbox
+            .init ( sample.test_0 )
+            .select ()
+            .all ()
+            .spread ( 'tuples', x => {
+                      expect ( x.length ).to.be.equal ( 7 )
+                      expect ( x[0][0] ).to.be.equal ( 'name' )
+                      expect ( x[0][1] ).to.be.equal ( 'Peter' )
+                      expect ( x[4][0] == x[5][0] )
+                      expect ( x[5][0] == x[6][0] )
+                })
+}) // it spread -> tuples
 
 
-  
+
 it ( 'Replace', () => {
         const test = {
                       name : 'Peter'

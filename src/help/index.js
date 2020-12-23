@@ -13,6 +13,7 @@ const
    , updateSelection  = require ( './updateSelection'   )
    , zipObject        = require ( './zipObject'         )
    , extractSelection = require ( './extractSelection'  )
+   , reduceTuples     = require ( './reduceTuples'      )
    ;
 
 const findType =  d =>  ( d instanceof Array ) ? 'array' : 'object'
@@ -33,6 +34,7 @@ module.exports = {
                     , updateSelection    // Updates selection list. Checks if element is already selected
                     , zipObject          // Conect two arrays in a single object
                     , extractSelection   // Creates 'value' object with selected keys only
+                    , reduceTuples
                 }
 
 

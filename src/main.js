@@ -527,15 +527,16 @@ const mainlib = {
                 case 'breadcrumbs' : 
                                 selection = convert.to ( 'breadcrumbs', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)])
                                 break
+                case 'tuples' :
+                                let data = convert.to  ( 'breadcrumbs', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)]);
+                                selection = help.reduceTuples ( mainlib.dependencies(), data )
+                                break
                 case 'file'       :
                                 let 
-                                      fileObject = convert.to ( 'breadcrumbs', mainlib.dependencies, [me._select.structure, help.extractSelection(me)])
-                                    , fileKeys = Object.keys(fileObject)
+                                      fileData = convert.to ( 'breadcrumbs', mainlib.dependencies, [me._select.structure, help.extractSelection(me)])
+                                    , tuples = help.reduceTuples ( mainlib.dependencies(), fileData )
                                     ;
-                                selection = fileKeys.reduce ( (res,k) => {
-                                                    res.push ( `${k}/${fileObject[k]}`)
-                                                    return res
-                                                }, [])
+                                selection = tuples.map ( ([k,v])=> `${k}/${v}` )
                                 break
                 case 'midFlat'   :
                                 if ( hasSelection )   selection = { ...me._select.result }
@@ -543,8 +544,8 @@ const mainlib = {
                                 break
                 case 'flat'       : 
                                 // NOTE: 
-                                // The 'flat' is internal only data-model. Export and import 'flat'
-                                // operations is always means 'shortFlat'.
+                                // The 'flat' is internal only data-model. Spread 'flat'
+                                // always means 'shortFlat'.
                                 // 
                 case 'shortFlat' : 
                 default          : {
