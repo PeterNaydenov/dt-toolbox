@@ -60,6 +60,31 @@ describe ( 'Provide results', () => {
 
 
 
+ it ( 'Spread -> flat with selection', () => {
+      const test = {
+                        name : 'Peter'
+                      , arr : [ 1,15 ]
+                };
+      // Data-model 'flat' in spread always mean 'shortFlat'
+      // Real flat data-model is internal only model.
+      const dt = dtbox.init ( test );
+      dt
+        .select ()
+        .folder ( 'arr' )
+        .withSelection ()
+        .flatten ()
+        .spread ( 'flat', x => {
+                  expect ( x.length ).to.be.equal ( 2 )
+                  let [ struct, val ] = x;
+                  expect ( struct.length ).to.be.equal ( 1 )
+                  expect ( val ).to.have.property ( 'root/0/0' )
+                  expect ( val ).to.have.property ( 'root/0/1' )
+                  expect ( val ).to.not.have.property ( 'root/0/name' )
+              })
+ }) // it spread -> flat with selection
+
+
+
  it ( 'Spread -> breadcrumbs', () => {
       const test = {
                         name : 'Peter'
@@ -110,6 +135,26 @@ describe ( 'Provide results', () => {
                   expect ( x[2]).to.be.equal ( 'arr/15'   )
             })
  }) // it spread -> file
+
+
+
+it ( 'Spread -> file with selection' , () => {
+      const test = {
+                        name : 'Peter'
+                      , arr  : [ 1, 15 ]
+              };
+      dtbox
+        .init ( test )
+        .folder ('arr')
+        .withSelection ()
+        .flatten ()
+        .spread ( 'file', x => {
+                  expect (x.length).to.be.equal ( 2 )
+                  expect ( x ).to.not.include ( 'Peter' )
+                  expect ( x ).to.include ( 1  )
+                  expect ( x ).to.include ( 15 )
+            })
+ }) // it spread -> file with selection
 
 
 

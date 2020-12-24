@@ -545,11 +545,17 @@ const mainlib = {
                                 selection = help.reduceTuples ( mainlib.dependencies(), tupleData )
                                 break
                 case 'file'       :
-                                let 
-                                      fileData = convert.to ( 'breadcrumbs', mainlib.dependencies, [me._select.structure, help.extractSelection(me)])
-                                    , tuples = help.reduceTuples ( mainlib.dependencies(), fileData )
-                                    ;
-                                selection = tuples.map ( ([k,v])=> `${k}/${v}` )
+                                let fileData, tuples;
+                                if ( hasSelection ) {
+                                        let fileSelect = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), me._select.result );
+                                        fileData = convert.to ( 'breadcrumbs', mainlib.dependencies(), fileSelect )
+                                    }
+                                else    fileData = convert.to ( 'breadcrumbs', mainlib.dependencies, [me._select.structure, help.extractSelection(me)])
+                                tuples  = help.reduceTuples ( mainlib.dependencies(), fileData ) 
+                                selection = tuples.map ( ([k,v])=> {
+                                                    if ( k )   return `${k}/${v}` 
+                                                    else       return  v
+                                                })
                                 break
                 case 'midFlat'   :
                                 if ( hasSelection )   selection = { ...me._select.result }
@@ -562,11 +568,16 @@ const mainlib = {
                                 // 
                 case 'shortFlat' : 
                 default          : {
-                                let 
-                                      set    = help.extractSelection ( me ) 
-                                    , struct = help.copyStructure ( me._select.structure )
-                                    ;
-                                selection = [struct, set]
+                                if ( hasSelection ) {
+                                        selection = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), me._select.result )
+                                    }
+                                else {
+                                        let 
+                                            set    = help.extractSelection ( me ) 
+                                          , struct = help.copyStructure ( me._select.structure )
+                                          ;
+                                        selection = [ struct, set ]
+                                    }
                                 }
                 } // switch instruction
   		    callback ( selection )
