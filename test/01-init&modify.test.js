@@ -389,6 +389,9 @@ it ( 'Modify: Insert', () => {
 }) // it insert
 
 
+
+
+
 it ( 'Modify: Combine', () => {
     const
          a = { link: 'one' }
