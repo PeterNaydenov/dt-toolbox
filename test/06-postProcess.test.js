@@ -11,6 +11,21 @@ const
 
 describe ( 'Post Processes', () => {
 
+it ( 'withData', () => {
+      const test = {
+                        name : 'Peter'
+                      , arr  : [ 1, 15, ['one', 'two'], {'joy': 'music', 'style': 'metal'} ]
+                };
+      let dt = dtbox
+                .init ( test )
+                .withData ();
+
+      expect ( dt._select.result['root'] ).to.have.property ( 'name' )
+      expect ( dt._select.result['root/arr'][1]).to.be.equal ( 15 )
+  }) // it withData
+
+
+
 it ( 'withSelection', () => {
       const test = {
                         name : 'Peter'

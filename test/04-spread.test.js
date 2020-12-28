@@ -299,9 +299,7 @@ it ( 'Replace', () => {
                 };
         let res = dtbox
                     .init ( test )
-                    .select ()
-                    .all ()
-                    .withSelection ()
+                    .withData ()
                     .keyPrefix ('-')
                     .flatten ()
                     .replace ()
