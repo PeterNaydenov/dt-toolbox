@@ -351,6 +351,18 @@ const mainlib = {
 
 
 
+    , reverse ( namespace = ['root'] ) {
+                const
+                       me = this
+                    , { result } = me._select
+                    ;
+                if ( !result )   return me
+                me._select.result = modifier['reverse'] ( result, namespace )
+                return me
+        } // reverse func.
+
+
+
     , keyPrefix ( separationSymbol='' ) {
             const
                     me = this
@@ -671,11 +683,7 @@ const API = {
           , flatten        : mainlib.flatten          // Mix existing objects in a single object.
           , mix           : mainlib.mix             // Mix objects in order. Start with a host and provide guests list [].
           , keyPrefix      : mainlib.keyPrefix        // Modify key as object name+key. Separator-symbol default: emptySpace. It can be modified.
-          // TODO: Do I need this? 
-        //   , keys          : 'Converts the object to array of key-names'
-        //   , values        : 'Converts the object to array of values'
-        //   , keyValues     :  'Object that contains '
-          , reverse       : 'Change place of keys and values. Default directive: insert'
+          , reverse       : mainlib.reverse         // Change place of keys and values
 }; // API                                               
 
 

@@ -117,6 +117,35 @@ it ( 'modifier -> keyPrefix', () => {
                       expect ( x ).to.have.property ( 'arr-0'    )
                       expect ( x ).to.have.property ( 'name'     )
                 })
-    }) // it modifier -> keyPrefix
+      }) // it modifier -> keyPrefix
+
+
+
+it ( 'Modifer -> reverse without arguments', () => {
+// *** Should reverse only root namespace
+            const test = {
+                    name : 'Peter'
+                  , arr  : [ 1, 15, ['one', 'two'], {'joy': 'music', 'style': 'metal'} ]
+                };
+            const x = dtbox
+                           .init ( test )
+                           .withData ()
+                           .reverse ()
+
+            const 
+                    result  = x._select.result['root']
+                  , check   = x._select.result['root/arr/3']
+                  ;
+
+            expect ( result ).to.have.property ( 'Peter' )
+            expect ( result['Peter']).to.be.equal ( 'name' )
+            
+            expect ( check ).to.have.property ( 'joy'   )
+            expect ( check ).to.have.property ( 'style' )
+      }) // it modifier -> reverse without arguments
+
+
 
 }) // describe
+
+

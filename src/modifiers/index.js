@@ -10,6 +10,7 @@ const
   , flatten    = require ( './flatten'    )
   , combine   = require ( './combine'   )
   , mix       = require ( './mix'       )
+  , reverse   = require ( './reverse'   )
   ;
 
 const modifier = {
@@ -23,6 +24,7 @@ const modifier = {
                     , flatten
                     , combine
                     , mix
+                    , reverse
                 }
 
 
