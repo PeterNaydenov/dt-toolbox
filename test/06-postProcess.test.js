@@ -121,8 +121,8 @@ it ( 'modifier -> keyPrefix', () => {
 
 
 
-it ( 'Modifer -> reverse without arguments', () => {
-// *** Should reverse only root namespace
+it ( 'Modifier -> reverse without arguments', () => {
+      // *** Should reverse only 'root' namespace
             const test = {
                     name : 'Peter'
                   , arr  : [ 1, 15, ['one', 'two'], {'joy': 'music', 'style': 'metal'} ]
@@ -131,7 +131,6 @@ it ( 'Modifer -> reverse without arguments', () => {
                            .init ( test )
                            .withData ()
                            .reverse ()
-
             const 
                     result  = x._select.result['root']
                   , check   = x._select.result['root/arr/3']
@@ -144,6 +143,29 @@ it ( 'Modifer -> reverse without arguments', () => {
             expect ( check ).to.have.property ( 'style' )
       }) // it modifier -> reverse without arguments
 
+
+
+it ( 'Modifier -> reverse with arguments', () => {
+// *** Should reverse only 'root/arr/3' namespace
+            const test = {
+                    name : 'Peter'
+                  , arr  : [ 1, 15, ['one', 'two'], {'joy': 'music', 'style': 'metal'} ]
+                };
+            const x = dtbox
+                           .init ( test )
+                           .withData ()
+                           .reverse (['root/arr/3'])
+            const 
+                    result  = x._select.result['root']
+                  , check   = x._select.result['root/arr/3']
+                  ;
+
+            expect ( result ).to.have.property ( 'name' )
+            expect ( result['name']).to.be.equal ( 'Peter' )
+            
+            expect ( check ).to.have.property ( 'music'   )
+            expect ( check ).to.have.property ( 'metal' )
+      }) // it modifier -> reverse with arguments
 
 
 }) // describe
