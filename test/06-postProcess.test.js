@@ -65,6 +65,7 @@ it ( 'Modifier -> flatten', () => {
     }) // it modifier -> flatten
 
 
+
 it ( 'Modifier -> mix', () => {
         const test = {
                     x : 'someX'
@@ -166,6 +167,7 @@ it ( 'Modifier -> reverse with arguments', () => {
             expect ( check ).to.have.property ( 'music'   )
             expect ( check ).to.have.property ( 'metal' )
       }) // it modifier -> reverse with arguments
+
 
 
 }) // describe
