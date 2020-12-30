@@ -394,18 +394,26 @@ it ( 'Modify: Insert', () => {
 
 it ( 'Modify: Combine', () => {
     const
-         a = { link: 'one' }
-       , b = { link: 'two' }
+         a = { link: 'one', m: 'fine' }
+       , b = { up: {link:1,two:2}, link: ['check', 'me'] }
        , c = { link: 'three'}
+       , d = { link: 'final'}
        ;
     dtbox
         .init ( a )
         .combine ( b, {model:'std'})
         .combine ( c, {model:'std'})
+        .combine ( d, {model:'std'})
         .spreadAll ( 'std', x => {
                             expect ( x ).to.have.property ( 'link' )
                             expect ( x['link'] instanceof Array )
-                            expect ( x['link'].length ).to.be.equal ( 3 )
+                            expect ( x['link'].length ).to.be.equal ( 6 )
+                            expect ( x['link'][0] ).to.be.equal ( 'one' )
+                            expect ( x['link'][1] ).to.be.equal ( 1 )
+                            expect ( x['link'][2] ).to.be.equal ( 'check' )
+                            expect ( x['link'][3] ).to.be.equal ( 'me' )
+                            expect ( x['link'][4] ).to.be.equal ( 'three' )
+                            expect ( x['link'][5] ).to.be.equal ( 'final' )
                     })
 }) // it modify Insert simular
 

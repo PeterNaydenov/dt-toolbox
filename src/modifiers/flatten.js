@@ -1,5 +1,5 @@
 const 
-      combine = require ('./combine')
+      combineShallow = require ('./combineShallow')
     , separator = ';'
     ;
 
@@ -11,7 +11,7 @@ function flatten ( mainData ) {
 
     let flatter =  keyList.reduce ( (res,k) => {
                                 let update = { 'root': {...mainData[k]} }
-                                return combine ( res, update )
+                                return combineShallow ( res, update )
                 },{ 'root': {...mainData['root']}})
 
     let flatterKeyList = Object

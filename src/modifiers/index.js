@@ -1,14 +1,14 @@
 // NOTE: modifiers require a midFlat model for mainData and update
 const
-    overwrite = require ( './overwrite' )
-  , update    = require ( './update'    )
-  , add       = require ( './add'       )
-  , insert    = require ( './insert'    )
-  , append    = require ( './append'    )
-  , prepend   = require ( './prepend'   )
-  , keyPrefix  = require ( './keyPrefix'  )
-  , flatten    = require ( './flatten'    )
-  , combine   = require ( './combine'   )
+    overwrite       = require ( './overwrite' )
+  , update          = require ( './update'    )
+  , add             = require ( './add'       )
+  , insert          = require ( './insert'    )
+  , append          = require ( './append'    )
+  , prepend         = require ( './prepend'   )
+  , keyPrefix        = require ( './keyPrefix'  )
+  , flatten          = require ( './flatten'    )
+  , combineShallow  = require ( './combineShallow'   )
   , mix       = require ( './mix'       )
   , reverse   = require ( './reverse'   )
   ;
@@ -22,7 +22,7 @@ const modifier = {
                     , prepend
                     , keyPrefix
                     , flatten
-                    , combine
+                    , combineShallow
                     , mix
                     , reverse
                 }

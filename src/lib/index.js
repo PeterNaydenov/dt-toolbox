@@ -9,6 +9,7 @@ const
     , modify    = require ( './modify'    )
     , transform = require ( './transform' )
     , attach    = require ( './attach'    )
+    , combine   = require ( './combine'   )
     ;
 
 
@@ -43,6 +44,7 @@ const dtlib = {
     , block
     , transform
     , attach
+    , combine
 } // dtlib
 
 

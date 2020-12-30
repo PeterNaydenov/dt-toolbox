@@ -84,7 +84,10 @@ it ( 'Modifier -> mix', () => {
           .select ()
           .all ()
           .withSelection ()
-          .mix ( 'root/person', [ 'root/extendedData', 'root/other'] )
+          .mix ( 'root/person', [ 
+                                      'root/extendedData'
+                                    , 'root/other'
+                              ])
           .spread ( 'std', x => {
                           expect ( x ).to.have.property ( 'x' )
                           expect ( x ).to.have.property ( 'person' )
