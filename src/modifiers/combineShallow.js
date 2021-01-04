@@ -20,8 +20,8 @@ function combineShallow ( mainData, update ) {
                                                  , check  = key.split('/').pop ()
                                                  , mainKeys = Object.keys ( mainObject )
                                                  ;
-                                                 
-                                              if ( key!= 'root' && mainData[key] ) {
+
+                                              if ( key!= 'root' && mainData[key] ) {   // key already has more than one value in mainData. Converted to object
                                                       res.add ( check )
                                                       if ( !extraContent[check] )   extraContent[check] = []
                                                       extraContent[check] = Object.keys ( mainData[key] ).reduce ( (res,k) => {
@@ -30,14 +30,7 @@ function combineShallow ( mainData, update ) {
                                                                                                       }, extraContent[check])
                                                 }
 
-                                              if ( mainKeys.includes(check)  ) {
-                                                      res.add ( check )
-                                                      if (!extraContent[check])   extraContent[check] = []
-                                                      extraContent[check].push ( mainObject[check] )
-                                                      
-                                                }
-                                    
-                                             if ( check!='root' && updateObject ) {
+                                             if ( check!='root' && updateObject ) {  // key exists as object in updateObject
                                                       res.add ( check )
                                                       if (!extraContent[check])   extraContent[check] = []
                                                       extraContent[check] = Object.keys ( updateObject ).reduce ( (res,k) => {
@@ -46,8 +39,8 @@ function combineShallow ( mainData, update ) {
                                                                                                       }, extraContent[check])
                                                 }
                                                   
-                                              if ( mainObject && updateObject ) {
-                                                      for ( k in updateObject ) {
+                                          
+                                             for ( k in updateObject ) {
                                                               if ( mainData[`root/${k}`] && updateObject[k] ) { 
                                                                         res.add ( k )
                                                                         if ( !extraContent[k] )   extraContent[k] = []
@@ -59,8 +52,7 @@ function combineShallow ( mainData, update ) {
                                                                         if ( extraContent[k] )   extraContent[k].push ( updateObject[k] )
                                                                         else                     extraContent [ k ] = [ mainObject[k], updateObject[k]]
                                                                   }
-                                                         }
-                                                }
+                                                      }
                                               return res
                                     }, new Set() )
     
