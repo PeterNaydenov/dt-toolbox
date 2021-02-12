@@ -419,20 +419,10 @@ const mainlib = {
 
     , assemble () {
                 const
-                      me        = this
-                    , selection = me._select.value
-                    , struct    = help.copyStructure (me._select.structure)
+                      me                   = this
+                    , dependencies = { ...mainlib.dependencies() }
                     ;
-            let small = selection.reduce ( (res, k) => {
-                                        let num = k.split ( '/' )[1]
-                                        if ( num < res )   res = num
-                                        return res
-                                }, 100000 )
-            me._select.structure = struct.reduce ( (res,item) => {
-                                                if ( item[1] >= small )   res.push ([...item])
-                                                return res
-                                        },[])
-            return me
+                return   dtlib.assemble ( dependencies, me )
         } // assemble func.
 
 
@@ -563,7 +553,8 @@ const mainlib = {
                                     }
                                 selection = help.reduceTuples ( mainlib.dependencies(), tupleData )
                                 break
-                case 'file'       :
+                case 'file'        :
+                case 'files'       :
                                 let fileData, tuples;
                                 if ( hasSelection ) {
                                         let fileSelect = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), me._select.result );
