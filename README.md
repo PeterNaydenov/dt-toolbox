@@ -1,6 +1,6 @@
 # DT Toolbox
 
-Execute operations over deep object structures without worries. Compare, modify, reshape or extract data.Immutability is taken as consideration by this library.
+Execute operations over deep object structures without worries. Compare, modify, reshape or extract data. Immutability is taken as consideration by this library.
 
 What you can do:
   - Library knows some data-models and supports conversion among them;

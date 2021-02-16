@@ -11,6 +11,7 @@ const
     , attach    = require ( './attach'    )
     , combine   = require ( './combine'   )
     , assemble  = require ( './assemble'  )
+    , purify    = require ( './purify'    )
     ;
 
 
@@ -47,6 +48,7 @@ const dtlib = {
     , attach
     , combine
     , assemble
+    , purify
 } // dtlib
 
 

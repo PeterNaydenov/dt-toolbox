@@ -427,6 +427,16 @@ const mainlib = {
 
 
 
+    , purify () {
+                const
+                       me = this
+                     , dependencies = { ...mainlib.dependencies() }
+                     ;
+                return dtlib.purify ( dependencies, me )
+        } // purify func.
+
+
+
 
 
 
@@ -667,7 +677,8 @@ const API = {
           , deepObject : mainlib.block ( 'object' ) // Selector. Fullfil '_select' with deepest object elements
           , deepArray  : mainlib.block ( 'array'  ) // Selector. Fullfil '_select' with deepest array elements
           , invert     : mainlib.invert             // Selector. Invert existing selection
-          , assemble   : mainlib.assemble           // Selector. Remove unnecessary structure
+          , assemble   : mainlib.assemble           // Converts selection into 'array of objects' or 'single flat object'
+          , purify     : mainlib.purify             // Removes all empty structures ( no props ) from the selection 
 
     // Filters      
           , limit      : mainlib.limit              // Filter.   Reduces amount of records in the selection
