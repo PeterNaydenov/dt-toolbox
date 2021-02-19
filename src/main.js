@@ -91,8 +91,8 @@ const mainlib = {
                   dependencies = mainlib.dependencies () 
                 , dt = dependencies.simpleDT ()
                 , help = dependencies.help
-                , defaultOptions = {model:'std', mod:false }
-                , { model, mod } = { ...defaultOptions,...options }
+                , defaultOptions = {model:'std', modify:false }
+                , { model, modify } = { ...defaultOptions,...options }
                 ;
             if ( !INIT_DATA_TYPES.includes(model) ) {
                         this._error.push ( `Can't understand your data-type: ${model}. Please, find what is possible on http://todo.add.documentation.link.here` )
@@ -104,12 +104,12 @@ const mainlib = {
                         dt.structure = help.copyStructure ( structure ) 
                         dt.value     = value
                 }
-            if ( !mod   )   return dt
+            if ( !modify   )   return dt
             else {                   
-                            let [structure, value] = dtlib.transform ( {...dependencies, mod }, [dt.structure, dt.value] );
+                            let [structure, value] = dtlib.transform ( {...dependencies, modify }, [dt.structure, dt.value] );
                             let missingValues = ( Object.keys ( value ).length <= 0 );
                             if ( missingValues ) {  
-                                        dt._error.push ( `Modifier "${mod}" is not a valid modifier and was ignored. Data: ${JSON.stringify(inData)}` )
+                                        dt._error.push ( `Modifier "${modify}" is not a valid modifier and was ignored. Data: ${JSON.stringify(inData)}` )
                                 }
                             dt.structure = structure
                             dt.value = value
@@ -133,7 +133,7 @@ const mainlib = {
 
     , preprocess ( inData, fn, options ) {
                 let 
-                      defaultOptions = { model:'std', mod:false }
+                      defaultOptions = { model:'std', modify:false }
                     , { model='std' } = { ...defaultOptions,...options }
                     , shortFlat    = convert.from (model).toFlat ( mainlib.dependencies(), inData )
                     , afterProcess = fn ( shortFlat )   // afterProcess should be in 'shortFlat' data-model
@@ -487,8 +487,8 @@ const mainlib = {
             , hasSelection    = me._select.result ? true : false
             , { help } = mainlib.dependencies ()
             ;
-        let selection, mod, vals;
-            // TODO: refactoring of instructions. Should work as options in init. ( { mod, model} )
+        let selection, modify, vals;
+            // TODO: refactoring of instructions. Should work as options in init. ( { modify, model} )
             /**
              *   
              *   model:
@@ -499,7 +499,7 @@ const mainlib = {
              *      - tuples: Object described as array of arrays with two elements. First is the key, second is the value;
              *      - flat: Library internal description of the object 
              *      
-             *   mod:
+             *   modify:
              *        keys    - take keys as value. Ignore original values.
              *        nokeys  - ignore keys. Convert objects to arrays
              *        values  - use values as keys
@@ -510,27 +510,27 @@ const mainlib = {
                 // TODO: Values and keys are mostly modifiers! Should not be here...
                 case 'value'   :
                 case 'values'  :
-                                mod = 'values'
+                                modify = 'values'
                                 if ( hasSelection ) {
                                         let data = convert.from ( 'midFlat' ).toFlat ( mainlib.dependencies(), me._select.result );
-                                        vals = dtlib.transform ( {...mainlib.dependencies(),mod}, data )
+                                        vals = dtlib.transform ( {...mainlib.dependencies(),modify}, data )
                                     }
                                 else {
-                                        vals = dtlib.transform ( {...mainlib.dependencies(), mod }, [me.structure, me.value] );
+                                        vals = dtlib.transform ( {...mainlib.dependencies(), modify }, [me.structure, me.value] );
                                     }
                                 selection = convert.to ( 'std', mainlib.dependencies(), vals )
                                 break
                 case 'key'    : 
                 case 'keys'   : 
-                                mod = 'keys'
+                                modify = 'keys'
                                 if ( hasSelection ) {
                                             let data = convert.from ( 'midFlat' ).toFlat ( mainlib.dependencies(), me._select.result )
-                                            vals = dtlib.transform ( {...mainlib.dependencies(), mod}, data )
-                                            mod = 'values'
-                                            vals = dtlib.transform ( {...mainlib.dependencies(), mod}, vals )
+                                            vals = dtlib.transform ( {...mainlib.dependencies(), modify}, data )
+                                            modify = 'values'
+                                            vals = dtlib.transform ( {...mainlib.dependencies(), modify}, vals )
                                     }
                                 else {
-                                            vals = dtlib.transform ( {...mainlib.dependencies(),mod},[me.structure, me.value])
+                                            vals = dtlib.transform ( {...mainlib.dependencies(),modify},[me.structure, me.value])
                                     }
                                 selection = convert.to ( 'std', mainlib.dependencies(), vals )
                                 break

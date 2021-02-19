@@ -1,12 +1,12 @@
 function transform ( dependencies, [structure, value] ) {
     // *** Transformer for 'flat' object. Reverse object key and values, or get only keys/values
           let 
-                { mod, empty } = dependencies
+                { modify, empty } = dependencies
               , keyList = Object.keys ( value )
               , result
               ;
-
-          switch ( mod  ) {
+console.log ( modify )
+          switch ( modify  ) {
                      case 'reverse':
                                       result = keyList.reduce ( (res,item) => {
                                                                       let 

@@ -56,7 +56,7 @@ it ( 'Init: ST(standard) object' , () => {
 
 it ( 'Init: Reverse keys and values', () => {
     // * Create object where values will become keys and keys become values
-    let result = dtbox.init ( sample.test_0, {mod:'reverse'} );
+    let result = dtbox.init ( sample.test_0, {modify:'reverse'} );
 
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
     expect ( result.value ).to.have.deep.property ( 'root/1/true'  )
@@ -67,7 +67,7 @@ it ( 'Init: Reverse keys and values', () => {
 
 it ( 'Init: Keys only', () => {
     // * Create key replacement map
-    const result = dtbox.init ( sample.test_0, {mod:'keys'});
+    const result = dtbox.init ( sample.test_0, {modify:'keys'});
 
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
     expect ( result.value                ).to.have.property ( 'root/0/name'  )
@@ -80,7 +80,7 @@ it ( 'Init: Keys only', () => {
 it ( 'Init: Values only', () => {
     // * Ignore keys and convert data-structure to list of values (arrays)
     let 
-            result = dtbox.init ( sample.test_0, {mod:'value'} )
+            result = dtbox.init ( sample.test_0, {modify:'value'} )
         , { value, structure } = result
         ;
 
@@ -104,7 +104,7 @@ it ( 'Init: Values only, Model: std', () => {
                                   user : 'Peter'
                                 , age  : 42
                                 , role : 'admin'
-                              },{ model:'std', mod:'values' });
+                              },{ model:'std', modify:'values' });
 
     // root should be auto append
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
@@ -121,7 +121,7 @@ it ( 'Init: Values only, Model: std', () => {
 
 
 it ( 'Init: Value only, Model: values', () => {
-            const result = dtbox.init ( sample.test_9, {mod:'values', model:'file'} );
+            const result = dtbox.init ( sample.test_9, {modify:'values', model:'file'} );
 
  			expect ( result.value ).to.have.property ( 'root/1/0'  )
             expect ( result.value ).to.have.property ( 'root/2/1'  )
@@ -279,7 +279,7 @@ it ( 'Modify: Add with fake instructions' , () => {
 		const result = dtbox 
 						.init ()
 						.add ( { age: 25} )
-                        .add ( {'name' : 'Ivan'}, { mod:'fakeInstruction'} );   // fake instructions are ignored
+                        .add ( {'name' : 'Ivan'}, { modify:'fakeInstruction'} );   // fake instructions are ignored
                         
         expect ( result.value.hi()  ).to.be.equal ( 'hi' )
 		expect ( result.value ).to.have.property ( 'root/0/age' )
@@ -324,7 +324,7 @@ it ( 'Modify: Update', () => {   // Updates only existing values
 it ( 'Modify: Update with instructions', () => {   // Updates only existing values
     const result = dtbox 
                     .init   ( {name : 'Ivan'} )
-                    .update ( sample.test_0 , {mod:'key'} );
+                    .update ( sample.test_0 , {modify:'key'} );
 
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
     expect ( result.value                ).to.have.property ( 'root/0/name' )
@@ -377,7 +377,7 @@ it ( 'Modify: Overwrite with instructions', () => {
                                            name : 'Stefan'
                                         , 'prime-number'  : '8899 222 222'
                                         , 'dummy' : [12,24,55]
-                               }, {mod:'key'} );
+                               }, {modify:'key'} );
 
      // updates existing values and adds new data including 'namespace' and 'structures'
     expect ( result.value['root/0/name']        ).to.be.equal ( 'name' )
@@ -487,7 +487,7 @@ it ( 'Show Error Log', () => {
         dtbox 
             .init ()
             .add ( { age: 25} )
-            .add ( {'name' : 'Ivan'}, { mod:'fakeInstruction'} )   // fake instructions are ignored
+            .add ( {'name' : 'Ivan'}, { modify:'fakeInstruction'} )   // fake instructions are ignored
             .log ( x => result = x )
 
         expect ( result ).to.be.an ( 'array' )
