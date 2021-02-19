@@ -20,15 +20,15 @@ function transform ( dependencies, [structure, value] ) {
                                       break
                      case 'key':
                      case 'keys':
-                                      result = keyList.reduce ( (res,key) => {
+                                      result = keyList.reduce ( (res,key,i) => {
                                                                       let 
                                                                             arr = key.split ( '/' )
-                                                                          , onlyNumbers = /^[0-9]+$/
-                                                                          , pureKey = arr[2].match(onlyNumbers) ? parseInt(arr[2]) : arr[2]
+                                                                          , k = `root/0/${i}`
                                                                           ;
-                                                                      res[key] = pureKey
+                                                                      res[k] = arr[2]
                                                                       return res
                                                      }, empty() )
+                                      structure = [ [ 'array', 0 ]]
                                       break
                      case 'value' :
                      case 'values':

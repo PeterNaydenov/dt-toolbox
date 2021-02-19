@@ -67,12 +67,13 @@ it ( 'Init: Reverse keys and values', () => {
 
 it ( 'Init: Keys only', () => {
     // * Create key replacement map
-    const result = dtbox.init ( sample.test_0, {modify:'keys'});
-
-    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
-    expect ( result.value                ).to.have.property ( 'root/0/name'  )
-    expect ( result.value['root/0/name'] ).to.be.equal ( 'name' )
-    expect ( result.value['root/2/0']    ).to.be.equal ( 0 )
+    const 
+          result = dtbox.init ( sample.test_0, {modify:'keys'})
+        , keyList = Object.keys ( result.value )
+        ;
+    expect ( keyList.length ).to.be.equal ( 7 )
+    expect ( result.value                ).to.have.property ( 'root/0/0'  )
+    expect ( result.value['root/0/0'] ).to.be.equal ( 'name' )
 }) // it keys only
 
 
@@ -319,12 +320,11 @@ it ( 'Modify: Update', () => {   // Updates only existing values
 
 it ( 'Modify: Update with instructions', () => {   // Updates only existing values
     const result = dtbox 
-                    .init   ( {name : 'Ivan'} )
-                    .update ( sample.test_0 , {modify:'key'} );
+                    .init   ( ['keys'] )
+                    .update ( sample.test_0 , { modify:'key' });
 
-    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
-    expect ( result.value                ).to.have.property ( 'root/0/name' )
-    expect ( result.value['root/0/name'] ).to.be.equal ( 'name' )
+    expect ( result.structure[0][0]).to.be.equal ( 'array' )
+    expect ( result.value['root/0/0'] ).to.be.equal ( 'name' )
 }) // it modify: Update
 
 
@@ -365,7 +365,7 @@ it ( 'Modify: Overwrite with instructions', () => {
                     .init      ( sample.test_0 )
                     .update    ( 
                                     { 
-                                          name : 'Ivan'
+                                           name : 'Ivan'
                                         , 'second-number' : '8899 444 444'
                                })
                     .overwrite ( 
@@ -373,13 +373,17 @@ it ( 'Modify: Overwrite with instructions', () => {
                                            name : 'Stefan'
                                         , 'prime-number'  : '8899 222 222'
                                         , 'dummy' : [12,24,55]
-                               }, {modify:'key'} );
-
+                               }, {modify:'key'} )
+                    
+            , keyList = Object.keys ( result.value )
+            , valList =  Object.values ( result.value )
+            ;
      // updates existing values and adds new data including 'namespace' and 'structures'
-    expect ( result.value['root/0/name']        ).to.be.equal ( 'name' )
-    expect ( result.value                       ).to.not.have.property ( 'root/second-number' )
-    expect ( result.value                       ).to.have.property ( 'root/0/prime-number' )
-    expect ( result.value['root/0/prime-number']).to.be.equal ( 'prime-number' )
+    expect ( keyList ).to.contain ( 'root/0/name' )
+    expect ( result.value['root/0/name']        ).to.be.equal ( 'Ivan' )
+    expect ( keyList ).to.not.contain ( 'root/0/prime-number' )
+    expect ( valList ).to.contain ( 'prime-number' )
+    expect ( keyList.length ).to.be.be.equal ( 12 )
 })  // it modify: Overwrite
 
 

@@ -227,13 +227,9 @@ it ( 'Spread -> keys', () => {
 dtbox
   .init ( sample.test_0 )
   .spread ( 'keys', x => {
-                expect ( x      ).to.have.property ( 'name' )
-                expect ( x.name ).to.be.equal ( 'name' )
-                expect ( x      ).to.have.property ( 'age' )
-                expect ( x      ).to.have.property ( 'eyes' )
-                expect ( x.age  ).to.be.equal ( 'age' )
-                expect ( x.eyes ).to.be.equal ( 'eyes' )
-                expect ( x.array.length ).to.be.equal ( 3 )
+                expect ( x instanceof Array ).to.be.true
+                expect ( x.length ).to.be.equal ( 7 )
+                expect ( x.includes('name')).to.be.true
           })
 }) // it spread -> keys
 
@@ -247,12 +243,12 @@ it ( 'Spread -> keys with selection', () => {
       .withSelection ()
       .flatten ()
       .spread ( 'keys', x => {
+                    expect ( x instanceof Array ).to.be.true
                     expect ( x.length ).to.be.equal ( 7 )
                     expect ( x      ).to.contain ( 'name' )
                     expect ( x      ).to.contain ( 'age' )
                     expect ( x      ).to.contain ( 'eyes' )
-                    expect ( x      ).to.contain ( 0 )
-                    expect ( x      ).to.contain ( 2 )
+                    expect ( x      ).to.contain ( '2' )
                     expect ( x      ).to.contain ( 'active' )
               })
 }) // it spread -> keys
