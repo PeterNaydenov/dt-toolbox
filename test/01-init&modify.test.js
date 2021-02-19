@@ -80,18 +80,13 @@ it ( 'Init: Keys only', () => {
 it ( 'Init: Values only', () => {
     // * Ignore keys and convert data-structure to list of values (arrays)
     let 
-            result = dtbox.init ( sample.test_0, {modify:'value'} )
+            result = dtbox.init ( sample.test_0, { modify:'value' } )
         , { value, structure } = result
+        , keyList = Object.keys ( value )
         ;
-
-    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
-
-    expect ( structure.length ).to.be.equal ( 3 )
-    expect ( structure[0][0]).to.be.equal ( 'array' )
-
-    expect ( result.value ).to.have.property ( 'root/0/0'  )
-    expect ( result.value ).to.have.property ( 'root/0/2'  )
-    
+    expect ( structure.length ).to.be.equal ( 1 )
+    expect ( structure[0][0]  ).to.be.equal ( 'array' )
+    expect ( keyList.length ).to.be.equal ( 7 )
     expect ( result._error.length ).to.be.be.equal ( 0 )
 }) // it values only
 
@@ -120,21 +115,22 @@ it ( 'Init: Values only, Model: std', () => {
 
 
 
-it ( 'Init: Value only, Model: values', () => {
+it ( 'Init: Value only, Modify: values', () => {
             const result = dtbox.init ( sample.test_9, {modify:'values', model:'file'} );
-
- 			expect ( result.value ).to.have.property ( 'root/1/0'  )
-            expect ( result.value ).to.have.property ( 'root/2/1'  )
-            try {
-                    result.structure.forEach ( el => {
-                                    expect ( el[0]).is.equal ( 'array' )
-                            })
-                }
-            catch (e) {
-                        console.log ('Something went wrong with test "Init: Value only --> Important Detail"')
-                }
-
- 			//  expect ( result.value['root/rootFolder/profile/age/0'] ).is.equal ( '42' )			
+            const 
+                  structure = result.structure
+                , valList = Object.keys ( result.value )
+                ;
+            expect ( structure[0][0] ).to.be.equal ( 'array' )
+            expect ( structure.length ).to.be.equal ( 1 )
+            valList.forEach ( k => {
+                            let 
+                                  items = k.split ( '/' )
+                                , last = items[2] == '0' || parseInt ( items[2] ) ? true : false
+                                ;
+                            expect ( items[1] ).to.be.equal ( '0' )
+                            expect ( last ).to.be.true
+                    })
 }) // it values Important
 
 

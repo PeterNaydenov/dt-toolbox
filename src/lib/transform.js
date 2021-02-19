@@ -5,7 +5,6 @@ function transform ( dependencies, [structure, value] ) {
               , keyList = Object.keys ( value )
               , result
               ;
-console.log ( modify )
           switch ( modify  ) {
                      case 'reverse':
                                       result = keyList.reduce ( (res,item) => {
@@ -33,33 +32,15 @@ console.log ( modify )
                                       break
                      case 'value' :
                      case 'values':
-                                      let counters = []
-                                      result = keyList.reduce ( (res,k)=>{
+                                      result = keyList.reduce ( (res,k,i) => {
                                                             let 
-                                                                arr = k.split ( '/' )
-                                                              , item = value [k]
-                                                              , count = counters [ arr[1] ]
-                                                              ;
-                                                            if ( count == null )  count = counters [ arr[1] ] = 0
-                                                            else                  counters [ arr[1] ] = ++count
-                                                            arr[2] = count
-                                                            let key = arr.join ( '/' );
+                                                                  item = value [k]
+                                                                , key = `root/0/${i}`
+                                                                ;
                                                             res[key] = item
                                                             return res
-                                                      }, empty())
-                                      structure = structure.map ( (row,i) => {
-                                                                let [ type, id, ...members ] = row;
-                                                                if ( members.length > 0 ) {
-                                                                            members = members.map ( item => {
-                                                                                                    let 
-                                                                                                        [ target, prop ] = item
-                                                                                                      , name = ++counters[i]
-                                                                                                      ;
-                                                                                                    return [ target, name ]
-                                                                                              })
-                                                                    }
-                                                                return [ 'array', id, ...members ]
-                                                          })
+                                                      }, empty() )
+                                      structure = [ [ 'array', 0 ] ]
                                       break
                      default:
                                       result = empty ()

@@ -507,7 +507,6 @@ const mainlib = {
              *        
              */
   		    switch ( instruction ) {
-                // TODO: Values and keys are mostly modifiers! Should not be here...
                 case 'value'   :
                 case 'values'  :
                                 modify = 'values'
