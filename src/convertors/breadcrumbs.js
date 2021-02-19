@@ -39,7 +39,7 @@ function toFlat ( dependencies, rawValue ) {
               , buffer     = []                  // List contains items(generators). Item contain props organized by specific deepness
               , objectList = []                  // Array of objects. Object looks like this - { key: propNames[]}
               , deepList   = []
-              , rootObjectNames = []
+              , rootObjectNames = []             // Collection of all property names for objects. Evaluate 'root' object type on this.
               ;
           for (let i=maxLength-1; i >= 0; i--) {  // separate keys on deep levels
                             let selectedKeys = keyList.filter ( k => k.length == i+1 );
@@ -77,8 +77,8 @@ function toFlat ( dependencies, rawValue ) {
                                               rootObjectNames.push ( shortObjName )
                                           }
                               } 
-                          type = help.hasNumbers ( [shortObjName] ) ? 'array' : 'object'
-                          structure[0][0] = type
+                          type = help.hasNumbers ( rootObjectNames ) ? 'array' : 'object'   // Evaluate 'root' object type
+                          structure[0][0] = type   
                           for (let prop of val) {
                                       value [`root/${structSize-1}/${prop}`] = rawValue[`${objName}/${prop}`]
                                 }
