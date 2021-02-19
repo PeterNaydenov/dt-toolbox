@@ -27,7 +27,6 @@ function toFlat ( dependencies, rawValue ) {
                         ;
                     return [ structure, value ]
               }
-              
           let
                 { help }   = dependencies
               , structure  = []
@@ -40,6 +39,7 @@ function toFlat ( dependencies, rawValue ) {
               , buffer     = []                  // List contains items(generators). Item contain props organized by specific deepness
               , objectList = []                  // Array of objects. Object looks like this - { key: propNames[]}
               , deepList   = []
+              , rootObjectNames = []
               ;
           for (let i=maxLength-1; i >= 0; i--) {  // separate keys on deep levels
                             let selectedKeys = keyList.filter ( k => k.length == i+1 );
@@ -47,7 +47,7 @@ function toFlat ( dependencies, rawValue ) {
                 }
           objectList = buffer.map ( x => x.next().value ).reverse ()   // organize keys as objects in right order
           deepList = objectList.map ( (item,i) => help.generateList (i, item) )
-          
+
           for ( let list of deepList ) {
           for (let [id, objName, val] of list ) {   // example:  [ 0, 'root', [ 'name', 'age']   ]
                           let 
@@ -59,11 +59,13 @@ function toFlat ( dependencies, rawValue ) {
                               , EMPTY_OBJECTS = emptyObjects > 0
                               , type = help.hasNumbers ( val ) ? 'array' : 'object'
                               ;
-                          
                           if ( EMPTY_OBJECTS ) {
                                   for ( let i=0; i <= emptyObjects; i++ ) {
                                               structure.push ( [type, i ])
-                                              if ( i > 0 )   structure[i-1].push ([i, splitName[i]])
+                                              if ( i > 0 ) {  
+                                                    structure[i-1].push ([i, splitName[i]])
+                                                    rootObjectNames.push ( splitName[i] )
+                                                }
                                       }
                                   structSize = structure.length
                               } 
@@ -72,8 +74,11 @@ function toFlat ( dependencies, rawValue ) {
                                   structSize = structure.length
                                   if ( id > 1 ) {
                                               structure[id-2].push ([structSize-1, shortObjName])
+                                              rootObjectNames.push ( shortObjName )
                                           }
                               } 
+                          type = help.hasNumbers ( [shortObjName] ) ? 'array' : 'object'
+                          structure[0][0] = type
                           for (let prop of val) {
                                       value [`root/${structSize-1}/${prop}`] = rawValue[`${objName}/${prop}`]
                                 }

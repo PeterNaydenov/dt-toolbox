@@ -119,6 +119,7 @@ it ( 'Init: Values only, Model: std', () => {
 
 
 
+
 it ( 'Init: Value only, Model: values', () => {
             const result = dtbox.init ( sample.test_9, {mod:'values', model:'file'} );
 
@@ -156,6 +157,22 @@ it ( 'Init: Files', () => {
 
 
 
+it ( 'Init: Files. Array in object', () => {
+        const data = [
+                      'root/friends/Peter'
+                    , 'root/friends/Ivan'
+                    , 'root/friends/Georgy'
+                ]
+        dtbox
+            .init ( data, {model:'file'} )
+            .select ()
+            .all ()
+            .spread ( 'flat', x => {
+                            let type = x[0][0][0];
+                            expect ( type ).to.be.equal ( 'object' )
+                        })
+}) // it files. Array in object
+
 
 
 it ( 'Init: Handmade files-like structure', () => {
@@ -176,7 +193,7 @@ it ( 'Init: Handmade files-like structure', () => {
         expect ( result.value ).to.contain.property ( 'root/2/a' )
         expect ( result.value ).to.contain.property ( 'root/2/e' )
 
-        expect ( result.structure[0][0] ).to.be.equal ( 'array' )
+        expect ( result.structure[0][0] ).to.be.equal ( 'object' )
         expect ( result.structure[1][0] ).to.be.equal ( 'array' )
         expect ( result.structure[2][0] ).to.be.equal ( 'object' )
     }) // it handmade

@@ -6,7 +6,7 @@ What you can do:
   - Library knows some data-models and supports conversion among them;
   - Modify objects: add/update/overwrite/insert/combine/append/prepend;
   - Compare objects: identical/change/same/different/missing;
-  - Accumulative data selections;
+  - Accumulative data selections: find/parent/folder;
   - Accumulative filter selection: limit/keep/remove/deep;
   - Extract and manipulate data chunks;
 
@@ -76,7 +76,8 @@ const API = {
           , deepObject : "Selector. Fullfil '_select' with deepest object elements"
           , deepArray  : "Selector. Fullfil '_select' with deepest array elements"
           , invert     : 'Selector. Invert existing selection'
-          , assemble   : 'Selector. Remove unnecessary structure'
+          , assemble   : "Converts selection into 'array of objects' or 'single flat object'"
+          , purify     : 'Removes all empty structures ( no props ) from the selection'
 
     // Filters      
           , limit      : 'Filter.   Reduces amount of records in the selection'
@@ -107,6 +108,10 @@ const API = {
 3. Spread the result. Create new data structure according selection and provide it in required data-model.
 
 DT Toolbox supports chaining syntax and is that simple. Let's see some examples...
+
+
+
+
 
 
 
@@ -309,4 +314,187 @@ dtbox
   ]
 
 */
+```
+
+
+
+### Purify
+
+Cleaning empty structures till version 3 of the library was without alternative. Keep empty structures was recognized as a need and it's now default behaviour. Remove empty structures by using 'purify' function as in this example:
+
+```js
+const test = {
+                          name : 'Peter'
+                        , arr  : [ 1, 15 ]
+                        , de   : { me: ['eho', 'ha'] }
+                        , se   : { le: {} }
+                        , ze   : []
+                };
+    dtbox
+        .init ( test )
+        .select ()
+        .all ()
+        .purify ()
+        .spread ( 'std', x => {
+                            /** Result after purify will be:
+                             *   x = {
+                             *             name: Peter
+                             *           , arr  : [1,15]
+                             *           , de : { me: ['eho','ha']}
+                             *       }
+                            */
+                    })
+    }) // it purify
+```
+
+
+## Models
+
+The library can spread data-selection as different data-models. Let's see how initial data will be interpreted in available models. Here is our initial data:
+```js
+const data = {
+                      name: 'Peter'
+                    , familyMembers : [ 'Veselina', 'Iskra', 'Maria', 'Vasil', 'Vladimir', 'Petya' ]
+                    , shoes : {
+                                      winter : [ 'Keen', 'Head']
+                                    , summer : [ 'Lotto', 'Asics' ]
+                            }
+            }
+```
+
+### Standard ( std )
+Standard format will look exactly as initial data.
+```js
+{
+      name: 'Peter'
+    , familyMembers : [ 'Veselina', 'Iskra', 'Maria', 'Vasil', 'Vladimir', 'Petya' ]
+    , shoes : {
+                  winter : [ 'Keen', 'Head']
+                , summer : [ 'Lotto', 'Asics' ]
+            }
+}
+```
+
+
+### Flat ( shortFlat )
+It's a flat description of the object. It's an array with two elements. First element describes the structure of the object, second element - the value.
+**Structure**: Array of flatDescriptions. FlatDescription is array where first element is the type of the object (object or array), second is the index. If there are  more then 2 elements, we have connection descriptions. ConnectionDescription is array of 2 elements. First is the index of connected other object, second is the property name of the connection. 
+ In our example: We have object, that have property `familyMembers` that is array and other property `shoes` that is an object. Object `shoes` have 2 properties (winter,summer) that are arrays.
+ **Value**: Key describes the position of the property that have a primitive value. Value is just that primitive value. Key always have 3 elements separated by '/'. First element is always `root`, second is the `id` of the object (from structure description), third is the name of the property. If structure object is 'array' then property name will be a number representing the position into the array.
+```js
+[
+        // the structure description
+    [
+              [ 'object', 0, [1,'familyMembers'], [2,'shoes'] ]
+            , [ 'array' , 1 ]
+            , [ 'object', 2 , [3, 'winter'], [4, 'summer'] ]
+            , [ 'array' , 3 ]
+            , [ 'array' , 4 ]
+        ]
+        // the value description
+    , {
+              'root/0/name' : 'Peter'
+            , 'root/1/0'   : 'Veselina'
+            , 'root/1/0'   : 'Veselina'
+            , 'root/1/1'   : 'Iskra'
+            , 'root/1/2'   : 'Maria'
+            , 'root/1/3'   : 'Vasil'
+            , 'root/1/4'   : 'Vladimir'
+            , 'root/1/5'   : 'Petya'
+            , 'root/3/0'   : 'Keen'
+            , 'root/3/1'   : 'Head'
+            , 'root/4/0'   : 'Lotto'
+            , 'root/4/1'   : 'Asics'
+        }
+]
+```
+
+
+### MidFlat
+Object where keys represents location of the flat data structure. Value is always an object. Props are names. If data-structure is array, props are numbers:
+
+```js
+{
+      'root' : { name: 'Peter' }
+    , 'root/familyMembers' : { 
+                                  '0' : 'Veselina'
+                                , '1' : 'Iskra'
+                                , '2' : 'Maria'
+                                , '3' : 'Vasil'
+                                , '4' : 'Vladimir'
+                                , '5' : 'Petya' 
+                        }
+    , 'root/shoes/winter' : {
+                                      '0' : 'Keen'
+                                    , '1' : 'Head'
+                                }
+    , 'root/shoes/summer' : {
+                                    '0' : 'Lotto'
+                                    '1' : 'Asics'
+                                }
+}
+```
+
+
+
+
+
+### Breadcrumbs
+
+It's a flat interpratation of the data and looks like this:
+```js
+{
+      'root/name'            : 'Peter'
+    , 'root/familiMembers/0' : 'Veselina'
+    , 'root/familyMembers/1'  : 'Iskra'
+    , 'root/familyMembers/2'  : 'Maria'
+    , 'root/familyMembers/3'  : 'Vasil'
+    , 'root/familyMembers/4'  : 'Vladimir'
+    , 'root/familyMembers/5'  : 'Petya'
+    , 'root/shoes/winter/0'   : 'Keen'
+    , 'root/shoes/winter/1'   : 'Head'
+    , 'root/shoes/summer/0'   : 'Lotto'
+    , 'root/shoes/summer/1'   : 'Asics'
+}
+```
+
+
+### Files
+Data is interpreted like file/folder description.
+```js
+[
+      'root/name/Peter'
+    , 'root/familiMembers/Veselina'
+    , 'root/familyMembers/Iskra'
+    , 'root/familyMembers/Maria'
+    , 'root/familyMembers/Vasil'
+    , 'root/familyMembers/Vladimir'
+    , 'root/familyMembers/Petya'
+    , 'root/shoes/winter/Keen'
+    , 'root/shoes/winter/Head'
+    , 'root/shoes/summer/Lotto'
+    , 'root/shoes/summer/Asics'
+]
+```
+
+
+
+### Tuples
+
+Array of tuples. First element represents location + property name, second is the value.
+
+```js
+[
+      ['name', 'Peter' ]
+    , ['familiMembers', 'Veselina']
+    , ['familyMembers', 'Iskra']
+    , ['familyMembers', 'Maria']
+    , ['familyMembers', 'Vasil']
+    , ['familyMembers', 'Vladimir']
+    , ['familyMembers', 'Petya']
+    , ['shoes/winter' , 'Keen']
+    , ['shoes/winter' , 'Head']
+    , ['shoes/summer' , 'Lotto']
+    , ['shoes/summer' , 'Asics']
+]
 ```
