@@ -1,4 +1,6 @@
-# DT Toolbox
+# DT Toolbox v.3.x.x
+
+- [Check documentation for v.2.x.x if you need it]( './README_v.2.x.x.md' )
 
 Execute operations over deep object structures without worries. Compare, modify, reshape or extract data. Immutability is taken as consideration by this library.
 
@@ -9,9 +11,6 @@ What you can do:
   - Accumulative data selections: find/parent/folder;
   - Accumulative filter selection: limit/keep/remove/deep;
   - Extract and manipulate data chunks;
-
-
-
 
 
 ## Installation
@@ -29,6 +28,10 @@ let dtbox = require ( 'dt-toolbox')
 **Installation for browsers**: Grab file 'dist/dt-toolbox.min.js' and put it inside the project. Request the file from HTML page. Global variable 'dtbox' is available for use.
 
 
+            Note:
+            Library is using 'generator functions' and if support for very old browsers 
+            is required, add a 'generators' polyfill or get back to version 2.x.x of 
+            the library.
 
 
 
@@ -230,15 +233,15 @@ dtbox
    .add  ({
                 age : 25         // 'add' will ignore this. Age is already defined.
               , gender : 'male'  // Will add this.
-          })
+          }, { model: 'std'})
    .update ({
                age  : 50         // Will update
                eyes : 'blue'     // Will ignore this.
-          })
+          }, { model: 'std'})
   .overwrite ({
                 age   : 43         // Will update
               , hobby : 'skating'  // Will add
-          })
+          }, { model: 'std'})
 
   // The object (dtbox.value) will look like:
   /*
@@ -320,7 +323,7 @@ dtbox
 
 ### Purify
 
-Cleaning empty structures till version 3 of the library was without alternative. Keep empty structures was recognized as a need and it's now default behaviour. Remove empty structures by using 'purify' function as in this example:
+Cleaning empty structures till version 3 of the library was without alternative. Keep empty structures was recognized as a need and it's now a default behaviour. Remove empty structures by using 'purify' function as in this example:
 
 ```js
 const test = {
@@ -350,7 +353,7 @@ const test = {
 
 ## Models
 
-The library can spread data-selection as different data-models. Let's see how initial data will be interpreted in available models. Here is our initial data:
+The library can spread data-selection as different data-models. Let's see how initial data will be interpreted in available models. Here is our initial `standard`(std) data:
 ```js
 const data = {
                       name: 'Peter'
@@ -498,3 +501,28 @@ Array of tuples. First element represents location + property name, second is th
     , ['shoes/summer' , 'Asics']
 ]
 ```
+
+
+
+
+
+## External Links
+
+- [Migration guide]( './Migration.guide.md' )
+- [History of changes]( './changelog.md' )
+- [Documentation v.2.x.x]( './README_v.2.x.x.md' )
+
+
+
+
+## Credits
+'dt-toolbox' was created and supported by Peter Naydenov.
+
+
+
+
+
+## License
+'dt-toolbox' is released under the [MIT License](http://opensource.org/licenses/MIT).
+
+

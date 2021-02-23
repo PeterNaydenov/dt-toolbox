@@ -444,7 +444,7 @@ it ( 'Modify: Prepend', () => {
         ;
     const 
           result = dtbox.init ( a )
-                  .prepend ( b, {model:'std'}   )
+                        .prepend ( b, {model:'std'}   )
         , val = result.value
         ;
     expect ( val ).to.have.property ( 'root/0/name' )

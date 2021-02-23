@@ -45,7 +45,7 @@ let dtbox = require ( 'dt-toolbox')
 ## APIs Reference
 Dtbox contains two different APIs. First is related to the library itself:
 
-```
+```js
 API = {
  // * DT I/O Operations
      init       : 'Start chain with data or empty'
@@ -86,8 +86,7 @@ API = {
 
 Second set of functions are available for DT object in a callback of 'spread' and 'preprocess' functions. More details can be found later in the example section.
 
-```
-
+```js
 exportAPI = {
   // * Structure Manipulation 
      assemble     : 'Remove all duplications in the keys and shrinks th possible'
@@ -109,7 +108,6 @@ exportAPI = {
    , keepValues   : 'Apply test on values. Keep met the criteria'
    , removeValues : 'Apply test on values. Remove met the criteria'
 }
-
 ```
 
 
@@ -188,8 +186,8 @@ dtbox
     .spread ( 'dt', dt => stResult == dt.build()   ) // convert back to ST
     .select () // Start new selection. Will remove previous selection.
     .folder('friends') // select keys that contain 'friends'
-    .spread ( 'dt' => friendList = dt.build() ) //= { friends :[ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ] }
-    .spread ( 'dt' => friendList = dt.assemble().build() ) // = [ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ]
+    .spread ( 'dt', dt => friendList = dt.build() ) //= { friends :[ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ] }
+    .spread ( 'dt', dt => friendList = dt.assemble().build() ) // = [ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ]
     // 'assemble' removes all duplicated elements in the keys and simplifies the result.
     
 ```
