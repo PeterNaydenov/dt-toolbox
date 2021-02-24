@@ -65,8 +65,8 @@ describe ( 'Provide results', () => {
                         name : 'Peter'
                       , arr : [ 1,15 ]
                 };
-      // Data-model 'flat' in spread always mean 'shortFlat'
-      // Real flat data-model is internal only model.
+      // Data-type 'flat' in spread always mean 'shortFlat'
+      // Real flat data-type is internal only data-type.
       const dt = dtbox.init ( test );
       dt
         .select ()

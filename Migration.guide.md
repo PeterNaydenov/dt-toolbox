@@ -35,6 +35,13 @@ dtbox
 
 
 
+### [x] Method 'spread'
+Method 'spread' has a lot of changes. Instruction 'st' now is available as 'standard' or 'std'. Instruction 'dt' doesn't exists anymore. Instruction 'flat' will return selection in 'shortFlat' data-type.
+
+
+
+
+
 ### [x] Data-type 'dt'
 Internal data representation in the library was changed. I have recognized the need of information about data structures and their relations. So data-type `dt` was depricated as main internal representation data-type and we started to use `flat`. If you have build your application around 'dt' data-type, the library will continue to support it (load/spread). Code change required.
 
