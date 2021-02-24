@@ -1,6 +1,6 @@
 # DT Toolbox v.3.x.x
 
-- [Check documentation for v.2.x.x if you need it]( './README_v.2.x.x.md' )
+- [Check documentation for v.2.x.x if you need it](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.2.x.x.md)
 
 Execute operations over deep object structures without worries. Compare, modify, reshape or extract data. Immutability is taken as consideration by this library.
 
@@ -509,9 +509,9 @@ Array of tuples. First element represents location + property name, second is th
 
 ## External Links
 
-- [Migration guide]( 'Migration.guide.md' )
-- [History of changes]( 'Changelog.md' )
-- [Documentation v.2.x.x]( 'README_v.2.x.x.md' )
+- [Migration guide](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Migration.guide.md)
+- [History of changes](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Changelog.md)
+- [Documentation v.2.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.2.x.x.md)
 
 
 
