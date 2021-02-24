@@ -140,8 +140,8 @@ it ( 'Init: Value only, Modify: values', () => {
 
 it ( 'Init: Files', () => {
 	// Create new object from values where we have value with '/' delimiter. Last element of the string will become a value
- 			const result = dtbox.init ( sample.test_9, {type:'file'} );
-            // TODO: Not tested for boolean!
+             const result = dtbox.init ( sample.test_9, {type:'file'} );
+             
  			expect ( result.value ).to.have.property ( 'root/2/name'  )
  			expect ( result.value['root/2/name'] ).to.be.equal ( 'Peter'  )
  			
@@ -471,11 +471,6 @@ it ( 'Modify: Append', () => {
     expect ( val['root/0/items']).to.be.equal (10)    
  }) // it append
 
-
-
-// TODO: I'm not sure about this method... Looks not good enough.
-it ( 'Modify: Insert text')
-it ( 'Modify: Insert in root')
 
 
 

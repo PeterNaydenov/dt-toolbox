@@ -45,7 +45,7 @@ const API = {
 	      , load       : 'Load a flat data-type'
           , loadFast   : 'Important! Method is depricated. Use load instead'
 
-          , preprocess : 'Apply custom modifier to initial data. TODO: Depricate? Just create as another data and modify. Then execute (add, update, overwrite, insert, append, prepend)'
+          , preprocess : 'Apply custom modifier to initial data.
           , add        : 'Add data and keep existing data'
           , update     : 'Updates only existing data fields'
           , overwrite  : 'Add new data to DT object. Overwrite existing fields'

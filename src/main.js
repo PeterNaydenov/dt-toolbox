@@ -17,7 +17,7 @@
      - Works in browsers. December 24th, 2017
      - Refactoring and version 3.0.0   April 14th, 2020 - February 24th, 2020
          * Much faster and memory efficient algorithms;
-         * Multiple convertors for switching among different data-typea;
+         * Multiple convertors for switching among different data-type;
          * Change of internal data-description;
          * Old internal data-type have a new name(breadcrumbs) and is fully supported(import/export);
          * Support for tuples(import and export);
@@ -487,23 +487,16 @@ const mainlib = {
             , { help } = mainlib.dependencies ()
             ;
         let selection, modify, vals;
-            // TODO: refactoring of instructions. Should work as options in init. ( { modify, type} )
             /**
-             *   
-             *   type:
+             *   Instructions:
              *      - standard/std: standard js object;
-             *      - breadcrumb: keys position described as breadcrumb and values are primitives(number,boolean,string);
-             *      - file: Array of combined breadcrumb keys and value in single string;
+             *      - breadcrumb(s): keys position described as breadcrumb and values are primitives(number,boolean,string);
+             *      - file(s): Array of combined breadcrumb keys and value in single string;
              *      - midFlat: Mix. Breadcrumb keys and values are object with primitive properties;
              *      - tuples: Object described as array of arrays with two elements. First is the key, second is the value;
-             *      - flat: Library internal description of the object 
-             *      
-             *   modify:
-             *        keys    - take keys as value. Ignore original values.
-             *        nokeys  - ignore keys. Convert objects to arrays
-             *        values  - use values as keys
-             *        reverse - keys will become values and values - keys
-             *        
+             *      - flat: Library internal description of the object
+             *      - key(s): Array of all keys
+             *      - value(s): Array of all values
              */
   		    switch ( instruction ) {
                 case 'value'   :
@@ -641,7 +634,7 @@ const API = {
 	      , load       : mainlib.load                      // Load a flat data-type
           , loadFast   : mainlib.load                      // Important! Method is depricated. Use load instead
 
-          , preprocess : mainlib.preprocess                // Apply custom modifier to initial data. TODO: Depricate? Just create as another data and modify. Then execute (add, update, overwrite, insert, append, prepend)  
+          , preprocess : mainlib.preprocess                // Apply custom modifier to initial data.
           , add        : mainlib.modify ( 'add'       )    // Add data and keep existing data
           , update     : mainlib.modify ( 'update'    )    // Updates only existing data
           , overwrite  : mainlib.modify ( 'overwrite' )    // Add new data to DT object. Overwrite existing fields

@@ -66,18 +66,34 @@ it ( 'Modifier -> flatten', () => {
 
 
 
+
+
+it ( 'Modifier -> flatten with same props', () => {
+      const test = {
+                          a : 12
+                        , b : { a: 'some', some: 'text' }
+                  };
+
+      dtbox
+        .init ( test )
+        .withData ()
+        .flatten ()
+        .spread ( 'std', x => {
+                        expect ( x.a ).to.be.equal ( '12;some' )
+                        expect ( x.some ).to.be.equal ( 'text' )
+                  })
+}) // it modifer -> flatten with same props
+
+
+
+
+
 it ( 'Modifier -> mix', () => {
         const test = {
-                    x : 'someX'
-                  , person : {
-                              name: 'Peter'
-                        }
-                  , extendedData : {
-                              age : 46
-                        }
-                  , other : {
-                              sport : 'fencing'
-                        }
+                    x            : 'someX'
+                  , person       : { name: 'Peter' }
+                  , extendedData : { age : 46 }
+                  , other        : { sport : 'fencing' }
             };
       dtbox
           .init ( test )
