@@ -1,89 +1,116 @@
 'use strict'
 
 const		 
-		  dtbox  = require ( '../src/dt-toolbox'   )
-		, sample = require ( '../test-data/sample' )
-		, chai   = require ( 'chai'                )
+		  dtbox  = require ( '../src/main'        )
+		, sample = require ( '../test-data/index' )
+        , chai   = require ( 'chai'               )
 		, expect = chai.expect
 		;
 
 
 
-
-
-
 describe ( 'Assemble', () => {
 
-
-it ( 'When optimization is not needed', () => {
-     let result;
-
-     dtbox
- 	      .init ( sample.test_0 )
- 	      .select ()
- 	      .all ()
- 	      .spread ( 'dt', dt => result = dt.assemble().build()   )
-
- 	expect ( result ).has.property ( 'name' )
- 	expect ( result ).has.property ( 'age'  )
- 	expect ( result ).has.property ( 'eyes' )
- 	expect ( result.profile ).has.property ( 'active' )
- 	expect ( result.array ).is.an ( 'array' ) 
- })  // it no optimization
-
-
-
-
-
-it ( 'Assemble empty data', () => {
-	let result;
-	const testData = { a: 12, b:24 };
-	dtbox
-	  .init ( testData )
-	  .spread ( 'dt', x => result = x.assemble() )
-	
-	expect ( result ).to.be.empty
-	expect ( result ).to.be.an ( 'object' )
-}) // it assemble empty data
+it ( 'Result is a single object', () => {
+        const test = {
+                          name : 'Peter'
+                        , arr  : [ 1, 15 ]
+                };
+        dtbox
+            .init ( test )
+            .select ()
+            .find ( 'arr' )
+            .assemble ()
+            .spread ( 'std', x => {
+                        expect ( x ).to.have.length ( 2 )
+                        expect ( x[0]).to.be.equal ( 1 )
+                        expect ( x[1]).to.be.equal ( 15 )
+                })
+    }) // it assemble
 
 
 
 
-it ( 'Single property result', () => {
-     let result;
 
-     dtbox
- 	      .init ( sample.test_0 )
- 	      .select ()
- 	      .folder ( 'profile' )
- 	      .spread ( 'dt', dt => result = dt.assemble().build()   )
+  it ( 'Has multiple objects', () => {
+        let data = {
+                    'school' : [
+                                    { name: 'Ivan',   age: 14 }
+                                  , { name: 'Georgy', age: 15 }
+                                  , { name: 'Adi',    age: 11 }
+                                  , { name: 'Kati',   age: 11 }
+                              ]
+                  , 'sports' : [
+                                    { name: 'Iva',    age: 28 }
+                                  , { name: 'Stoyan', age: 36 }
+                              ]
+                  , 'work'   : [
+                                    { name: 'Hristo',   age: 38 }
+                                  , { name: 'Lachezar', age: 33 }
+                                  , { name: 'Veselina', age: 35 }
+                                  
+                              ]
+                  , 'recent' : {
+                                    'classmates' : [
+                                                        { name: 'Anton',     age: 42 }
+                                                      , { name: 'Miroslava', age: 42 }
+                                                  ]
+                                  , 'social' : [
+                                                      { name: 'Iliana', age: 61 }
+                                                    , { name: 'Tzvetan', age: 19 }
+                                                ]
+                                }
+                };
+      dtbox
+          .init ( data )
+          .select ()
+          .parent ( 'name', person => person.age < 40 )
+          .assemble ()
+          .spread ( 'std', dt => {
+                          expect ( dt.length ).to.be.equal ( 10 )
+                          expect ( dt[0].name ).to.be.equal ( 'Ivan' )
+                          expect ( dt[0].age  ).to.be.equal ( 14 )
+                })
+    }) // it has multiple objects
 
- 	expect ( result ).to.have.property ( 'active' )
- 	expect ( result.active ).to.be.true
-}) // it single result
 
 
 
 
-it ( 'Optimization', () => {
-     let result;
-     
-     dtbox
- 	      .init ( sample.test_7 )
- 	      .select ()
- 	      .folder ('profile')
- 	      .spread ( 'dt', dt => result = dt.assemble()   )
 
- 	  expect ( result ).to.have.property ( 'root/name'     )
- 	  expect ( result ).to.have.property ( 'root/credit'   )
- 	  expect ( result ).to.have.property ( 'root/gender'   )
- 	  expect ( result ).to.have.property ( 'root/comments' )
-}) // it optimization
+  it ( 'Complicated: Array + props', () => {
+            let data = {
+                          pref : 'something'
+                        , 'work'   : [
+                                          { name: 'Hristo',   age: 38 }
+                                        , { name: 'Lachezar', age: 33 }
+                                        , { name: 'Veselina', age: 35 }
+                                        
+                                    ]
+                        , 'recent' : {
+                                          'classmates' : [
+                                                              { name: 'Anton',     age: 42 }
+                                                            , { name: 'Miroslava', age: 42 }
+                                                        ]
+                                        , 'social' : [
+                                                            { name: 'Iliana', age: 61 }
+                                                          , { name: 'Tzvetan', age: 19 }
+                                                      ]
+                                      }
+                      };
+              dtbox
+                  .init ( data )
+                  .select ()
+                  .find ( 'pref' )
+                  .parent ( 'name', person => person.age < 40 )
+                  .assemble ()
+                  .spread ( 'std', dt => {
+                                 expect ( dt ).to.have.property ( 'pref' )
+                                 expect ( dt.length ).to.be.equal ( 4 )
+                                 expect ( dt[0].name ).to.be.equal ( 'Hristo' )
+                                 expect ( dt[0].age ).to.be.equal ( 38 )
+                        })
 
+    }) // it complicated
 
-
-}) // define
-
-
-
-
+}) // describe

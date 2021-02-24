@@ -1,29 +1,16 @@
-# DT Toolbox
+# DT Toolbox v.3.x.x
 
+- [Check documentation for v.2.x.x if you need it]( './README_v.2.x.x.md' )
 
+Execute operations over deep object structures without worries. Compare, modify, reshape or extract data. Immutability is taken as consideration by this library.
 
-Data manipulation tool:
-  - Converts object to flatten version(DT) and reverse(ST);
-  - Modify DT objects: add/update/overwrite;
-  - Compare DT objects: identical/change/same/different/missing;
-  - Select data in DT objects;
+What you can do:
+  - Library knows some data-types and supports conversion among them;
+  - Modify objects: add/update/overwrite/insert/combine/append/prepend;
+  - Compare objects: identical/change/same/different/missing;
+  - Accumulative data selections: find/parent/folder;
   - Accumulative filter selection: limit/keep/remove/deep;
   - Extract and manipulate data chunks;
-  - Converts objects in key-value string;
-  - Replacement for underscore/lodash libraries;
-
-Deliberately designed to work nicely with JSON and simplify data creation, searching and extracting data processes. **Works in node projects and browsers**.
-
-
-
-
-
-## What is DT?
-
-DT format is a flatten version of the standard javascript object. **Keys** are structured like folders - `'root/sub_object/property'`. **Values** are always primitives. In this documentation are mentioned two formats - ST(standard) and DT(data). ST means non-flatten version of the object. Convertion between ST and DT is possible in both direction with one important note: If ST object contains empty structure like `key: []` (*key with empty array value*), then this structure will be lost. **Purpose of DT is to strip all boilerplate structure and keep only that is value related**.
-
-
-
 
 
 ## Installation
@@ -41,86 +28,87 @@ let dtbox = require ( 'dt-toolbox')
 **Installation for browsers**: Grab file 'dist/dt-toolbox.min.js' and put it inside the project. Request the file from HTML page. Global variable 'dtbox' is available for use.
 
 
+            Note:
+            Library is using 'generator functions'. If support for old browsers 
+            is required, add a polyfill for 'generators' or get back to version 2.x.x of 
+            the library.
+
+
 
 ## APIs Reference
-Dtbox contains two different APIs. First is related to the library itself:
 
+Dtbox API methods with a short description:
+```js
+const API = {
+    // DT I/O Operations
+		    init       : 'Convert any object to flat data-type'
+	      , load       : 'Load a flat data-type'
+          , loadFast   : 'Important! Method is depricated. Use load instead'
+
+          , preprocess : 'Apply custom modifier to initial data.
+          , add        : 'Add data and keep existing data'
+          , update     : 'Updates only existing data fields'
+          , overwrite  : 'Add new data to DT object. Overwrite existing fields'
+          , insert     : 'Insert data on specified key, when the key represents an array'
+          , combine    : 'Combine values for simular keys in arrays'
+          , append     : 'Combine values for duplicated keys. main + update'
+          , prepend    : 'Combine values for duplicated keys. update + main'
+          , log        : 'Executes callback with errors list as argument'
+          , empty      : 'Empty object with export methods'
+
+    // Provide Results      
+          , replace    : 'Get this._selection.result as a main data'
+          , attach     : 'Attach this._selection.result to the main data. Set point of connection'
+          , spread     : 'Returns result of selection'
+          , spreadAll  : 'Select all and returns it with one command'
+
+    // Compare Operations
+         , identical  :  'Value compare. Reduce data to identical key/value pairs'
+         , change     :  'Value compare. Reduce to key/value pairs with different values'
+         , same       :  'Key compare. Returns key/value pairs where keys are the same'
+         , different  :  'Key compare. Returns key/value pairs where key does not exist'
+         , missing    :  'Key compare. Returns key/value pairs that are missing'
+    
+    // Selectors
+          , select     : 'Initialize a new selection'
+          , parent     : 'Selector. Apply conditions starting from parent level'
+          , find        : 'Selector. Fullfil select with list of arguments that contain specific string'
+          , all        : "Selector. Same as find ('root')"
+          , folder     : "Selector. Fullfil selection with 'midFlat' object props"
+          , space      : "Selector. Same as 'folder'"
+          , deepObject : "Selector. Fullfil '_select' with deepest object elements"
+          , deepArray  : "Selector. Fullfil '_select' with deepest array elements"
+          , invert     : 'Selector. Invert existing selection'
+          , assemble   : "Converts selection into 'array of objects' or 'single flat object'"
+          , purify     : 'Removes all empty structures ( no props ) from the selection'
+
+    // Filters      
+          , limit      : 'Filter.   Reduces amount of records in the selection'
+          , keep       : 'Filter.   Keeps records in selection if check function returns true'
+          , remove     : 'Filter.   Removes records from selection if check function returns true'
+          , deep       : "Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members"
+
+    // Modifiers
+          , withData      : 'Generate "this._select.result" from the official data. Modifier will work with this data'
+          , withSelection : 'Generate "this._select.result" content. Modifier will work with this data'
+          , flatten        : 'Mix existing objects in a single object'
+          , mix           : 'Mix objects in order. Start with a host and provide guests list []'
+          , keyPrefix      : 'Modify key as object name+key. Separator-symbol default: emptySpace. It can be modified'
+          , reverse       : 'Change place of keys and values'
+}; // API   
 ```
-API = {
- // * DT I/O Operations
-     init       : 'Start chain with data or empty'
-   , load       : 'Load DT object or value'
-   , preprocess : 'Convert ST to DT object. Change income data before add, update, overwrite'
-   , add        : 'Add data and keep existing data'
-   , update     : 'Updates only existing data'
-   , overwrite  : 'Add new data to DT object. Overwrite existing fields'
-   , insert     : 'Insert data on specified key, when the key represents an array'
-   , spread     : 'Export DT object'
-   , spreadAll  : 'Shortcut for chain: .select().all().spread()'
-   , log        : 'Executes callback with errors list as argument'
-   , empty      : 'Returns empty DT object'
 
-// Compare Operations
-   , identical  :  'Value compare. Reduce data to identical key/value pairs'
-   , change     :  'Value compare. Reduce to key/value pairs with different values'
-   , same       :  'Key compare. Returns key/value pairs where keys are the same'
-   , different  :  'Key compare. Reduce data to key/value pairs that differ'
-   , missing    :  'Key compare. Gets from DT key/value pairs that are missing'
-       
- // * Selectors and Filters
-   , select     : 'Init new selection'
-   , parent     : 'Selector. Apply conditions starting from parent level'
-   , folder     : 'Selector. Fullfil select with list of arguments that have specific string'
-   , all        : 'Selector. Same as folder'
-   , space      : 'Selector. Fullfil select with namespace members'
-   , deepArray  : 'Selector. Fullfil '_select' with deepest array elements'
-   , deepObject : 'Selector. Fullfil '_select' with deepest object elements'
-   , invert     : 'Selector. Invert existing selection'
-   , limit      : 'Filter.   Reduces amount of records in the selection'
-   , keep       : 'Filter.   Keeps records in selection if check function returns true'
-   , remove     : 'Filter.   Removes records from selection if check function returns true'
-   , deep       : 'Filter.   Arguments ( num, direction - optional). Num mean level of deep. Deep '0' mean root members'
-}
 
-```
-
-Second set of functions are available for DT object in a callback of 'spread' and 'preprocess' functions. More details can be found later in the example section.
-
-```
-
-exportAPI = {
-  // * Structure Manipulation 
-     assemble     : 'Remove all duplications in the keys and shrinks th possible'
-   , ignoreKeys   : 'Converts object with nosense keys in array'
-   , cut          : 'Cut out number of key elements'
-   , keyList      : 'Returns array of DT object keys'
-   , valueList    : 'Returns array of DT object values'
-   , list         : 'Returns array of items'
-   , map          : 'Standard map function'
-   , json         : 'Return JSON format of DT object'
-   , file         : 'Returns file format array'
-   , keyValue     : 'Returns key-value string'
-   , build        : 'Build ST object'
-
-  // * Data Manipulation 
-   , modifyKeys   : 'Add modified keys back to DT object'
-   , keepKeys     : 'Apply test on array of keys. Keep met the criteria'
-   , removeKeys   : 'Apply test on array of keys. Remove met the criteria'
-   , keepValues   : 'Apply test on values. Keep met the criteria'
-   , removeValues : 'Apply test on values. Remove met the criteria'
-}
-
-```
 
 
 
 # How it works?
 
-1. First: Create data inside DT toolbox. Load already existing DT or init with some ST object. Mix if you need with other objects by using 'add/update/overwrite'. Use 'preprocess' to adapt data package before assimilate it.
+1. First: Insert data in dt-toolbox. Use `load` for `flat` data-type or `init` for other data-types. Mix with other objects by using 'add/update/overwrite/combine' if you need. Use 'preprocess' to change data-type before assimilate it.
 
-2. Select! Without selection, DT Toolbox will always return empty object. Selectors will search in dt.value and result will be accumulated. Filters will be applied to already selected data.
+2. Select! Without selection, dt-toolbox will return an empty object. Selection respresents the information that should be extracted from the data. Result of selectors is accumulative. Filters will be applied to already selected data.
 
-3. Spread the data.
+3. Spread the result. Create new data structure according selection and provide it in required data-type.
 
 DT Toolbox supports chaining syntax and is that simple. Let's see some examples...
 
@@ -135,8 +123,9 @@ DT Toolbox supports chaining syntax and is that simple. Let's see some examples.
 
 ## Examples
 
+Here are some use cases, but if you're interested, test-cases are on your disposal. 
 ### Basics
-Let's have a ST object:
+Let's have a standard JS object:
 
 ```js
 let st = {
@@ -148,26 +137,47 @@ let st = {
          }
 
 ```
-Same object in DT will look like:
+Put the **st** data into dt-toolbox:
 
 ```js
-{
-    'root/name/firstName' : 'Peter'
-  , 'root/name/surname'   : 'Naydenov'
-  , 'root/friends/0'      : 'Tisho'
-  , 'root/friends/1'      : 'Dibo'
-  , 'root/friends/2'      : 'Ivo'
-  , 'root/friends/3'      : 'Vasil'
+let dt = dtbox.init ( standard )
+```
+
+Internal representation of data is based on `flat` data-type. Type `flat` has two elements: value and structure.
+**Value** represents primitive values and their location. **Structure** represents existing flat objects and their relations.
+Our standard object inside the library will look like:
+
+```js
+dt.structure = [
+              //   type      i   object descriptors [i, name]
+              [ 'object',    0,  [1, name], [2, friends]   ]  // Root object and relation with other objects
+            , [ 'object',    1   ]   // st.name object. Object has only primitive values.
+            , [ 'array' ,    2   ]   // st.friends array. Array has only primitive values.
+        ]
+
+dt.value = {    // Represents a primitive props and their location
+              'root/1/firstName'  : 'Peter'
+            , 'root/1/surname'   : 'Naydenov'
+            , 'root/2/0'         : 'Tisho'
+            , 'root/2/1'         : 'Dibo'
+            , 'root/2/2'         : 'Ivo'
+            , 'root/2/3'         : 'Vasil'
+        }
 }
 ```
 
-Convert any standard javascript object to DT using dt-toolbox:
+::: warning
+Internal representation is '*LIKE*' flat data-type but not the data-type itself. Type `flat` is array with two elements: structure and value `[structure, value]`. Internal representation has these two elements but they are like props. `dt = { structure, value }`.
+:::
 
+
+
+Extract a flat information:
 ```js
-let dt = dtbox.init ( standard ).value
+ dt.spreadAll ( 'flat', res => { 
+                        // Data-type 'Flat': An array with 2 entries: [structure, value] 
+                })
 ```
-
-
 
 
 
@@ -184,12 +194,13 @@ dtbox
     .init(st) // Init data. Converts ST to DT
     .select() // Starting new selection
     .all()    // Select all data
-    .spread ( 'dt', dt => dtResult = dt            ) // returns DT object
-    .spread ( 'dt', dt => stResult == dt.build()   ) // convert back to ST
+    .spread ( 'flat', dt => dtResult = dt   ) // Returns as `flat` data-type
+    .spread ( 'std', dt => stResult = dt   ) // Convert back to original 'st' object
     .select () // Start new selection. Will remove previous selection.
-    .folder('friends') // select keys that contain 'friends'
-    .spread ( 'dt' => friendList = dt.build() ) //= { friends :[ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ] }
-    .spread ( 'dt' => friendList = dt.assemble().build() ) // = [ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ]
+    .find ( 'friends' ) // select keys that contain 'friends'
+    .spread ( 'std', dt => friendList = dt ) //= { friends :[ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ] }
+    .assemble ()
+    .spread ( 'std' => friendList = dt ) // = [ 'Tisho', 'Dibo', 'Ivo', 'Vasil' ]
     // 'assemble' removes all duplicated elements in the keys and simplifies the result.
     
 ```
@@ -197,8 +208,10 @@ dtbox
 ### Convert ST to DT objects
 
 ```js
-let dt = dtbox.init(st).value;
-
+let result; 
+dtbox
+  .init(st)
+  .spreadAll ( 'flat', dt => result = dt );
 ```
 
 ### Mixing objects - Add/Update/Overwrite
@@ -221,23 +234,23 @@ dtbox
    .add  ({
                 age : 25         // 'add' will ignore this. Age is already defined.
               , gender : 'male'  // Will add this.
-          })
+          }, { type: 'std'})
    .update ({
                age  : 50         // Will update
                eyes : 'blue'     // Will ignore this.
-          })
+          }, { type: 'std'})
   .overwrite ({
                 age   : 43         // Will update
               , hobby : 'skating'  // Will add
-          })
+          }, { type: 'std'})
 
-  // DT object (dtbox.value) will look like:
+  // The object (dtbox.value) will look like:
   /*
     {
-        'root/name'   : 'Peter'
-      , 'root/age'    : 43
-      , 'root/gender' : 'male'
-      , 'root/hobby'  : 'skating'
+        'root/0/name'   : 'Peter'
+      , 'root/0/age'    : 43
+      , 'root/0/gender' : 'male'
+      , 'root/0/hobby'  : 'skating'
     }
 
   /*
@@ -285,7 +298,8 @@ dtbox
    .init ( data )
    .select ()
    .parent ( 'name', person => person.age < 40 )
-   .spread ( 'dt' , dt => result = dt.assemble().ignoreKeys().build()   )
+   .assemble ()
+   .spread ( 'std' , dt => result = dt   )
 
 /*
    result will look like this:
@@ -308,225 +322,202 @@ dtbox
 
 
 
-
-
-
-
-
-## More 
-Find more examples in `./test` folder. Almost 90 unit tests are on your disposal. Find what is possible start experimenting with the library. 
-
-Let me know what you think by using twitter tag #dttoolbox.
-
-
-
-
-
-
-
-
-
-
-## Tips
-
-- DT format not depends on DT Toolbox. Use toolbox when language cannot provide better tools;
-- Iteration on data with DT Toolbox could bring performance issues(anti-pattern). Iterate over data first and then use DT Toolbox;
-- Working with flat objects (DT) could be relieving experience with extras - performance and readability gain;
-
-
-
-
-
-
-
-
-
-
-## Known bugs
-_(Nothing yet)_
-
-
-
-
-
-## Roadmap
-- Upgrade error handling. Add proper error messages;
-- Create API methods documentation;
-
-
-
-
-
-
-
-
-
-
-## Release History
-
-
-
-### 2.1.2 (2019-09-12)
-- [x] Fix: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
-- [x] Browser version was updated;
-
-
-
-
-
-### 2.1.1 (2019-06-06)
-- [x] Fix: Build a ST object with repeating structure;
-- [x] Browser version was updated;
-- [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
-
-
-
-
-
-### 2.1.0 (2019-06-02)
-- [x] Modify methods ( add/update/overwrite ) can receive DT data format;
-- [x] Browser version was updated;
-- [ ] Bug: Build a ST object with repeating structure;
-- [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
-
-
-
-
-
-### 2.0.2 (2019-05-30)
-- [x] Fix: ST Build regression with boolean values;
-- [x] Browser version was updated;
-- [ ] Bug: Build a ST object with repeating structure;
-- [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11";
-
-
-
-
-### 2.0.1 (2019-05-30)
-- [x] Fix: ST Build (lib._build) was refactored;
-- [x] Improvment: Method 'lib._toFolderFiles' has array of counters in sync with duplications;
-- [x] Browser version was updated;
-- [ ] Bug: ST Build regression with boolean values;
-- [ ] Bug: Build a ST object with repeating structure;
-- [ ] Bug: Similar namespaces bug - Overwrite of object properties values. Ex: "s1" and "s11".;
-
-
-
-
-
-### 2.0.0 (2017-12-28)
-- [x] Breaking change: Method ‘modifyKeys’ argument should be a function;
-- [x] Test cases updates;
-- [x] Browser version was updated;
-- [ ] Problems with building heavy ST structures;
-- [ ] Build a wrong ST object when similar namespaces are available. Example: "sample1" and "sample11";
-
-
-
-### 1.8.0 (2017-12-28)
-- [x] Method 'remove' has new argument-key. Evaluate the key name;
-- [x] Method 'keep' has new argument-key. Evaluate the key name;
-- [x] Test coverage - 100%;
-
-
-
-### 1.7.0 (2017-12-24)
-- [x] Browser version is available;
-- [x] Dependencies updates ( Mocha, chai );
-- [x] Istambul coverage tool was added;
-- [x] Some minor project structure changes;
-- [x] Unit tests updates for Mocha v.4;
-
-
-
-### 1.6.0 (2017-04-22)
-- [x] ExportAPI method `keyValue` returns a key-value string;
-
-
-
-### 1.5.0 (2017-04-17)
-- [x] ExportAPI method 'cut' will cut out number of key elements;
-- [x] ExportAPI method 'file' will convert dt data to file format;
-- [x] Fix: ExportAPI method 'map' could break the app if callback function does not return a string;
-
-
-
-### 1.4.0 (2017-03-28)
-- [x] Fix: Very large files can cause 'stack overflow';
-- [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
-
-
-### 1.3.0 (2017-02-19)
-- [x] API method 'invert' - selector. Invert existing selection;
-- [ ] Warning: Very large files can cause 'stack overflow';
-- [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
-
-
-
-### 1.2.0 (2017-02-16)
-- [x] ExportAPI method 'list'. Returns findings in an array.
-- [x] API method 'deepArray'  - selector
-- [x] API method 'deepObject' - selector
-- [x] API method 'loadFast' - load DT data without meta information calculation. 
-- [x] ExportLib method `map` is 'root/' aware. 
-- [ ] Warning: Very large files can cause 'stack overflow';
-- [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
-
-
-
-
-### 1.1.2 (2017-02-05)
-
- - [x] Fix: ExportAPI method `map` has `index` argument;
- - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
- - [ ] Warning: Very large files can cause 'stack overflow';
- - [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
-
-
-
-
-### 1.1.1 (2017-02-04)
-
- - [x] Fix: Method `empty` now works as it was intended;
- - [x] Method `spreadAll` was added and could be used instead the chain: .select().all().spread()
- - [ ] ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
- - [ ] Error: ExportAPI method `map` has no `index` argument;
- - [ ] Warning: Very large files can cause 'stack overflow';
- - [ ] Warning: ExportAPI method 'map' could break the app if callback function does not return a string;
-
-
-
-
-### 1.1.0
-
- - [x] Method `empty` returns empty DT object;
- - [x] Compare method were added: `identical`, `change`, `same`, `different`, `missing`
- - [ ] Error: Method `empty` is actually an object;
- - [ ] Error: ExportAPI method `map` has no `index` argument;
- - [ ] Warning: Very large files can cause 'stack overflow';
- - [ ] Warning: ExportAPI method `map` is not aware of 'root/'. Add 'root/' explicitly;
- - [ ] Warning: ExportAPI method `map` could break the app if callback function does not return a string;
-
-
-
-
-### 1.0.2 (2017-01-14)
- - [x] Bug fix - init with files;
-
-
-
-### 1.0.0 (2017-01-14)
- 
- - [x] Initial code;
- - [x] Test package;
- - [x] Documentation;
-
+### Purify
+
+Cleaning empty structures till version 3 of the library was without alternative. Keep empty structures was recognized as a need and it's now a default behaviour. Remove empty structures by using 'purify' function as in this example:
+
+```js
+const test = {
+                          name : 'Peter'
+                        , arr  : [ 1, 15 ]
+                        , de   : { me: ['eho', 'ha'] }
+                        , se   : { le: {} }
+                        , ze   : []
+                };
+    dtbox
+        .init ( test )
+        .select ()
+        .all ()
+        .purify ()
+        .spread ( 'std', x => {
+                            /** Result after purify will be:
+                             *   x = {
+                             *             name: Peter
+                             *           , arr  : [1,15]
+                             *           , de : { me: ['eho','ha']}
+                             *       }
+                            */
+                    })
+    }) // it purify
+```
+
+
+## Data-types
+
+The library can spread data-selection as different data-types. Let's see how initial data will be interpreted in available data-types. Here is our initial `standard`(std) data:
+```js
+const data = {
+                      name: 'Peter'
+                    , familyMembers : [ 'Veselina', 'Iskra', 'Maria', 'Vasil', 'Vladimir', 'Petya' ]
+                    , shoes : {
+                                      winter : [ 'Keen', 'Head']
+                                    , summer : [ 'Lotto', 'Asics' ]
+                            }
+            }
+```
+
+### Standard ( std )
+Standard data-type will look exactly as initial data.
+```js
+{
+      name: 'Peter'
+    , familyMembers : [ 'Veselina', 'Iskra', 'Maria', 'Vasil', 'Vladimir', 'Petya' ]
+    , shoes : {
+                  winter : [ 'Keen', 'Head']
+                , summer : [ 'Lotto', 'Asics' ]
+            }
+}
+```
+
+
+### Flat ( shortFlat )
+It's a flat description of the object. It's an array with two elements. First element describes the structure of the object, second element - the values.
+**Structure**: Array of flatDescriptions. FlatDescription is array where first element is the type of the object (object or array), second is the index. If there are  more then 2 elements, we have connection descriptions. ConnectionDescription is array of 2 elements. First is the index of connected other object, second is the property name of the connection. 
+ In our example: We have object, that have property `familyMembers` that is array and other property `shoes` that is an object. Object `shoes` have 2 properties (winter,summer) that are arrays.
+ **Value**: Key describes the position of the property that have a primitive value. Value is just that primitive value. Key always have 3 elements separated by '/'. First element is always `root`, second is the `id` of the object (from structure description), third is the name of the property. If structure object is 'array' then property name will be a number representing the position into the array.
+```js
+[
+        // the structure description
+    [
+              [ 'object', 0, [1,'familyMembers'], [2,'shoes'] ]
+            , [ 'array' , 1 ]
+            , [ 'object', 2 , [3, 'winter'], [4, 'summer'] ]
+            , [ 'array' , 3 ]
+            , [ 'array' , 4 ]
+        ]
+        // the value description
+    , {
+              'root/0/name' : 'Peter'
+            , 'root/1/0'   : 'Veselina'
+            , 'root/1/0'   : 'Veselina'
+            , 'root/1/1'   : 'Iskra'
+            , 'root/1/2'   : 'Maria'
+            , 'root/1/3'   : 'Vasil'
+            , 'root/1/4'   : 'Vladimir'
+            , 'root/1/5'   : 'Petya'
+            , 'root/3/0'   : 'Keen'
+            , 'root/3/1'   : 'Head'
+            , 'root/4/0'   : 'Lotto'
+            , 'root/4/1'   : 'Asics'
+        }
+]
+```
+
+
+### MidFlat
+Object where keys represents "location" of the flat object. Value is always an object. Props are names. If data-structure is array, props are numbers:
+
+```js
+{
+      'root' : { name: 'Peter' }
+    , 'root/familyMembers' : { 
+                                  '0' : 'Veselina'
+                                , '1' : 'Iskra'
+                                , '2' : 'Maria'
+                                , '3' : 'Vasil'
+                                , '4' : 'Vladimir'
+                                , '5' : 'Petya' 
+                        }
+    , 'root/shoes/winter' : {
+                                      '0' : 'Keen'
+                                    , '1' : 'Head'
+                                }
+    , 'root/shoes/summer' : {
+                                    '0' : 'Lotto'
+                                    '1' : 'Asics'
+                                }
+}
+```
+
+
+
+
+
+### Breadcrumbs
+
+It's a flat interpratation of the data and looks like this:
+```js
+{
+      'root/name'            : 'Peter'
+    , 'root/familiMembers/0' : 'Veselina'
+    , 'root/familyMembers/1'  : 'Iskra'
+    , 'root/familyMembers/2'  : 'Maria'
+    , 'root/familyMembers/3'  : 'Vasil'
+    , 'root/familyMembers/4'  : 'Vladimir'
+    , 'root/familyMembers/5'  : 'Petya'
+    , 'root/shoes/winter/0'   : 'Keen'
+    , 'root/shoes/winter/1'   : 'Head'
+    , 'root/shoes/summer/0'   : 'Lotto'
+    , 'root/shoes/summer/1'   : 'Asics'
+}
+```
+
+
+### Files
+Data is interpreted like file/folder description.
+```js
+[
+      'root/name/Peter'
+    , 'root/familiMembers/Veselina'
+    , 'root/familyMembers/Iskra'
+    , 'root/familyMembers/Maria'
+    , 'root/familyMembers/Vasil'
+    , 'root/familyMembers/Vladimir'
+    , 'root/familyMembers/Petya'
+    , 'root/shoes/winter/Keen'
+    , 'root/shoes/winter/Head'
+    , 'root/shoes/summer/Lotto'
+    , 'root/shoes/summer/Asics'
+]
+```
+
+
+
+### Tuples
+
+Array of tuples. First element represents location + property name, second is the value.
+
+```js
+[
+      ['name', 'Peter' ]
+    , ['familiMembers', 'Veselina']
+    , ['familyMembers', 'Iskra']
+    , ['familyMembers', 'Maria']
+    , ['familyMembers', 'Vasil']
+    , ['familyMembers', 'Vladimir']
+    , ['familyMembers', 'Petya']
+    , ['shoes/winter' , 'Keen']
+    , ['shoes/winter' , 'Head']
+    , ['shoes/summer' , 'Lotto']
+    , ['shoes/summer' , 'Asics']
+]
+```
+
+
+
+
+
+## External Links
+
+- [Migration guide]( './Migration.guide.md' )
+- [History of changes]( './Changelog.md' )
+- [Documentation v.2.x.x]( './README_v.2.x.x.md' )
 
 
 
 
 ## Credits
-'dt-toolbox' was created by Peter Naydenov.
+'dt-toolbox' was created and supported by Peter Naydenov.
 
 
 
@@ -534,7 +525,5 @@ _(Nothing yet)_
 
 ## License
 'dt-toolbox' is released under the [MIT License](http://opensource.org/licenses/MIT).
-
-
 
 
