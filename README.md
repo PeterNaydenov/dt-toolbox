@@ -5,7 +5,7 @@
 Execute operations over deep object structures without worries. Compare, modify, reshape or extract data. Immutability is taken as consideration by this library.
 
 What you can do:
-  - Library knows some data-models and supports conversion among them;
+  - Library knows some data-types and supports conversion among them;
   - Modify objects: add/update/overwrite/insert/combine/append/prepend;
   - Compare objects: identical/change/same/different/missing;
   - Accumulative data selections: find/parent/folder;
@@ -29,8 +29,8 @@ let dtbox = require ( 'dt-toolbox')
 
 
             Note:
-            Library is using 'generator functions' and if support for very old browsers 
-            is required, add a 'generators' polyfill or get back to version 2.x.x of 
+            Library is using 'generator functions'. If support for old browsers 
+            is required, add a polyfill for 'generators' or get back to version 2.x.x of 
             the library.
 
 
@@ -41,8 +41,8 @@ Dtbox API methods with a short description:
 ```js
 const API = {
     // DT I/O Operations
-		    init       : 'Convert any object to flat data-model'
-	      , load       : 'Load a flat data-model'
+		    init       : 'Convert any object to flat data-type'
+	      , load       : 'Load a flat data-type'
           , loadFast   : 'Important! Method is depricated. Use load instead'
 
           , preprocess : 'Apply custom modifier to initial data. TODO: Depricate? Just create as another data and modify. Then execute (add, update, overwrite, insert, append, prepend)'
@@ -104,11 +104,11 @@ const API = {
 
 # How it works?
 
-1. First: Insert data in dt-toolbox. Use `load` for `flat` models or `init` for other models. Mix with other objects by using 'add/update/overwrite' if you need. Use 'preprocess' to change data-model before assimilate it.
+1. First: Insert data in dt-toolbox. Use `load` for `flat` data-type or `init` for other data-types. Mix with other objects by using 'add/update/overwrite/combine' if you need. Use 'preprocess' to change data-type before assimilate it.
 
 2. Select! Without selection, dt-toolbox will return an empty object. Selection respresents the information that should be extracted from the data. Result of selectors is accumulative. Filters will be applied to already selected data.
 
-3. Spread the result. Create new data structure according selection and provide it in required data-model.
+3. Spread the result. Create new data structure according selection and provide it in required data-type.
 
 DT Toolbox supports chaining syntax and is that simple. Let's see some examples...
 
@@ -123,6 +123,7 @@ DT Toolbox supports chaining syntax and is that simple. Let's see some examples.
 
 ## Examples
 
+Here are some use cases, but if you're interested, test-cases are on your disposal. 
 ### Basics
 Let's have a standard JS object:
 
@@ -166,7 +167,7 @@ dt.value = {    // Represents a primitive props and their location
 ```
 
 ::: warning
-Internal representation is '*LIKE*' flat model but not the model itself. Model `flat` is array with two elements: structure and value `[structure, value]`. Internal representation has these two elements but they are like props. `dt = { structure, value }`.
+Internal representation is '*LIKE*' flat model but not the data-type itself. Model `flat` is array with two elements: structure and value `[structure, value]`. Internal representation has these two elements but they are like props. `dt = { structure, value }`.
 :::
 
 
@@ -193,7 +194,7 @@ dtbox
     .init(st) // Init data. Converts ST to DT
     .select() // Starting new selection
     .all()    // Select all data
-    .spread ( 'flat', dt => dtResult = dt   ) // Returns as `flat` model
+    .spread ( 'flat', dt => dtResult = dt   ) // Returns as `flat` data-type
     .spread ( 'std', dt => stResult = dt   ) // Convert back to original 'st' object
     .select () // Start new selection. Will remove previous selection.
     .find ( 'friends' ) // select keys that contain 'friends'
@@ -351,9 +352,9 @@ const test = {
 ```
 
 
-## Models
+## Data-types
 
-The library can spread data-selection as different data-models. Let's see how initial data will be interpreted in available models. Here is our initial `standard`(std) data:
+The library can spread data-selection as different data-types. Let's see how initial data will be interpreted in available data-types. Here is our initial `standard`(std) data:
 ```js
 const data = {
                       name: 'Peter'
@@ -366,7 +367,7 @@ const data = {
 ```
 
 ### Standard ( std )
-Standard format will look exactly as initial data.
+Standard data-type will look exactly as initial data.
 ```js
 {
       name: 'Peter'
@@ -380,7 +381,7 @@ Standard format will look exactly as initial data.
 
 
 ### Flat ( shortFlat )
-It's a flat description of the object. It's an array with two elements. First element describes the structure of the object, second element - the value.
+It's a flat description of the object. It's an array with two elements. First element describes the structure of the object, second element - the values.
 **Structure**: Array of flatDescriptions. FlatDescription is array where first element is the type of the object (object or array), second is the index. If there are  more then 2 elements, we have connection descriptions. ConnectionDescription is array of 2 elements. First is the index of connected other object, second is the property name of the connection. 
  In our example: We have object, that have property `familyMembers` that is array and other property `shoes` that is an object. Object `shoes` have 2 properties (winter,summer) that are arrays.
  **Value**: Key describes the position of the property that have a primitive value. Value is just that primitive value. Key always have 3 elements separated by '/'. First element is always `root`, second is the `id` of the object (from structure description), third is the name of the property. If structure object is 'array' then property name will be a number representing the position into the array.
@@ -414,7 +415,7 @@ It's a flat description of the object. It's an array with two elements. First el
 
 
 ### MidFlat
-Object where keys represents location of the flat data structure. Value is always an object. Props are names. If data-structure is array, props are numbers:
+Object where keys represents "location" of the flat object. Value is always an object. Props are names. If data-structure is array, props are numbers:
 
 ```js
 {
@@ -509,7 +510,7 @@ Array of tuples. First element represents location + property name, second is th
 ## External Links
 
 - [Migration guide]( './Migration.guide.md' )
-- [History of changes]( './changelog.md' )
+- [History of changes]( './Changelog.md' )
 - [Documentation v.2.x.x]( './README_v.2.x.x.md' )
 
 

@@ -15,12 +15,11 @@
      - Invert selection method was added. February 19th, 2017
      - String format support introduces. April 22th, 2017
      - Works in browsers. December 24th, 2017
-     - Refactoring and version 3.0.0   April 14th, 2020 - December 23th, 2020
+     - Refactoring and version 3.0.0   April 14th, 2020 - February 24th, 2020
          * Much faster and memory efficient algorithms;
-         * Smaller library size;
-         * Multiple convertors for switching among different data-models;
+         * Multiple convertors for switching among different data-typea;
          * Change of internal data-description;
-         * Old internal data type have new name(breadcrumbData) and is fully supported(import/export);
+         * Old internal data-type have a new name(breadcrumbs) and is fully supported(import/export);
          * Support for tuples(import and export);
          * Complete code refactoring;
 */
@@ -73,13 +72,13 @@ const mainlib = {
 
 /**
  *  Init options:
- *  modifier(mod): 
+ *  modifier(modify): 
  *          keys    - take keys as value. Ignore original values.
  *          nokeys  - ignore keys. Convert objects to arrays
  *          values  - use values as keys
  *        reverse   - keys will become values and values - keys
  * 
- *  data-models(type): 
+ *  data-type(model): 
  *      std         - standard js object
  *      breadcrumb  - key as a folder. Separate value
  *      file         - keys and values in a single string 
