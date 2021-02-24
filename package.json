@@ -1,6 +1,6 @@
 {
   "name": "dt-toolbox",
-  "version": "2.1.2",
+  "version": "3.0.0",
   "description": "Data manipulation tool",
   "main": "src/dt-toolbox.js",
   "scripts": {
@@ -11,7 +11,6 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
