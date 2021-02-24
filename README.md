@@ -509,9 +509,9 @@ Array of tuples. First element represents location + property name, second is th
 
 ## External Links
 
-- [Migration guide]( './Migration.guide.md' )
-- [History of changes]( './Changelog.md' )
-- [Documentation v.2.x.x]( './README_v.2.x.x.md' )
+- [Migration guide]( 'Migration.guide.md' )
+- [History of changes]( 'Changelog.md' )
+- [Documentation v.2.x.x]( 'README_v.2.x.x.md' )
 
 
 
