@@ -1,28 +1,28 @@
 'use strict';
 
-const 
-      webpack = require ( 'webpack' )
-    , uglifyOptions = {
-                          minimize : true
-                        , mangle   : true
-                    }
-    ;
+const webpack = require ( 'webpack' );
 
 module.exports = {
-      entry: "./src/dt-toolbox.js"
+      entry: "./src/main.js"
+    , mode: 'production'
     , output: {
               filename: "dt-toolbox.min.js"
             , path: __dirname + "/dist"
             , library: 'dtbox'
-            , libraryTarget: "umd"
+            , libraryTarget: "var"
             , umdNamedDefine : true
        }
+    , optimization: {}
     , module: {
-          loaders: [
-              {test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, query: { presets: ['env'] }   }
-          ]
-        }
-    , plugins: [
-                    new webpack.optimize.UglifyJsPlugin ( uglifyOptions )
+          rules: [
+                  {
+                        test: /\.js$/
+                      , exclude: /node_modules/
+                      , use : { 
+                            loader: 'babel-loader'
+                          , options : { presets: ['@babel/preset-env']}
+                        }
+                    }
                 ]
+        }
 }
