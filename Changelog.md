@@ -2,7 +2,7 @@
 
 
 
-### 3.0.0 ( 2021-02-23 )
+### 3.0.0 ( 2021-02-25 )
 - [x] Complete rewrite of the library;
 - [x] Dt-toolbox is using . Consider this for support of old browsers;
 - [x] Export API was removed. Methods were moved to main API or removed;
@@ -17,7 +17,7 @@
 - [x] New method 'keyPrefix' was added;
 - [x] New method 'replace' was added;
 - [x] New method 'combine' was added;
-- [] All methods expect data as 'flat'. Other models should be converted or provide a option/model param;
+- [x] All methods expect data as 'flat'. Other models should be converted or provide an option/model param;
 
 
 
