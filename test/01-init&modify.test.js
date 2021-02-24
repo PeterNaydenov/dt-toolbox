@@ -95,12 +95,12 @@ it ( 'Init: Values only', () => {
 
 
 
-it ( 'Init: Values only, Model: std', () => {
+it ( 'Init: Values only, Type: std', () => {
     let result = dtbox.init ({
                                   user : 'Peter'
                                 , age  : 42
                                 , role : 'admin'
-                              },{ model:'std', modify:'values' });
+                              },{ type:'std', modify:'values' });
 
     // root should be auto append
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
@@ -117,7 +117,7 @@ it ( 'Init: Values only, Model: std', () => {
 
 
 it ( 'Init: Value only, Modify: values', () => {
-            const result = dtbox.init ( sample.test_9, {modify:'values', model:'file'} );
+            const result = dtbox.init ( sample.test_9, {modify:'values', type:'file'} );
             const 
                   structure = result.structure
                 , valList = Object.keys ( result.value )
@@ -140,7 +140,7 @@ it ( 'Init: Value only, Modify: values', () => {
 
 it ( 'Init: Files', () => {
 	// Create new object from values where we have value with '/' delimiter. Last element of the string will become a value
- 			const result = dtbox.init ( sample.test_9, {model:'file'} );
+ 			const result = dtbox.init ( sample.test_9, {type:'file'} );
             // TODO: Not tested for boolean!
  			expect ( result.value ).to.have.property ( 'root/2/name'  )
  			expect ( result.value['root/2/name'] ).to.be.equal ( 'Peter'  )
@@ -161,7 +161,7 @@ it ( 'Init: Files. Array in object', () => {
                     , 'root/friends/Georgy'
                 ]
         dtbox
-            .init ( data, {model:'file'} )
+            .init ( data, {type:'file'} )
             .select ()
             .all ()
             .spread ( 'flat', x => {
@@ -182,7 +182,7 @@ it ( 'Init: Handmade files-like structure', () => {
                         , 'd/e/www'
                       ]
         
-        result =  dtbox.init ( data, { model:'file'} )
+        result =  dtbox.init ( data, { type:'file'} )
 
         expect ( result.value ).to.contain.property ( 'root/1/0' )
         expect ( result.value ).to.contain.property ( 'root/1/1' )
@@ -292,7 +292,7 @@ it ( 'Modify: Add a shortFlat object', () => {
                   start = dtbox.init ({ name:'Peter', age: 45 })
                 , result = dtbox
                                         .init ()
-                                        .add ( [start.structure, start.value], { model:'shortFlat' } )
+                                        .add ( [start.structure, start.value], { type:'shortFlat' } )
                 ;
     expect ( result.value.hi()  ).to.be.equal ( 'hi' )
     expect ( result.value ).to.have.property ( 'root/0/age' )
@@ -394,8 +394,8 @@ it ( 'Modify: Insert', () => {
     // * Insert data on specified key, when the key represents an array.	
 	const result = dtbox
 	                 .init ()
-	                 .add ( sample.test_10, { model:'file'})
-	                 .insert ( ['root/friends/Misho', 'root/friends/Tosho' ] , {model: 'file'} )
+	                 .add ( sample.test_10, { type:'file'})
+	                 .insert ( ['root/friends/Misho', 'root/friends/Tosho' ] , {type: 'file'} )
 
     expect ( result.value.hi()           ).to.be.equal ( 'hi' )
 	expect ( result.value ).to.have.property ( 'root/1/3' )
@@ -418,9 +418,9 @@ it ( 'Modify: Combine', () => {
        ;
     dtbox
         .init ( a )
-        .combine ( b, {model:'std'})
-        .combine ( c, {model:'std'})
-        .combine ( d, {model:'std'})
+        .combine ( b, {type:'std'})
+        .combine ( c, {type:'std'})
+        .combine ( d, {type:'std'})
         .spreadAll ( 'std', x => {
                             expect ( x ).to.have.property ( 'link' )
                             expect ( x['link'] instanceof Array )
@@ -444,7 +444,7 @@ it ( 'Modify: Prepend', () => {
         ;
     const 
           result = dtbox.init ( a )
-                        .prepend ( b, {model:'std'}   )
+                        .prepend ( b, {type:'std'}   )
         , val = result.value
         ;
     expect ( val ).to.have.property ( 'root/0/name' )
@@ -462,7 +462,7 @@ it ( 'Modify: Append', () => {
         ;
     const 
           result = dtbox.init ( a )
-                  .append ( b, {model:'std'}   )
+                  .append ( b, {type:'std'}   )
         , val = result.value
         ;
     expect ( val ).to.have.property ( 'root/0/name' )

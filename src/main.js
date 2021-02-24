@@ -78,7 +78,7 @@ const mainlib = {
  *          values  - use values as keys
  *        reverse   - keys will become values and values - keys
  * 
- *  data-type(model): 
+ *  data-type(type): 
  *      std         - standard js object
  *      breadcrumb  - key as a folder. Separate value
  *      file         - keys and values in a single string 
@@ -90,16 +90,16 @@ const mainlib = {
                   dependencies = mainlib.dependencies () 
                 , dt = dependencies.simpleDT ()
                 , help = dependencies.help
-                , defaultOptions = {model:'std', modify:false }
-                , { model, modify } = { ...defaultOptions,...options }
+                , defaultOptions = {type:'std', modify:false }
+                , { type, modify } = { ...defaultOptions,...options }
                 ;
-            if ( !INIT_DATA_TYPES.includes(model) ) {
-                        this._error.push ( `Can't understand your data-type: ${model}. Please, find what is possible on http://todo.add.documentation.link.here` )
+            if ( !INIT_DATA_TYPES.includes(type) ) {
+                        this._error.push ( `Can't understand your data-type: ${type}. Please, find what is possible on https://github.com/PeterNaydenov/dt-toolbox` )
                         return
                 }
             if ( inData != null ) {
                         // Note: Use method 'load' instead of 'init' if your data is 'flat'
-                        const [structure, value] = ( model == 'shortFlat') ? inData : convert.from(model).toFlat ( dependencies, inData )
+                        const [structure, value] = ( type == 'shortFlat') ? inData : convert.from(type).toFlat ( dependencies, inData )
                         dt.structure = help.copyStructure ( structure ) 
                         dt.value     = value
                 }
@@ -132,13 +132,13 @@ const mainlib = {
 
     , preprocess ( inData, fn, options ) {
                 let 
-                      defaultOptions = { model:'std', modify:false }
-                    , { model='std' } = { ...defaultOptions,...options }
-                    , shortFlat    = convert.from (model).toFlat ( mainlib.dependencies(), inData )
-                    , afterProcess = fn ( shortFlat )   // afterProcess should be in 'shortFlat' data-model
+                      defaultOptions = { type:'std', modify:false }
+                    , { type='std' } = { ...defaultOptions,...options }
+                    , shortFlat    = convert.from (type).toFlat ( mainlib.dependencies(), inData )
+                    , afterProcess = fn ( shortFlat )   // afterProcess should be in 'shortFlat' data-type
                     ;
                 if ( !afterProcess ) {
-                        this._error.push ( 'Method "preprocess" should always return a shortFlat model: [structure, value]' )
+                        this._error.push ( 'Method "preprocess" should always return a shortFlat data-type: [structure, value]' )
                         return mainlib.init ()   // On preprocess error, create an empty object 
                     }
                 return dtlib.loadShort ( mainlib.dependencies(), afterProcess )
@@ -450,7 +450,7 @@ const mainlib = {
                            ||
                         !data.hasOwnProperty ( 'structure' )
                    ) {
-                        const errorMsg = 'Error: Compared object should be model "flat"'; 
+                        const errorMsg = 'Error: Compared object should be data-type "flat"'; 
                         callback ( null )
                         return this
                     }
@@ -487,10 +487,10 @@ const mainlib = {
             , { help } = mainlib.dependencies ()
             ;
         let selection, modify, vals;
-            // TODO: refactoring of instructions. Should work as options in init. ( { modify, model} )
+            // TODO: refactoring of instructions. Should work as options in init. ( { modify, type} )
             /**
              *   
-             *   model:
+             *   type:
              *      - standard/std: standard js object;
              *      - breadcrumb: keys position described as breadcrumb and values are primitives(number,boolean,string);
              *      - file: Array of combined breadcrumb keys and value in single string;
@@ -581,7 +581,7 @@ const mainlib = {
                                 break
                 case 'flat'       : 
                                 // NOTE: 
-                                // The 'flat' is internal only data-model. Spread 'flat'
+                                // The 'flat' is internal only data-type. Spread 'flat'
                                 // always means 'shortFlat'.
                                 // 
                 case 'shortFlat' : 
@@ -637,8 +637,8 @@ const exportAPI = {
 // * Official API
 const API = {
     // DT I/O Operations
-		    init       : mainlib.init                      // Convert any object to flat data-model
-	      , load       : mainlib.load                      // Load a flat data-model
+		    init       : mainlib.init                      // Convert any object to flat data-type
+	      , load       : mainlib.load                      // Load a flat data-type
           , loadFast   : mainlib.load                      // Important! Method is depricated. Use load instead
 
           , preprocess : mainlib.preprocess                // Apply custom modifier to initial data. TODO: Depricate? Just create as another data and modify. Then execute (add, update, overwrite, insert, append, prepend)  

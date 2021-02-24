@@ -143,7 +143,7 @@ Put the **st** data into dt-toolbox:
 let dt = dtbox.init ( standard )
 ```
 
-Internal representation of data is based on `flat` model elements. Model `flat` has two elements: value and structure.
+Internal representation of data is based on `flat` data-type. Type `flat` has two elements: value and structure.
 **Value** represents primitive values and their location. **Structure** represents existing flat objects and their relations.
 Our standard object inside the library will look like:
 
@@ -167,7 +167,7 @@ dt.value = {    // Represents a primitive props and their location
 ```
 
 ::: warning
-Internal representation is '*LIKE*' flat model but not the data-type itself. Model `flat` is array with two elements: structure and value `[structure, value]`. Internal representation has these two elements but they are like props. `dt = { structure, value }`.
+Internal representation is '*LIKE*' flat data-type but not the data-type itself. Type `flat` is array with two elements: structure and value `[structure, value]`. Internal representation has these two elements but they are like props. `dt = { structure, value }`.
 :::
 
 
@@ -175,7 +175,7 @@ Internal representation is '*LIKE*' flat model but not the data-type itself. Mod
 Extract a flat information:
 ```js
  dt.spreadAll ( 'flat', res => { 
-                        // Model 'Flat': An array with 2 entries: [structure, value] 
+                        // Data-type 'Flat': An array with 2 entries: [structure, value] 
                 })
 ```
 
@@ -234,15 +234,15 @@ dtbox
    .add  ({
                 age : 25         // 'add' will ignore this. Age is already defined.
               , gender : 'male'  // Will add this.
-          }, { model: 'std'})
+          }, { type: 'std'})
    .update ({
                age  : 50         // Will update
                eyes : 'blue'     // Will ignore this.
-          }, { model: 'std'})
+          }, { type: 'std'})
   .overwrite ({
                 age   : 43         // Will update
               , hobby : 'skating'  // Will add
-          }, { model: 'std'})
+          }, { type: 'std'})
 
   // The object (dtbox.value) will look like:
   /*

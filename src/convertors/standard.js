@@ -39,7 +39,7 @@ function toFlat ( dependencies, d ) {
 
 
 
-function toModel ( dependencies, [ structure, value ]) {
+function toType ( dependencies, [ structure, value ]) {
             let 
                 keys = Object.keys ( value )
               , resultObjects = []
@@ -65,7 +65,7 @@ function toModel ( dependencies, [ structure, value ]) {
                                             })
                             })
             return resultObjects[0]
-    } // toModel func.
+    } // toType func.
 
 
 
@@ -79,6 +79,6 @@ function toModel ( dependencies, [ structure, value ]) {
 
 
 
-module.exports = { toFlat, toModel }
+module.exports = { toFlat, toType }
 
 

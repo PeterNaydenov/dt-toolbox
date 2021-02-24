@@ -30,13 +30,13 @@ it ( 'Parent', () => {
 					  								                .build      ()
 							                 } );
 	
-		  // Expect 'flat' data-model:
+		  // Expect 'flat' data-type:
 		  expect ( result ).to.be.an              ( 'object'    )
 		  expect ( result ).to.have.property      ( 'value'     )
 		  expect ( result ).to.have.property      ( 'structure' )
 		  expect ( result ).to.have.property      ( 'namespace' )
 		  
-		  // Convertion to 'flat' data-model success
+		  // Convertion to 'flat' data-type success
 		  expect ( result.value ).to.have.deep.property ( 'root/0/genre'       )
 		  expect ( result.value ).to.have.deep.property ( 'root/2/profile/age' )
 
@@ -65,7 +65,7 @@ it ( 'Parent with array', () => {
 																.build      ()
 									   } );
 
-    // Expect 'flat' data-model:
+    // Expect 'flat' data-type:
 	expect ( result.value ).to.have.property ( 'root/name/0' )
 	expect ( result.value ).to.have.property ( 'root/name/1' )
 	

@@ -1,4 +1,4 @@
-// NOTE: modifiers require a midFlat model for mainData and update
+// NOTE: modifiers require a midFlat data-type for mainData and update
 const
     overwrite       = require ( './overwrite' )
   , update          = require ( './update'    )

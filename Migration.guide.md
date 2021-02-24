@@ -35,24 +35,24 @@ dtbox
 
 
 
-### [x] Data-model 'dt'
-Internal data representation in the library was changed. I have recognized the need of information about data structures and their relations. So data-model `dt` was depricated as main internal representation data-model and we started to use `flat`. If you have build your application around 'dt' models, the library will continue to support it (load/spread). Code change required.
+### [x] Data-type 'dt'
+Internal data representation in the library was changed. I have recognized the need of information about data structures and their relations. So data-type `dt` was depricated as main internal representation data-type and we started to use `flat`. If you have build your application around 'dt' data-type, the library will continue to support it (load/spread). Code change required.
 
 Old code:
 ```js
- // Load dt model in dt-toolbox
+ // Load "dt" data-type in dt-toolbox
  dtbox.load ( dt )
 ```
 
 New code:
 ```js
-// Old 'dt' model == 'breadcrumbs' model
-dtbox.init ( dt, { model: 'breadcrumbs'})
+// Old 'dt' data-type == 'breadcrumbs' data-type
+dtbox.init ( dt, { type: 'breadcrumbs'})
 ```
 
 Old code:
 ```js
-// Spread 'dt' model
+// Spread 'dt' data-type
 dtbox
   .init ( data )
   .spreadAll ( 'dt', dt => dtResult = dt )
@@ -60,7 +60,7 @@ dtbox
 
 New code:
 ```js
-// Model 'dt' was renamed to 'breadcrumbs'
+// Type 'dt' was renamed to 'breadcrumbs'
 dtbox
   .init ( data )
   .spreadAll ( 'breadcrumbs', x => dtResult = x )
@@ -100,8 +100,8 @@ Method `folder` was used to search for specific string into keys. Name is not ve
 
 
 
-### Methods add/update/overwrite/combine/... will need param if are not in flat model
-Library expect by default `flat` data-model. All other formats should be mentioned in option object parameter.
+### Methods add/update/overwrite/combine/... will need param if are not in flat data-type
+Library expect by default `flat` data-type. All other formats should be mentioned in option object parameter.
 
 Old code:
 ```js
@@ -132,10 +132,10 @@ const
        ;
     dtbox
         .init ( a )
-        .combine ( b, {model:'std'})   // Expect 'flat', but can provide other models like 'standard'
-        .update  ( z, {model:'std'})
-        .combine ( c, {model:'std'})
-        .combine ( d, {model:'std'})
+        .combine ( b, {type:'std'})   // Expect 'flat', but can provide other data-types like 'standard'(std)
+        .update  ( z, {type:'std'})
+        .combine ( c, {type:'std'})
+        .combine ( d, {type:'std'})
         .spreadAll ( 'std', x => response = x )
 
 /**
