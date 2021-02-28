@@ -43,11 +43,13 @@ function toType ( dependencies, [ structure, value ]) {
             let 
                 keys = Object.keys ( value )
               , resultObjects = []
+              , result
               ;
             structure.forEach ( ([type, id, ...items]) => {   // Create data-structures
                                     let local;
                                     if ( type == 'array' )   local = []
                                     else                     local = {}
+                                    
                                     let selectedKeys = keys.filter ( k => k.includes(`root/${id}`));
                                     selectedKeys.forEach ( k => {   // Fill with primitive data
                                                             let 
@@ -61,7 +63,7 @@ function toType ( dependencies, [ structure, value ]) {
             structure.forEach ( ([type, id, ...items]) => {  // Conect data-structures
                                     items.forEach ( ([link, propName],i) => {
                                                     link = Number(link) || link
-                                                    resultObjects[id][propName] = resultObjects[i+1]
+                                                    resultObjects[id][propName] = resultObjects[id+1]
                                             })
                             })
             return resultObjects[0]

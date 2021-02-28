@@ -31,6 +31,25 @@ describe ( 'Provide results', () => {
 
 
 
+
+ it ( 'Spread -> standard with deep structure', () => {
+      const 
+            test = [ 'name/firstName/name/Peter' ]
+          , dt = dtbox.init ( test, {type:'file'})
+          ;
+          
+      dt
+         .select ()
+         .all ()
+         .spread ( 'std', x => {
+                  expect ( x ).to.have.property ( 'name' )
+                  expect ( x['name'] ).to.have.property ( 'firstName' )
+                  expect ( x['name']['firstName']).to.have.property ( 'name' )
+            })
+ }) // it spread->standard with deep structure
+
+
+
  it ( 'SpreadAll', () => {
     const test = {
                       name: 'Peter'

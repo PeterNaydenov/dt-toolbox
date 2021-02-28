@@ -2,6 +2,16 @@
 
 
 
+
+
+### 3.0.1 ( 2021-02-28 )
+- [x] Fix: Convert to 'standard' fails on some objects;
+- [] Bug: Methods "add/update/overwrite/combine/append/prepend" expect by default data-type 'standard'. Should be a 'flat' data-type;
+
+
+
+
+
 ### 3.0.0 ( 2021-02-25 )
 - [x] Complete rewrite of the library;
 - [x] Dt-toolbox is using . Consider this for support of old browsers;
@@ -18,6 +28,8 @@
 - [x] New method 'replace' was added;
 - [x] New method 'combine' was added;
 - [x] All methods expect data as 'flat'. Other models should be converted or provide an option/model param;
+- [] Bug: Convert to 'standard' fails on some objects;
+- [] Bug: Methods "add/update/overwrite/combine/append/prepend" expect by default data-type 'standard'. Should be a 'flat' data-type;
 
 
 

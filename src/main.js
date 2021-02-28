@@ -99,7 +99,7 @@ const mainlib = {
                 }
             if ( inData != null ) {
                         // Note: Use method 'load' instead of 'init' if your data is 'flat'
-                        const [structure, value] = ( type == 'shortFlat') ? inData : convert.from(type).toFlat ( dependencies, inData )
+                        const [structure, value] = ( type == 'flat' || type == 'shortFlat' ) ? inData : convert.from(type).toFlat ( dependencies, inData )
                         dt.structure = help.copyStructure ( structure ) 
                         dt.value     = value
                 }
