@@ -4,7 +4,7 @@
 
 
 
-### 3.0.1 ( 2021-02-28 )
+### 3.0.2 ( 2021-02-28 )
 - [x] Fix: Convert to 'standard' fails on some objects;
 - [] Bug: Methods "add/update/overwrite/combine/append/prepend" expect by default data-type 'standard'. Should be a 'flat' data-type;
 

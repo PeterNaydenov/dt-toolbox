@@ -50,6 +50,34 @@ describe ( 'Provide results', () => {
 
 
 
+
+ it ( 'Spread -> standard. Various structures', () => {
+        const flatData = [[
+                        [ 'object', 0, [ 1, 'name' ], [ 2, 'hidden' ] ]
+                      , [ 'object', 1, [ 3, 'firstName' ] ]
+                      , [ 'object', 2 ]
+                      , [ 'object', 3 ]
+                    ]
+                    , {
+                          'root/1/lastName': 'Dimitrov'
+                          , 'root/2/age': 42
+                          , 'root/3/name': 'Peter'
+                      }
+                  ];
+        dtbox
+            .load ( flatData )
+            .spreadAll ( 'std', x => {
+                        expect ( x ).to.have.property ( 'name' )
+                        expect ( x ).to.have.property ( 'hidden' )
+                        expect ( x.hidden ).to.have.property ( 'age' )
+                        expect ( x.name ).to.have.property ( 'lastName' )
+                        expect ( x.name ).to.have.property ( 'firstName' )
+                        expect ( x.name.firstName ).to.have.property ( 'name' )                        
+                });
+ }) // it Spread -> standard. Various structures
+ 
+
+
  it ( 'SpreadAll', () => {
     const test = {
                       name: 'Peter'

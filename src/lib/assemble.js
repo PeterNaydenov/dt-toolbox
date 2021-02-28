@@ -11,7 +11,8 @@ function assemble ( dependencies, me ) {
                                             if ( num < res )   res = num
                                             return res
                                     }, 100000 )
-                me._select.structure = structure.reduce ( (res,item) => {
+                // small -> id of first object with primitive values
+                me._select.structure = structure.reduce ( (res,item) => {   // Build structure of selection
                                                     let 
                                                           ix = item[1]
                                                         , inScope = ( ix >= small )
@@ -22,7 +23,7 @@ function assemble ( dependencies, me ) {
                                                         }
                                                     return res
                                             }, [ firstRow ]   )
-                                            
+
                 if ( listIndex.has(0) )   me._select.structure.splice ( 1, 1 )
                 if ( countObjects.size > 1 ) {   // Selection has more than one object. Connect objects to root element
                             let countIx = 0;
