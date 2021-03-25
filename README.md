@@ -59,8 +59,10 @@ const API = {
     // Provide Results      
           , replace    : 'Get this._selection.result as a main data'
           , attach     : 'Attach this._selection.result to the main data. Set point of connection'
-          , spread     : 'Returns result of selection'
-          , spreadAll  : 'Select all and returns it with one command'
+          , spread     : 'Returns result of selection in a calback function'
+          , spreadAll  : 'Select all and returns it with one command in a callback function'
+          , export     : 'Returns result of selection'
+          , exportAll  : 'Select all and returns it with one command'
 
     // Compare Operations
          , identical  :  'Value compare. Reduce data to identical key/value pairs'
@@ -108,7 +110,7 @@ const API = {
 
 2. Select! Without selection, dt-toolbox will return an empty object. Selection respresents the information that should be extracted from the data. Result of selectors is accumulative. Filters will be applied to already selected data.
 
-3. Spread the result. Create new data structure according selection and provide it in required data-type.
+3. Spread/Export the result. Create new data structure according selection and provide it in required data-type.
 
 DT Toolbox supports chaining syntax and is that simple. Let's see some examples...
 
@@ -177,6 +179,8 @@ Extract a flat information:
  dt.spreadAll ( 'flat', res => { 
                         // Data-type 'Flat': An array with 2 entries: [structure, value] 
                 })
+ // other way to receive same result:
+ let myFlat = dt.exportAll ( 'flat' )
 ```
 
 

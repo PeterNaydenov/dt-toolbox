@@ -2,6 +2,10 @@
 
 
 
+### 3.1.0 ( 2021-030-25)
+- [x] Methods "export" and "exportAll" were added;
+- [] Bug: Methods "add/update/overwrite/combine/append/prepend" expect by default data-type 'standard'. Should be a 'flat' data-type;
+
 
 
 ### 3.0.2 ( 2021-02-28 )
