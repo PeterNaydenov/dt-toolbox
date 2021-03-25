@@ -377,6 +377,20 @@ it ( 'Replace', () => {
           //  expect () 
  }) // it attach
 
+
+
+it ( 'Export -> standard', () => {
+  const test = {
+                    name: 'Peter'
+                  , array : [ 1, 15 ]
+               };
+  let result = dtbox.init ( test )
+                    .select ()
+                    .all ()
+                    .export ('std');
+  expect ( result ).to.be.eql ( test )
+}) // it spread->standard
+
 }) // describe
 
 

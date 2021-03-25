@@ -480,7 +480,8 @@ const mainlib = {
 
 
     , spread ( instruction, callback ) {
-      // *** Returns result of selection
+      // *** Returns result of the selection in a callback
+      // If callback is missing - returns result of the selection directly
         const 
                me = this
             , hasSelection    = me._select.result ? true : false
@@ -591,8 +592,14 @@ const mainlib = {
                                     }
                                 }
                 } // switch instruction
-  		    callback ( selection )
-  		    return me
+                
+            if ( callback ) {
+                        callback ( selection )
+                        return me
+                }
+            else {
+                        return selection
+                }
         } // spread func.
 
 
@@ -648,8 +655,10 @@ const API = {
     // Provide Results      
           , replace    : mainlib.replace                   // Get this._selection.result as a main data
           , attach     : mainlib.attach                    // Attach this._selection.result to the main data. Set point of connection
-          , spread     : mainlib.spread                    // Returns result of selection
-          , spreadAll  : mainlib.spreadAll                 // Select all and returns it with one command
+          , spread     : mainlib.spread                    // Returns result of selection in a callback
+          , spreadAll  : mainlib.spreadAll                 // Select all and returns it with one command in a callback
+          , export     : mainlib.spread                    // Returns result of selection
+          , exportAll  : mainlib.spreadAll                 // Select all and returns it with one command
 
     // Compare Operations
          , identical  :  mainlib.compare ( 'identical' )   // Value compare. Reduce data to identical key/value pairs.
