@@ -12,14 +12,14 @@
     "test": "test"
   },
   "devDependencies": {
-    "@babel/core": "7.13.8",
-    "@babel/preset-env": "7.13.8",
+    "@babel/core": "7.13.10",
+    "@babel/preset-env": "7.13.12",
     "babel-loader": "8.2.2",
-    "chai": "4.3.0",
-    "mocha": "8.3.0",
+    "chai": "4.3.4",
+    "mocha": "8.3.2",
     "nyc": "15.1.0",
     "uglifyjs-webpack-plugin": "2.2.0",
-    "webpack": "5.24.2",
+    "webpack": "5.28.0",
     "webpack-cli": "4.5.0"
   },
   "repository": {
