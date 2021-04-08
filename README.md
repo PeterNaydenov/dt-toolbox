@@ -1,6 +1,6 @@
-# DT Toolbox v.3.x.x
+# DT Toolbox v.4.x.x and v.3.x.x 
 
-- [Check documentation for v.2.x.x if you need it](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.2.x.x.md)
+- [Documentation for old v.2.x.x is here](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.2.x.x.md)
 
 Execute operations over deep object structures without worries. Compare, modify, reshape or extract data. Immutability is taken as consideration by this library.
 

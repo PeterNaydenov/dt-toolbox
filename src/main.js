@@ -157,10 +157,13 @@ const mainlib = {
 
     , modify ( method ) {
             return function ( inData, options ) {
-                    const
-                          me = this 
-                        , updateData = mainlib.init ( inData, options )                        
-                        ;
+                    const me = this;
+                    let   updateData;
+                    if ( options )   updateData = mainlib.init ( inData, options )
+                    else             updateData = { 
+                                                      structure : help.copyStructure(inData.structure)
+                                                    , value     : {...inData.value }
+                                            }
                     return   dtlib.modify ( { ...mainlib.dependencies(), action:method}, me, updateData )
         }} // modify func.
 

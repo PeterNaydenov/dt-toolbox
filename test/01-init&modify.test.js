@@ -258,8 +258,8 @@ it ( 'Load: shortFlat', () => {
 it  ( 'Modify: Add' , () => {			
 			const result = dtbox 
                                 .init ()
-                                .add ( {name : 'Ivan'} )
-                                .add (  sample.test_0  );
+                                .add ( dtbox.init({name : 'Ivan'}))
+                                .add (  sample.test_0, { type: 'std'}  );
             
             expect ( result.value.hi()  ).to.be.equal ( 'hi' )
  			expect ( result.value ).to.have.property ( 'root/0/name'  )
@@ -275,8 +275,8 @@ it  ( 'Modify: Add' , () => {
 it ( 'Modify: Add with fake instructions' , () => {			
 		const result = dtbox 
 						.init ()
-						.add ( { age: 25} )
-                        .add ( {'name' : 'Ivan'}, { modify:'fakeInstruction'} );   // fake instructions are ignored
+						.add ( { age: 25}, {type:'std'} )
+                        .add ( {'name' : 'Ivan'}, { modify:'fakeInstruction', type:'std'} );   // fake instructions are ignored
                         
         expect ( result.value.hi()  ).to.be.equal ( 'hi' )
 		expect ( result.value ).to.have.property ( 'root/0/age' )
@@ -289,7 +289,7 @@ it ( 'Modify: Add with fake instructions' , () => {
 
 it ( 'Modify: Add a shortFlat object', () => {
     const 
-                  start = dtbox.init ({ name:'Peter', age: 45 })
+                  start = dtbox.init ({ name:'Peter', age: 45 }, {type:'std'})
                 , result = dtbox
                                         .init ()
                                         .add ( [start.structure, start.value], { type:'shortFlat' } )
@@ -306,7 +306,7 @@ it ( 'Modify: Add a shortFlat object', () => {
 it ( 'Modify: Update', () => {   // Updates only existing values
     const result = dtbox 
                     .init   ( {name : 'Ivan'} )
-                    .update ( sample.test_0   );
+                    .update ( sample.test_0, { type: 'std' }   );
 
         expect ( Object.keys(result.value).length ).to.be.equal ( 1 )
         expect ( result.value.hi()  ).to.be.equal ( 'hi' )
@@ -321,7 +321,7 @@ it ( 'Modify: Update', () => {   // Updates only existing values
 it ( 'Modify: Update with instructions', () => {   // Updates only existing values
     const result = dtbox 
                     .init   ( ['keys'] )
-                    .update ( sample.test_0 , { modify:'key' });
+                    .update ( sample.test_0 , { modify:'key', type:'std' });
 
     expect ( result.structure[0][0]).to.be.equal ( 'array' )
     expect ( result.value['root/0/0'] ).to.be.equal ( 'name' )
@@ -338,13 +338,13 @@ it ( 'Modify: Overwrite', () => {
                                     { 
                                           name : 'Ivan'
                                         , 'second-number' : '8899 444 444'
-                               })
+                               }, {type:'std'})
                     .overwrite ( 
                                     { 
                                            name : 'Stefan'
                                         , 'prime-number'  : '8899 222 222'
                                         , 'dummy' : [12,24,55]
-                              });
+                              }, {type:'std'});
 
      // updates existing values and adds new data including 'namespace' and 'structures'
      expect ( result.value.hi()           ).to.be.equal ( 'hi' )
@@ -367,13 +367,13 @@ it ( 'Modify: Overwrite with instructions', () => {
                                     { 
                                            name : 'Ivan'
                                         , 'second-number' : '8899 444 444'
-                               })
+                               }, { type: 'std'})
                     .overwrite ( 
                                     { 
                                            name : 'Stefan'
                                         , 'prime-number'  : '8899 222 222'
                                         , 'dummy' : [12,24,55]
-                               }, {modify:'key'} )
+                               }, { modify:'key', type:'std' }   )
                     
             , keyList = Object.keys ( result.value )
             , valList =  Object.values ( result.value )
@@ -481,8 +481,8 @@ it ( 'Show Error Log', () => {
         
         dtbox 
             .init ()
-            .add ( { age: 25} )
-            .add ( {'name' : 'Ivan'}, { modify:'fakeInstruction'} )   // fake instructions are ignored
+            .add ( { age: 25}, { type:'std'} )
+            .add ( {'name' : 'Ivan'}, { modify:'fakeInstruction', type:'std'} )   // fake instructions are ignored
             .log ( x => result = x )
 
         expect ( result ).to.be.an ( 'array' )
