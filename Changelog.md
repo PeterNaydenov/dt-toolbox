@@ -1,7 +1,7 @@
 ## Release History
 
 
-### 4.0.0 (2021-04-08)
+### 4.0.1 (2021-04-08)
 - [x] Fix: Methods "add/update/overwrite/combine/append/prepend" expect by default data-type 'standard'. Should be a 'flat' data-type. This update is coming as major release because may require some changes. Everything else is according documentation for version 3.x.x;
 
 
