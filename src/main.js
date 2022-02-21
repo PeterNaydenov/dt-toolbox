@@ -273,11 +273,15 @@ const mainlib = {
 
     , keep ( fx ) {
         // *** Filter. Reduce selected item by testing their values. If pass the test will stay.
-            const me = this;
+            const 
+                  me = this
+                , breadcrumbKeys = help.toBreadcrumbKeys ( me._select.value, me.structure )
+                ;
             if ( fx === undefined   )   return me
             me._select.result = null
-            me._select.value = me._select.value.reduce ( (res, item ) => {
-                                          if ( fx(me.value[item], item) )   res.push ( item )
+            me._select.value = me._select.value.reduce ( (res, flatKey, i ) => {
+                                          let breadcrumbKey = breadcrumbKeys[i];
+                                          if ( fx(me.value[flatKey], breadcrumbKey, flatKey) )   res.push ( flatKey )
                                           return res
                                  },[])
             return me
@@ -288,13 +292,17 @@ const mainlib = {
 
     , remove ( fx ) {
         // *** Filter. Reduce selected item by testing their values. If pass the test will remove.
-            const me = this;
+            const 
+                  me = this
+                , breadcrumbKeys = help.toBreadcrumbKeys ( me._select.value, me.structure )
+                ;
             if ( fx === undefined )   return me
             me._select.result = null
-            me._select.value = me._select.value.reduce ( (res, item ) => {
-                                          if ( !fx(me.value[item],item) )   res.push ( item )
-                                          return res
-                                 },[])
+            me._select.value   = me._select.value.reduce ( (res, flatKey,i) => {
+                                                    let breadcrumbKey = breadcrumbKeys[i];
+                                                    if ( !fx(me.value[flatKey],breadcrumbKey,flatKey) )   res.push ( flatKey )
+                                                    return res
+                                            }, [] )
             return me
         } // remove func.
 

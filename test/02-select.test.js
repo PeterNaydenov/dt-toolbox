@@ -216,15 +216,20 @@ it ( 'Remove: Value check' , () => {
 
 
 it ( 'Remove: Key check' , () => {
-    const x = dtbox
+  
+    const 
+            breadcrumbKeys = []
+          , x = dtbox
                 .init ( sample.test_0 )
                 .select ()
                 .all ()
-                .remove ( (v,k) => {
+                .remove ( (v, breadcrumbK, flatK ) => {
                                   let 
-                                      prop  = k.split ( '/' ).pop ()
+                                      prop  = flatK.split ( '/' ).pop ()
                                     , check = isNaN(Number(prop)) ? false : true
                                     ;
+                                  breadcrumbKeys.push ( breadcrumbK )
+
                                   if ( check )   return true
                                   else           return false
                             });
@@ -234,6 +239,11 @@ it ( 'Remove: Key check' , () => {
     expect ( result ).to.contain ( 'root/0/age' )
     expect ( result ).to.contain ( 'root/0/eyes' )
     expect ( result ).to.contain ( 'root/1/active' )
+
+    expect ( breadcrumbKeys ).to.have.length ( 7 )
+    expect ( breadcrumbKeys ).to.contains ('root/eyes')
+    expect ( breadcrumbKeys ).to.contains ( 'root/profile/active' )
+    expect ( breadcrumbKeys ).to.contains ( 'root/array/2' )
 }) // it remove: Key check
 
 
