@@ -35,55 +35,53 @@ function toFlat ( dependencies, rawValue ) {
                                 .keys ( rawValue )
                                 .map ( x => x.split('/')   )
                                 .sort ( (a,b) => b.length - a.length   )
-              , maxLength  = keyList[0].length
-              , buffer     = []                  // List contains items(generators). Item contain props organized by specific deepness
-              , objectList = []                  // Array of objects. Object looks like this - { key: propNames[]}
-              , deepList   = []
-              , rootObjectNames = []             // Collection of all property names for objects. Evaluate 'root' object type on this.
-              ;
-          for (let i=maxLength-1; i >= 0; i--) {  // separate keys on deep levels
-                            let selectedKeys = keyList.filter ( k => k.length == i+1 );
-                            buffer.push ( help.generateObject(selectedKeys)   )
-                }
-          objectList = buffer.map ( x => x.next().value ).reverse ()   // organize keys as objects in right order
-          deepList = objectList.map ( (item,i) => help.generateList (i, item) )
+            ,  tProps   = {}   // { objectLocation<string> : childObjectNames<set> }
+            , structRaw = []   // objectLocation strings
+            , propDone  = []
+            ;
+          keyList.forEach ( (keyArr) => {   // Setup our temp structures: tProps and structRaw
+                    keyArr.forEach ( (k,i) => {
+                                    let parent = keyArr.slice( 0, i ).join ( '/' );
+                                    if ( !parent         )   return
+                                    if ( !tProps[parent] ) { 
+                                            tProps[parent] = new Set()
+                                            structRaw.push ( parent )
+                                        }
+                                    tProps[parent].add ( k )
+                            })
+                })
+           structRaw.forEach ( (el,i) => {   // Build the structure rows
+                                let elChildren = false;
+                                if ( !structure[i]    )   structure[i] = [ 'object', i ]
+                                if ( propDone[i]      )   el = propDone[i]
+                                elChildren = Array.from ( tProps[el] )
+                                elChildren.forEach ( name => {   // Setup connections between object
+                                                        let test = tProps[`${el}/${name}`];
+                                                        if ( !test )   return
+                                                        let 
+                                                              childProps = Array.from (test)
+                                                            , type = help.hasNumbers ( childProps ) ? 'array' : 'object'
+                                                            , lastIndex = structure.length
+                                                            ;
+                                                        propDone[lastIndex] = `${el}/${name}`
+                                                        structure.push ([type, lastIndex])
+                                                        structure[i].push ( [lastIndex, name])
+                                                })
+                        })
 
-          for ( let list of deepList ) {
-          for (let [id, objName, val] of list ) {   // example:  [ 0, 'root', [ 'name', 'age']   ]
-                          let 
-                                splitName     = objName.split ( '/' )
-                              , splitSize     = splitName.length
-                              , shortObjName  = splitName[splitSize-1]
-                              , structSize    = structure.length
-                              , emptyObjects  = id - structSize-1
-                              , EMPTY_OBJECTS = emptyObjects > 0
-                              , type = help.hasNumbers ( val ) ? 'array' : 'object'
-                              ;
-                          if ( EMPTY_OBJECTS ) {
-                                  for ( let i=0; i <= emptyObjects; i++ ) {
-                                              structure.push ( [type, i ])
-                                              if ( i > 0 ) {  
-                                                    structure[i-1].push ([i, splitName[i]])
-                                                    rootObjectNames.push ( splitName[i] )
-                                                }
-                                      }
-                                  structSize = structure.length
-                              } 
-                          else {
-                                  structure.push ([type, structSize])
-                                  structSize = structure.length
-                                  if ( id > 1 ) {
-                                              structure[id-2].push ([structSize-1, shortObjName])
-                                              rootObjectNames.push ( shortObjName )
-                                          }
-                              } 
-                          type = help.hasNumbers ( rootObjectNames ) ? 'array' : 'object'   // Evaluate 'root' object type
-                          structure[0][0] = type   
-                          for (let prop of val) {
-                                      value [`root/${structSize-1}/${prop}`] = rawValue[`${objName}/${prop}`]
-                                }
-              }} // for deepList
-          return [ structure, value ]
+        keyList.forEach ( k => {   // Create flat keys and write values 
+                        let 
+                              name      = k.pop()
+                            , keySearch = k.join ( '/' )
+                            , objNumber = null
+                            , theKey    = ''
+                            ;
+                        objNumber = propDone.indexOf ( keySearch )
+                        if ( objNumber < 0 )  objNumber = structRaw.indexOf(keySearch)
+                        theKey = `root/${objNumber}/${name}`
+                        value[theKey] = rawValue[`${keySearch}/${name}`]
+                })
+        return [ structure, value ]
   } // toFlat func.
 
 

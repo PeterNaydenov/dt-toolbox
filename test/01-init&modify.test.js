@@ -53,6 +53,37 @@ it ( 'Init: ST(standard) object' , () => {
  }) // it ST object
 
 
+ 
+it ( 'Init: Breadcrumbs', () => {
+            let r;
+            const test = {
+                              'root/name' : 'hello'
+                            , 'root/settings/channel/destinations/1/settings/0/streamName' : 'try1'
+                            , 'root/settings/channel/destinations/1/settings/0/url' : 'http://some.domain.com/stream'
+                            , 'root/settings/channel/destinations/2/settings/0/streamName' : 'try2'
+                            , 'root/settings/channel/destinations/2/settings/0/url' : 'http://some.domain.com/stream2'
+                            , 'root/settings/inputs/0/createInput/source/0/url' : 'http://some.domain.com/stream3'
+                        }
+            const mm = dtbox
+                        .init ( test, {type:'breadcrumbs'})
+                        .spreadAll ( 'breadcrumbs', br => r = br   )
+    
+            expect ( mm.structure ).to.have.length ( 15 )
+            expect ( mm.structure[3][2][0]).to.be.equal ( 5   )
+            expect ( mm.structure[3][2][1]).to.be.equal ( '0' )
+            expect ( mm.structure[4][2][0]).to.be.equal ( 6   )
+            expect ( mm.structure[4][2][1]).to.be.equal ( '1' )
+
+            expect ( mm.value ).to.have.property ( 'root/12/streamName' )
+            expect ( mm.value ).to.have.property ( 'root/12/url'        )
+            expect ( mm.value ).to.have.property ( 'root/0/name'        )
+
+            expect ( r ).to.have.property ( 'root/settings/channel/destinations/1/settings/0/streamName' )
+            expect ( r ).to.have.property ( 'root/settings/inputs/0/createInput/source/0/url' )
+            expect ( r ).to.have.property ( 'root/name' )
+}) // it init Breadcrumbs
+
+
 
 it ( 'Init: Reverse keys and values', () => {
     // * Create object where values will become keys and keys become values

@@ -391,6 +391,8 @@ it ( 'Export -> standard', () => {
   expect ( result ).to.be.eql ( test )
 }) // it spread->standard
 
+
+
 }) // describe
 
 

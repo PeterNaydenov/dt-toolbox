@@ -1,6 +1,12 @@
 ## Release History
 
 
+
+### 4.0.3 (2022-02-23)
+- [x] Fix: Initialize with breadcrumbs is not working at all;
+
+
+
 ### 4.0.2 (2022-02-21)
 - [x] Fix: Methods 'keep' and 'remove' received `flat keys` instead of `breadcrumbs keys`. If need a `flat key`, its still available as third argument.
 ```js
@@ -8,12 +14,14 @@
                                 // ... set your filter here...
                     })
 ```
+- [ ] Bug: Initialize with breadcrumbs is not working at all;
 
 
 
 ### 4.0.1 (2021-04-08)
 - [x] Fix: Methods "add/update/overwrite/combine/append/prepend" expect by default data-type 'standard'. Should be a 'flat' data-type. This update is coming as major release because may require some changes. Everything else is according documentation for version 3.x.x;
-- [] Bug: Methods 'keep' and 'remove' received `flat keys` instead of `breadcrumbs keys`
+- [ ] Bug: Methods 'keep' and 'remove' received `flat keys` instead of `breadcrumbs keys`
+- [ ] Bug: Initialize with breadcrumbs is not working at all;
 
 
 
