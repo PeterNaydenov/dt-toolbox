@@ -2,11 +2,17 @@
 
 
 
+### 4.0.5 (2022-03-01)
+- [x] Fix: Arrays are recognized as objects. Object members of arrays are recognized as arrays;
+
+
+
 ### 4.0.4 (2022-03-01)
 - [x] Fix: Convertor for 'midFlat' is loosing empty data-structures;
 - [x] Fix: Boolean values "true" are converted to 1(number);
 - [x] Fix: Operation "add" treats numbers as string;
 - [x] Fix: Convertor from 'breadcrumbs' breaks;
+- [ ] Bug: Arrays are recognized as objects. Object members of arrays are recognized as arrays;
 
 
 

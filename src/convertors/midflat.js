@@ -57,12 +57,17 @@ function toFlat ( dependencies, d ) {   // Converts data to shortFlat
 
                                                 const flatList = tProps[path];
                                                 if ( !flatList ) return
+                                                
+                                                let 
+                                                          flat = Array.from(flatList)
+                                                        , isArray = help.hasNumbers ( flat )
+                                                        ;
+                                                if ( isArray )   structure[i][0] = 'array'
+
                                                 flatList.forEach ( name => {
-                                                                let flat = Array.from ( flatList );
                                                                 position = structure.length
-                                                                let type = help.hasNumbers (flat) ? 'array' : 'object';
                                                                 propDone[position] = `${path}/${name}`
-                                                                structure.push ( [type , position])
+                                                                structure.push ( ['object' , position])
                                                         })
                         })
 
@@ -80,9 +85,7 @@ function toFlat ( dependencies, d ) {   // Converts data to shortFlat
 
                                 let ix = propDone.indexOf (breadcrumbs);
                                 if ( ix >= 0 )   structure[ix].push ( [i, kProp] )
-                                
                                 if ( isArray )   structure[i][0] = 'array'
-                                else             structure[i][0] = 'object'
 
                                 propDone [i] = k
                                 for (let el in d[k] ) {

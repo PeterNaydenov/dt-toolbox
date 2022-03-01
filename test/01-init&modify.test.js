@@ -355,10 +355,13 @@ it ( 'Blueprint case', () => {
                               mode    = st.settings.channel.encoderSettings.outputGroups[0].outputGroupSettings.hlsGroupSettings.mode
                             , archive = st.settings.createArchives
                             , motionSettings = st.settings.channel.encoderSettings.motionGraphicsConfiguration.motionGraphicsSettings.htmlMotionGraphicsSettings
+                            , captionDescriptions = st.settings.channel.encoderSettings.captionDescriptions
                             ;
+                            
                         expect ( mode ).to.be.equal ( 'VOD' )
                         expect ( archive ).to.be.equal ( true )
                         expect ( motionSettings ).to.be.empty
+                        expect ( captionDescriptions instanceof Array )
             })
 }) // it Blueprint case
 
