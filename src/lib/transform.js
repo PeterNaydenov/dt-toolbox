@@ -16,7 +16,7 @@ function transform ( dependencies, [structure, value] ) {
                                                                           ;
                                                                       res[`root/${arr[1]}/${val}`] = pureKey
                                                                       return res
-                                                     }, empty() )
+                                                     }, {} )
                                       break
                      case 'key':
                      case 'keys':
@@ -27,7 +27,7 @@ function transform ( dependencies, [structure, value] ) {
                                                                           ;
                                                                       res[k] = arr[2]
                                                                       return res
-                                                     }, empty() )
+                                                     }, {} )
                                       structure = [ [ 'array', 0 ]]
                                       break
                      case 'value' :

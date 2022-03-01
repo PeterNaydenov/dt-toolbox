@@ -55,6 +55,10 @@ function toFlat ( dependencies, rawValue ) {
                                 if ( !structure[i]    )   structure[i] = [ 'object', i ]
                                 if ( propDone[i]      )   el = propDone[i]
                                 elChildren = Array.from ( tProps[el] )
+                                if ( el === 'root' ) {
+                                          const mainType = help.hasNumbers ( elChildren ) ? 'array' : 'object';
+                                          structure[i][0] = mainType
+                                    }
                                 elChildren.forEach ( name => {   // Setup connections between object
                                                         let test = tProps[`${el}/${name}`];
                                                         if ( !test )   return
@@ -77,6 +81,7 @@ function toFlat ( dependencies, rawValue ) {
                             , theKey    = ''
                             ;
                         objNumber = propDone.indexOf ( keySearch )
+
                         if ( objNumber < 0 )  objNumber = structRaw.indexOf(keySearch)
                         theKey = `root/${objNumber}/${name}`
                         value[theKey] = rawValue[`${keySearch}/${name}`]

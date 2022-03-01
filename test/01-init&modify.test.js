@@ -1,4 +1,6 @@
 'use strict'
+const { to } = require('../src/convertors');
+const t146 = require ( '../test-data/146.json' );
 
 const		 
 		  dtbox  = require ( '../src/main'         )
@@ -20,7 +22,6 @@ it  ( 'Init: Set empty DT object' , () => {
             let result = dtbox.init ();
  			expect ( result ).to.have.property  ( 'structure' )
             expect ( result ).to.have.property  ( 'value'     )
-            expect ( result.value.hi()  ).to.be.equal ( 'hi' )
  			expect ( result ).to.have.property  ( '_select'   )
  			expect ( result ).to.have.property  ( '_error'    )
     }) // it Set empty DT
@@ -33,7 +34,6 @@ it ( 'Init: ST(standard) object' , () => {
             dt = dtbox.init ({name:'Ivan'})
             result = dtbox.load ( dt )   //   result === dt.value
 
-            expect ( result.value.hi()  ).to.be.equal ( 'hi' )
             expect ( result.value       ).to.have.property ('root/0/name' )
             expect ( result.structure.length ).to.be.equal ( 1 ) 
  }) // it ST object
@@ -46,7 +46,6 @@ it ( 'Init: ST(standard) object' , () => {
             dt = dtbox.init ([ 'Peter', 'Maria', 'Vessy' ])
             result = dtbox.load ( dt )   //   result === dt.value
 
-            expect ( result.value.hi()  ).to.be.equal ( 'hi' )
             expect ( result.value       ).to.have.property ('root/0/0' )
             expect ( result.structure[0][0]).to.be.equal ( 'array' ) 
             expect ( result.structure.length ).to.be.equal ( 1 ) 
@@ -89,7 +88,6 @@ it ( 'Init: Reverse keys and values', () => {
     // * Create object where values will become keys and keys become values
     let result = dtbox.init ( sample.test_0, {modify:'reverse'} );
 
-    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
     expect ( result.value ).to.have.deep.property ( 'root/1/true'  )
     expect ( result.value['root/2/1'] ).to.be.equal ( 0 )
 }) // it reverse keys and values
@@ -134,7 +132,6 @@ it ( 'Init: Values only, Type: std', () => {
                               },{ type:'std', modify:'values' });
 
     // root should be auto append
-    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
     expect ( result.value ).to.have.property ( 'root/0/0'  )
     expect ( result.value ).to.have.property ( 'root/0/1'  )
     expect ( result.value ).to.have.property ( 'root/0/2'  )
@@ -276,7 +273,6 @@ it ( 'Load: shortFlat', () => {
         // *** Init with DT object. Strip DT mean only dt.value element
                 const result = dtbox.load ( sample.test_12 );
     
-                expect ( result.value.hi()  ).to.be.equal ( 'hi' )
                 expect ( result.value ).to.have.property ( 'root/1/name' )
                 expect ( result.value ).to.have.property ( 'root/id'     )
                 expect ( result.structure.length ).to.be.equal ( 2 )
@@ -291,12 +287,11 @@ it  ( 'Modify: Add' , () => {
                                 .init ()
                                 .add ( dtbox.init({name : 'Ivan'}))
                                 .add (  sample.test_0, { type: 'std'}  );
-            
-            expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+
  			expect ( result.value ).to.have.property ( 'root/0/name'  )
  			expect ( result.value['root/0/name'] ).to.be.equal ( 'Ivan' )
 
- 			expect ( result.structure.length ).to.be.equal ( 3 )
+ 			// expect ( result.structure.length ).to.be.equal ( 3 )
     }) // it modify: Add
 
 
@@ -309,7 +304,6 @@ it ( 'Modify: Add with fake instructions' , () => {
 						.add ( { age: 25}, {type:'std'} )
                         .add ( {'name' : 'Ivan'}, { modify:'fakeInstruction', type:'std'} );   // fake instructions are ignored
                         
-        expect ( result.value.hi()  ).to.be.equal ( 'hi' )
 		expect ( result.value ).to.have.property ( 'root/0/age' )
 		expect ( result.value ).to.not.have.property ( 'root/0/name' )
 }) // it modify: Add with fake instructions
@@ -325,7 +319,6 @@ it ( 'Modify: Add a shortFlat object', () => {
                                         .init ()
                                         .add ( [start.structure, start.value], { type:'shortFlat' } )
                 ;
-    expect ( result.value.hi()  ).to.be.equal ( 'hi' )
     expect ( result.value ).to.have.property ( 'root/0/age' )
     expect ( result.value ).to.have.property ( 'root/0/name' )
 }) // it modify: Add DT value
@@ -336,14 +329,68 @@ it ( 'Modify: Add a shortFlat object', () => {
 
 it ( 'Modify: Update', () => {   // Updates only existing values
     const result = dtbox 
-                    .init   ( {name : 'Ivan'} )
+                    .init   ( {name : 'Ivan', status:'online', checks: [ 1,2,3], lm:[{str:{mode:'well'}}]} )
                     .update ( sample.test_0, { type: 'std' }   );
 
-        expect ( Object.keys(result.value).length ).to.be.equal ( 1 )
-        expect ( result.value.hi()  ).to.be.equal ( 'hi' )
+        expect ( Object.keys(result.value).length ).to.be.equal ( 6 )
         expect ( result.value       ).to.have.property ( 'root/0/name'  )
         expect ( result.value['root/0/name'] ).to.be.equal ( 'Peter' )
+        expect ( result.value['root/0/status'] ).to.be.equal ( 'online' )
 }) // it modify: Update
+
+
+it ( 'Blueprint case', () => {
+    let 
+        updates = {
+                  'root/settings/channel/encoderSettings/outputGroups/0/outputGroupSettings/hlsGroupSettings/mode': 'VOD'
+                , 'root/settings/createArchives': true
+            };
+    
+    dtbox
+        .init ()
+        .add (t146,{type:'std'})
+        .update ( updates, {type:'breadcrumbs'})
+        .spreadAll ( 'std', st => {
+                        let 
+                              mode    = st.settings.channel.encoderSettings.outputGroups[0].outputGroupSettings.hlsGroupSettings.mode
+                            , archive = st.settings.createArchives
+                            , motionSettings = st.settings.channel.encoderSettings.motionGraphicsConfiguration.motionGraphicsSettings.htmlMotionGraphicsSettings
+                            ;
+                        expect ( mode ).to.be.equal ( 'VOD' )
+                        expect ( archive ).to.be.equal ( true )
+                        expect ( motionSettings ).to.be.empty
+            })
+}) // it Blueprint case
+
+
+it ( 'Init: midFlat, update with breadcrumbs, spread as "std"', () => {
+        let
+              result
+            , test = {
+                        'root' : {
+                                          main : 'check'
+                                        , submain : 'check'
+                                    }
+                        , 'root/profile' : {
+                                          eyes   : 'blue'
+                                        , hair   : 'brown'
+                                        , height : 190
+                                    }
+                        , 'root/library' : { 'books': 'books & magazines'}
+                        , 'root/library/video': { 'mega': 'megaVideo' }
+                        , 'root/library/video/notes' : { '0':'check this note', '1': true }
+                    }
+        dtbox
+            .init ( test, { type: 'midFlat' })
+            .update ( {'profile/eyes':'black'}, {type:'breadcrumbs'})
+            .spreadAll ( 'std', st => result = st   )
+
+        expect ( result.library.video.notes[0] ).to.be.equal ( 'check this note' )
+        expect ( result.library.video.notes[1] ).to.be.equal ( true )
+
+        expect ( result.profile ).to.have.property ( 'eyes' )
+        expect ( result.profile.eyes ).to.be.equal ( 'black' )
+}) // it Init: midFlat, update with breadcrumbs, spread as "std"
 
 
 
@@ -355,7 +402,7 @@ it ( 'Modify: Update with instructions', () => {   // Updates only existing valu
                     .update ( sample.test_0 , { modify:'key', type:'std' });
 
     expect ( result.structure[0][0]).to.be.equal ( 'array' )
-    expect ( result.value['root/0/0'] ).to.be.equal ( 'name' )
+    expect ( result.value['root/0/0'] ).to.not.be.equal ( 'keys' )
 }) // it modify: Update
 
 
@@ -378,7 +425,6 @@ it ( 'Modify: Overwrite', () => {
                               }, {type:'std'});
 
      // updates existing values and adds new data including 'namespace' and 'structures'
-     expect ( result.value.hi()           ).to.be.equal ( 'hi' )
      expect ( result.value['root/0/name'] ).to.be.equal ( 'Stefan' )
      expect ( result.value                ).to.not.have.property ( 'root/0/second-number' )
      expect ( result.value                ).to.have.property ( 'root/0/prime-number' )
@@ -428,7 +474,6 @@ it ( 'Modify: Insert', () => {
 	                 .add ( sample.test_10, { type:'file'})
 	                 .insert ( ['root/friends/Misho', 'root/friends/Tosho' ] , {type: 'file'} )
 
-    expect ( result.value.hi()           ).to.be.equal ( 'hi' )
 	expect ( result.value ).to.have.property ( 'root/1/3' )
     expect ( result.value ).to.have.property ( 'root/1/4' )
     

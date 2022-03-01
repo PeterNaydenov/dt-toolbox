@@ -159,6 +159,7 @@ const mainlib = {
             return function ( inData, options ) {
                     const me = this;
                     let   updateData;
+                    
                     if ( options )   updateData = mainlib.init ( inData, options )
                     else             updateData = { 
                                                       structure : help.copyStructure(inData.structure)
@@ -521,7 +522,14 @@ const mainlib = {
                                 else {
                                         vals = dtlib.transform ( {...mainlib.dependencies(), modify }, [me.structure, me.value] );
                                     }
-                                selection = convert.to ( 'std', mainlib.dependencies(), vals )
+                                selection = convert
+                                                .to ( 'std', mainlib.dependencies(), vals )
+                                                .map ( v => {
+                                                        switch ( typeof v ) {
+                                                                    case 'string' : return Number(v) || v
+                                                                    default       : return v
+                                                            }
+                                                    })
                                 break
                 case 'key'    : 
                 case 'keys'   : 

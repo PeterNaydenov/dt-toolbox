@@ -262,10 +262,11 @@ it ( 'Spread -> values with selection', () => {
       .spread ( 'values', x => {
                     expect ( x.length ).to.be.equal ( 7 )
                     expect (x).to.contain ( 'Peter' )
-                    expect (x).to.contain ( '42' )
+                    expect (x).to.contain ( 42 )
                     expect (x).to.contain ( 'blue' )
                     expect (x).to.contain ( true )
               })
+
 }) // it spread -> values
 
 

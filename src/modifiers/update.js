@@ -1,8 +1,10 @@
 function update ( mainData, update ) {
     for (const updateKey in update ) {
-              if ( mainData[updateKey] ) {
+              if ( mainData.hasOwnProperty(updateKey) ) {
                           for (let prop in update[updateKey]) {
-                                          if ( mainData[updateKey][prop] )   mainData[updateKey][prop] = update[updateKey][prop]
+                                          if ( mainData[updateKey].hasOwnProperty(prop) ) { 
+                                                    mainData[updateKey][prop] = update[updateKey][prop]
+                                              }
                                   }
                   }
       }

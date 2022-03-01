@@ -2,8 +2,24 @@
 
 
 
+### 4.0.4 (2022-03-01)
+- [x] Fix: Convertor for 'midFlat' is loosing empty data-structures;
+- [x] Fix: Boolean values "true" are converted to 1(number);
+- [x] Fix: Operation "add" treats numbers as string;
+- [x] Fix: Convertor from 'breadcrumbs' breaks;
+
+
+
+
 ### 4.0.3 (2022-02-23)
 - [x] Fix: Initialize with breadcrumbs is not working at all;
+- [ ] Bug: Convertor for 'midFlat' is loosing empty data-structures;
+- [ ] Bug: Boolean values "true" are converted to 1(number);
+- [ ] Bug: Operation "add" treats numbers as string;
+- [ ] Bug: Convertor from 'breadcrumbs' breaks;
+
+
+
 
 
 
@@ -15,6 +31,12 @@
                     })
 ```
 - [ ] Bug: Initialize with breadcrumbs is not working at all;
+- [ ] Bug: Convertor for 'midFlat' is loosing empty data-structures;
+- [ ] Bug: Boolean values "true" are converted to 1(number);
+- [ ] Bug: Operation "add" treats numbers as string;
+- [ ] Bug: Convertor from 'breadcrumbs' breaks;
+
+
 
 
 
@@ -22,6 +44,10 @@
 - [x] Fix: Methods "add/update/overwrite/combine/append/prepend" expect by default data-type 'standard'. Should be a 'flat' data-type. This update is coming as major release because may require some changes. Everything else is according documentation for version 3.x.x;
 - [ ] Bug: Methods 'keep' and 'remove' received `flat keys` instead of `breadcrumbs keys`
 - [ ] Bug: Initialize with breadcrumbs is not working at all;
+- [ ] Bug: Convertor for 'midFlat' is loosing empty data-structures;
+- [ ] Bug: Boolean values "true" are converted to 1(number);
+- [ ] Bug: Operation "add" treats numbers as string;
+- [ ] Bug: Convertor from 'breadcrumbs' breaks;
 
 
 

@@ -5,6 +5,7 @@ function modify ( dependencies, main, addData ) {
                 , mainData = convert.to ( 'midFlat', dependencies, [main.structure, main.value])
                 , update   = convert.to ( 'midFlat', dependencies, [addData.structure, addData.value] )
                 ;
+                
             let result;
             main._error = main._error.concat ( addData._error )
             result = modifier[action] ( mainData, update )

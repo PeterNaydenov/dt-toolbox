@@ -45,6 +45,7 @@ function toType ( dependencies, [ structure, value ]) {
               , resultObjects = []
               , resultMap = {}
               ;
+
             structure.forEach ( ([type, id, ...items]) => {   // Create data-structures
                                     let local;
                                     if ( type == 'array' )   local = []
@@ -61,13 +62,15 @@ function toType ( dependencies, [ structure, value ]) {
                                     resultMap [id] = resultObjects.length
                                     resultObjects.push ( local )
                             })
-            structure.forEach ( ([type, id, ...items]) => {  // Conect data-structures
-                                    items.forEach ( ([link, propName],i) => {
+                            
+            structure.forEach ( ([ , id, ...items]) => {  // Conect data-structures
+                                    items.forEach ( ([link, propName]) => {
                                                     link = Number(link) || link;
                                                     let location = resultMap[link];
                                                     resultObjects[id][propName] = resultObjects[ location ]
                                             })
                             })
+                            
             return resultObjects[0]
     } // toType func.
 
