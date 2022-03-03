@@ -2,8 +2,14 @@
 
 
 
+### 4.0.6 (2022-03-03)
+- [x] Fix: Sometimes empty array structures are converted to empty objects;
+
+
+
 ### 4.0.5 (2022-03-01)
 - [x] Fix: Arrays are recognized as objects. Object members of arrays are recognized as arrays;
+- [ ] Bug: Sometimes empty array structures are converted to empty objects;
 
 
 
@@ -54,6 +60,7 @@
 - [ ] Bug: Boolean values "true" are converted to 1(number);
 - [ ] Bug: Operation "add" treats numbers as string;
 - [ ] Bug: Convertor from 'breadcrumbs' breaks;
+
 
 
 

@@ -4,7 +4,6 @@ function attach ( dependencies, me ) {
        , mainData  = convert.to ( 'midFlat', dependencies, [ me.structure, me.value ]   )
        , { result }  = me._select
        ;
-       
     if ( !result )   return me
     for ( k in result ) {
                 newKey = k.replace ( 'root', location )

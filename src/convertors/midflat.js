@@ -89,7 +89,9 @@ function toFlat ( dependencies, d ) {   // Converts data to shortFlat
 
                                 propDone [i] = k
                                 for (let el in d[k] ) {
-                                                value [`root/${i}/${el}` ] = d[k][el]
+                                                let val = d[k][el];
+                                                if ( val === '_fake$$$' )   return   // Remove fake data generated from 'toType' function
+                                                value [`root/${i}/${el}` ] = val
                                         }
             }) // keys foreach
         return [ structure, value ]
@@ -119,14 +121,27 @@ function toType ( dependencies, [structure, value] ) {   // Converts data to mid
                                         keys [ objNumber ] = midKey
                                 })
                 })
-        let valueKeys = Object.keys ( value );
+        let 
+              valueKeys = Object.keys ( value )
+            , valueCheck = new Set ()
+            ;
         for (let k of valueKeys ) {    // Organize values per midFlat object
                         let 
                               [ , n ,prop ] = k.split ( '/' )
                             , midKey = keys[n]
                             ;
+                        valueCheck.add(n)
                         result[midKey][prop] = value[k]
                     }
+        structure.forEach ( row => {   // Set a fake value into array objects. Preserve 'array' during midflat operations
+                        let 
+                              [ type, n, ...objects ] = row
+                            ,  midKey     = keys [ n ]
+                            , noValue = !valueCheck.has(n.toString())
+                            , hasNoObjects = !( objects.length > 0 )
+                            ;
+                        if ( type === 'array' && noValue && hasNoObjects )   result[midKey]['-1'] = '_fake$$$'
+                })
         return result
 } // toType func.
 

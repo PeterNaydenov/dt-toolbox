@@ -5,10 +5,10 @@ const
 
 
 function flatten ( mainData ) {
+    
     let keyList = Object
                      .keys ( mainData )
                      .filter ( x => x != 'root' );
-
     let flatter =  keyList.reduce ( (res,k) => {
                                 let update = { 'root': {...mainData[k]} }
                                 return combineShallow ( res, update )

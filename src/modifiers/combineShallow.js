@@ -64,7 +64,6 @@ function combineShallow ( mainData, update ) {
                                               }
                })   // forEach mainKeys
 
-
             updateKeys.forEach ( key => {
                                           let 
                                                obj = update[key]
@@ -76,10 +75,14 @@ function combineShallow ( mainData, update ) {
                                                          let testKey = `root/${k}`;
                                                          if ( result[testKey] ) {
                                                                      let digitCount = _findDigitKeys ( result[testKey]);
+                                                                     if ( obj[k] === '_fake$$$' )   return
                                                                      result[testKey][digitCount] = obj[k]
                                                                      return
                                                                }
-                                                         if ( !duplicateNames.has(k) )   result[key][k] = obj[k]
+                                                         if ( !duplicateNames.has(k) ) {  
+                                                                     if ( obj[k] === '_fake$$$' )   return
+                                                                     result[key][k] = obj[k]
+                                                               }
                                                 })
                })   // forEach updateKeys
             

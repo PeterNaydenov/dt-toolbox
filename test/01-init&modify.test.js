@@ -366,6 +366,22 @@ it ( 'Blueprint case', () => {
 }) // it Blueprint case
 
 
+it ( 'Save type for array empty structure', () => {
+    let testData = {
+                          name : 'Peter'
+                        , friends : []
+                        , age: 47
+                }
+    dtbox
+       .init ()
+       .add ( testData, {type: 'std'} )
+       .spreadAll ( 'std', st => {
+                        expect ( st.friends instanceof Array )
+                        expect ( st.friends.length ).to.be.equal(0)
+            })
+}) // it
+
+
 it ( 'Init: midFlat, update with breadcrumbs, spread as "std"', () => {
         let
               result
