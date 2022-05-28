@@ -4,29 +4,43 @@
 
 function toFlat ( dependencies, d ) {
             let 
-                  deepList = []
-                , isPrimitve = false
-                , value = dependencies.empty ()
-                , {
-                        findType
-                      , isItPrimitive
-                      , generateList  
-                    } = dependencies.help
+                  value       = dependencies.empty ()
+                , walk        = dependencies.walk
+                , { findType } = dependencies.help
                 , structure = []
-                ;    
-            deepList.push ( generateList (0, d)   )
-            structure.push ([ findType(d), 0 ])
-            for ( let list of deepList ) {
-            for ( let [id, k,val ] of list  ) {
-                                isPrimitve = isItPrimitive ( val )
-                                if ( isPrimitve )   value [`root/${id}/${k}`] = val
-                                else  {             
-                                                    let j = structure.length;
-                                                    structure[id].push ([j,k])
-                                                    deepList.push ( generateList(j,val) )
-                                                    structure.push ([ findType(val), j])
-                                    }
-                }}
+                , objectCounter = 0
+                , currentObjectID = 0
+                , objectIndex = {}
+                ;
+
+            function objectCalls (obj, breadcrumbs ) {
+                      let 
+                          location = breadcrumbs.split ( '/' )
+                        , objectName = location.pop()
+                        ;
+
+                      structure.push ( [findType(obj), objectCounter])
+                      objectIndex[breadcrumbs] = objectCounter
+                      currentObjectID = objectCounter
+
+                      if ( location.length > 0 ) {  
+                                let 
+                                    hostName = location.join ( '/' )
+                                  , hostID   = objectIndex[hostName]
+                                  ;
+                                structure[hostID].push ([objectCounter, objectName])
+                          }
+                          
+                      objectCounter++
+                      return obj
+                } // objectCalls func.
+
+            function keyCalls ( v,k,breadcrumbs ) {
+                      value[`root/${currentObjectID}/${k}`] = v
+                      return v
+                } // keyCalls func.
+
+            walk ( d, [keyCalls, objectCalls])
             return [ structure, value ]
     } // getFlat func.
 
