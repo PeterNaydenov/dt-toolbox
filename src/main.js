@@ -502,7 +502,7 @@ const mainlib = {
         const 
                me = this
             , hasSelection    = me._select.result ? true : false
-            , { help, walk } = mainlib.dependencies ()
+            , { help } = mainlib.dependencies ()
             ;
         let selection, modify, vals;
             /**
