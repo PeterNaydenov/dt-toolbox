@@ -17,7 +17,6 @@ const simple = {    // * Simple instruments
     
     
     , isObject    : str  => !simple.notObject(str)
-    , copy        :  obj => JSON.parse ( JSON.stringify(obj) ) 
     , folderKind  : test => test instanceof Array ? 'array' : 'object'
     , getIterator : list => Object.keys ( list )
     
