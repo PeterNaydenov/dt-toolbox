@@ -5,12 +5,12 @@
 function toFlat ( dependencies, d ) {
             let 
                   value       = dependencies.empty ()
-                , walk        = dependencies.walk
-                , { findType } = dependencies.help
+                , { help, walk } = dependencies
+                , { findType    } = help
                 , structure = []
                 , objectCounter = 0
-                , currentObjectID = 0
-                , objectIndex = {}
+                , currentObjectID = 0  // In use for values in keyCalls function 
+                , objectIndex = {}     // Map breadcrumb -> structure row number
                 ;
 
             function objectCalls (obj, breadcrumbs ) {
@@ -30,7 +30,6 @@ function toFlat ( dependencies, d ) {
                                   ;
                                 structure[hostID].push ([objectCounter, objectName])
                           }
-                          
                       objectCounter++
                       return obj
                 } // objectCalls func.
