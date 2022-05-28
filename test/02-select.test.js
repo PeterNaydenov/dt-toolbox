@@ -1,9 +1,10 @@
 'use strict'
 
 const		 
-		  dtbox  = require ( '../src/main'         )
-		, sample = require ( '../test-data/index'  )
-		, chai   = require ( 'chai'                )
+		  dtbox  = require ( '../src/main'          )
+		, sample = require ( '../test-data/index'   )
+    , walk   = require ( '@peter.naydenov/walk' )
+		, chai   = require ( 'chai'                 )
 		, expect = chai.expect
 		;
 
@@ -19,22 +20,19 @@ it ( 'Parent', () => {
             .select ()
             .parent ( 'title', item => item.id.includes('222') ) // 222 is ID pattern for drama
             .spread ( 'flat', flat => result = flat[1]   )
-  
-        let keyList = Object.keys ( result );
-        // Expect result to be a 'shortFlat' data-type:
-        expect ( result ).to.be.an ( 'object' )
-        expect ( keyList.length ).to.be.equal ( 6 )
-        keyList.forEach ( key => {
-                        let 
-                              arr = key.split ( '/' )
-                            , num = arr[1]
-                            ;
+
+        let count = 0;
+        expect ( result ).to.be.an ( 'object' )   // Expect result to be a 'shortFlat' data-type
+        walk ( result, (v,k) => {
+                        let num = k.split ( '/' )[1];
                         expect ( num ).to.satisfy ( num => {
                                                     if ( num == 9  )   return true
                                                     if ( num == 10 )   return true
                                                     return false 
                                             })
+                        count++
                 })
+        expect ( count ).to.be.equal ( 6 )
 }) // it select parent
 
 

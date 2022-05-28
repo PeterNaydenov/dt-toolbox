@@ -6,7 +6,6 @@ function folder ( dependencies, me ) {
         , result = []
         ;
     if ( prop == 'root' )   usedNumbers.push ( 0 )
-
     me.structure.forEach ( row => {   // Find if structures
     row.forEach ( (item,i) => {
                   if ( i > 1 ) {
