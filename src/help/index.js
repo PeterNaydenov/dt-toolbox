@@ -6,7 +6,6 @@ const
    , generateList     = require ( './generateList'      )
    , generateObject   = require ( './generateObject'    )
    , sanitizeFlatKeys = require ( './sanitizeFlatKeys'  )
-   , copyStructure    = require ( './copyStructure'     )
    , objectsByLevel   = require ( './objectsByLevel'    )
    , filterObject      = require ( './filterObject'       )
    , toBreadcrumbKeys = require ( './toBreadcrumbsKeys' )
@@ -27,7 +26,6 @@ module.exports = {
                     , generateObject
                     , generateList  
                     , sanitizeFlatKeys   // Sanitize 'file' format keys
-                    , copyStructure      // Creates a structure copy. Immutability matters
                     , objectsByLevel     // Object IDs organized by levels
                     , filterObject        // Find object and object props in a value
                     , toBreadcrumbKeys   // Breadcrumbs keys

@@ -1,7 +1,7 @@
 function combine ( dependencies, main, addData ) {
     // ***   Modify combine
                 const
-                      { convert, help, modifier } = dependencies 
+                      { convert, modifier, walk } = dependencies 
                     , mainData = convert.to ( 'midFlat', dependencies, [main.structure, main.value])
                     , update   = convert.to ( 'midFlat', dependencies, [addData.structure, addData.value] )
                     , keyList = Object.keys ( update )
@@ -26,7 +26,7 @@ function combine ( dependencies, main, addData ) {
                                                     else        return modifier['combineShallow'] ( res, { root: {...update[k]}} )
                                         }, mainData )   
                 let [structure, value ] = convert.from ( 'midFlat').toFlat ( dependencies, result )
-                main.structure = help.copyStructure ( structure )
+                main.structure = walk ( structure )
                 main.value = value
                 return main
     } // combine func.

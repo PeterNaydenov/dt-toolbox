@@ -5,7 +5,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 3.0.0
+    Version 5.0.0
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -22,6 +22,9 @@
          * Old internal data-type have a new name(breadcrumbs) and is fully supported(import/export);
          * Support for tuples(import and export);
          * Complete code refactoring;
+     - Refactoring for version 5.0.0
+         * Scan objects by using @peter.naydenov/walk
+         * 
 */
 
 
@@ -32,6 +35,7 @@ const
     , modifier         = require ( './modifiers/index'      )
     , convert         = require ( './convertors/index'    )
     , compareMethod   = require ( './compareMethod/index' )
+    , walk            = require ( '@peter.naydenov/walk'  )
     
     , INIT_DATA_TYPES = [
                                'std', 'standard'
@@ -67,6 +71,7 @@ const mainlib = {
                         , convert
                         , help
                         , modifier
+                        , walk
                     }
             } // dependencies func.
 
@@ -100,7 +105,7 @@ const mainlib = {
             if ( inData != null ) {
                         // Note: Use method 'load' instead of 'init' if your data is 'flat'
                         const [structure, value] = ( type == 'flat' || type == 'shortFlat' ) ? inData : convert.from(type).toFlat ( dependencies, inData )
-                        dt.structure = help.copyStructure ( structure ) 
+                        dt.structure = walk ( structure ) 
                         dt.value     = value
                 }
             if ( !modify   )   return dt
@@ -162,7 +167,7 @@ const mainlib = {
                     
                     if ( options )   updateData = mainlib.init ( inData, options )
                     else             updateData = { 
-                                                      structure : help.copyStructure(inData.structure)
+                                                      structure : walk ( inData.structure )
                                                     , value     : {...inData.value }
                                             }
                     return   dtlib.modify ( { ...mainlib.dependencies(), action:method}, me, updateData )
@@ -187,7 +192,7 @@ const mainlib = {
                 ;
             if ( !result )   return me
             let [struct, val] = convert.from ( 'midFlat').toFlat ( mainlib.dependencies(), result )
-            me.structure = help.copyStructure ( struct )
+            me.structure = walk ( struct )
             me.value = {...val}
             me._select.result = null
             return me
@@ -203,7 +208,7 @@ const mainlib = {
                 , dependencies = { ...mainlib.dependencies(), location }
                 ;
             let [structure, value ] = dtlib.attach ( dependencies, me )
-            me.structure = help.copyStructure ( structure )
+            me.structure = walk ( structure )
             me.value     = {...value}
             me._select.result = null
             return me
@@ -497,7 +502,7 @@ const mainlib = {
         const 
                me = this
             , hasSelection    = me._select.result ? true : false
-            , { help } = mainlib.dependencies ()
+            , { help, walk } = mainlib.dependencies ()
             ;
         let selection, modify, vals;
             /**
@@ -605,7 +610,7 @@ const mainlib = {
                                 else {
                                         let 
                                             set    = help.extractSelection ( me ) 
-                                          , struct = help.copyStructure ( me._select.structure )
+                                          , struct = walk ( me._select.structure )
                                           ;
                                         selection = [ struct, set ]
                                     }

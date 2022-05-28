@@ -5,7 +5,7 @@ function find ( dependencies, me ) {
       , deepDefault = 9999
       , deepMax
       , keys = Object.keys ( me.value )
-      , { help, deep, search } = dependencies
+      , { help, deep, search, walk } = dependencies
       , longKeys = help.toBreadcrumbKeys ( keys, me.structure )
       ;
              
@@ -25,7 +25,7 @@ function find ( dependencies, me ) {
                                                       return res
                                           },[] )
       me._select.value     = help.updateSelection ( me._select.value,  collection )
-      me._select.structure = help.copyStructure ( me.structure )
+      me._select.structure = walk ( me.structure )
       return me
 } // find func.
 

@@ -1,5 +1,5 @@
 function parent ( dependencies, me ) {
-    const { help, prop, where } = dependencies;
+    const { help, prop, walk, where } = dependencies;
     let 
           usedNumbers = []
         , selectedKeys = []
@@ -37,7 +37,7 @@ function parent ( dependencies, me ) {
         } // if where
     else    result = selectedKeys
     me._select.value     = help.updateSelection ( me._select.value, result )
-    me._select.structure = help.copyStructure ( me.structure )
+    me._select.structure = walk ( me.structure )
     return me
 } // parent func.
 

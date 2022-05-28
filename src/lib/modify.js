@@ -1,7 +1,7 @@
 function modify ( dependencies, main, addData ) {
     // ***   Modify add | update | overwrite | insert | append | prepend | combine
             const
-                  { action, convert, help, modifier } = dependencies 
+                  { action, convert, modifier, walk } = dependencies 
                 , mainData = convert.to ( 'midFlat', dependencies, [main.structure, main.value])
                 , update   = convert.to ( 'midFlat', dependencies, [addData.structure, addData.value] )
                 ;
@@ -10,7 +10,7 @@ function modify ( dependencies, main, addData ) {
             result = modifier[action] ( mainData, update )
 
             let [structure, value ] = convert.from ( 'midFlat').toFlat ( dependencies, result )
-            main.structure = help.copyStructure ( structure )
+            main.structure = walk ( structure )
             main.value = value
             return main
 } // modify func.
