@@ -39,7 +39,8 @@ function toFlat ( dependencies, rawValue ) {
             , structRaw = []   // objectLocation strings
             , propDone  = []
             ;
-          keyList.forEach ( (keyArr) => {   // Setup our temp structures: tProps and structRaw
+
+          keyList.forEach ( keyArr => {   // Setup our temp structures: tProps and structRaw
                     keyArr.forEach ( (k,i) => {
                                     let parent = keyArr.slice( 0, i ).join ( '/' );
                                     if ( !parent         )   return
