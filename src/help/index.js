@@ -1,16 +1,17 @@
 'use strict'
 
 const
-     isItPrimitive    = require ( './isItPrimitive'     )
-   , hasNumbers       = require ( './hasNumbers'        )
-   , sanitizeFlatKeys = require ( './sanitizeFlatKeys'  )
-   , objectsByLevel   = require ( './objectsByLevel'    )
-   , filterObject      = require ( './filterObject'       )
-   , toBreadcrumbKeys = require ( './toBreadcrumbsKeys' )
-   , updateSelection  = require ( './updateSelection'   )
-   , zipObject        = require ( './zipObject'         )
-   , extractSelection = require ( './extractSelection'  )
-   , reduceTuples     = require ( './reduceTuples'      )
+     isItPrimitive      = require ( './isItPrimitive'       )
+   , hasNumbers         = require ( './hasNumbers'          )
+   , sanitizeFlatKeys   = require ( './sanitizeFlatKeys'    )
+   , objectsByLevel     = require ( './objectsByLevel'      )
+   , filterObject        = require ( './filterObject'         )
+   , toBreadcrumbKeys   = require ( './toBreadcrumbsKeys'   )
+   , updateSelection    = require ( './updateSelection'     )
+   , zipObject          = require ( './zipObject'           )
+   , extractSelection   = require ( './extractSelection'    )
+   , reduceTuples       = require ( './reduceTuples'        )
+   , tuplesToBradcrumbs = require ( './tuplesToBreadcrumbs' )
    ;
 
 const findType =  d =>  ( d instanceof Array ) ? 'array' : 'object'
@@ -29,6 +30,7 @@ module.exports = {
                     , zipObject          // Conect two arrays in a single object
                     , extractSelection   // Creates 'value' object with selected keys only
                     , reduceTuples
+                    , tuplesToBradcrumbs
                 }
 
 

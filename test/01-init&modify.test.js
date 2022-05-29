@@ -84,6 +84,23 @@ it ( 'Init: Breadcrumbs', () => {
 
 
 
+it ( 'Init: Tuples', () => {
+        const 
+            test = [
+                          ['firstName', 'Peter']
+                        , ['familyName', 'Naydenov']
+                        , [ 'props/age', 48 ]
+                    ]
+            , mm = dtbox.init ( test, {type:'tuples'})
+            ;
+        const { structure, value } = mm;
+        expect ( structure[0][2][1] ).to.be.equal ( 'props' )
+        expect ( value ).to.have.property ( 'root/1/age' )
+        expect ( value ).to.have.property ( 'root/0/firstName' )
+}) // it init tuples
+
+
+
 it ( 'Init: Reverse keys and values', () => {
     // * Create object where values will become keys and keys become values
     let result = dtbox.init ( sample.test_0, {modify:'reverse'} );

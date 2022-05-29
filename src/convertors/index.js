@@ -24,8 +24,7 @@ const selectConvertorFrom =
                                                   return   std.toFlat ( dependencies, inData )
                                 case 'tuple'   :
                                 case 'tuples'  :
-                                                  
-                                                  break
+                                                  inData = help.tuplesToBradcrumbs ( dependencies, inData )
                                 case 'breadcrumb'  :
                                 case 'breadcrumbs' :
                                                   rawKeys  = Object.keys ( inData )
