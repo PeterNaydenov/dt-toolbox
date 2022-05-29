@@ -3,7 +3,6 @@
 const
      isItPrimitive    = require ( './isItPrimitive'     )
    , hasNumbers       = require ( './hasNumbers'        )
-   , generateList     = require ( './generateList'      )
    , generateObject   = require ( './generateObject'    )
    , sanitizeFlatKeys = require ( './sanitizeFlatKeys'  )
    , objectsByLevel   = require ( './objectsByLevel'    )
@@ -24,7 +23,6 @@ module.exports = {
                     , hasNumbers         // Check if array contain number members. Returns boolean
                     , isItPrimitive      // Returns boolean
                     , generateObject
-                    , generateList  
                     , sanitizeFlatKeys   // Sanitize 'file' format keys
                     , objectsByLevel     // Object IDs organized by levels
                     , filterObject        // Find object and object props in a value
