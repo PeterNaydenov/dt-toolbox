@@ -61,12 +61,17 @@ function from ( type ) {   // convert from something to flat...
 
 
 function to ( type, dependencies, inData ) {   // convert from flat to 'data-type'...
+        const { help } = dependencies;
         switch ( type ) {
             case 'std' :
             case 'standard':
                              return std.toType ( dependencies, inData )
             case 'midFlat' : 
                              return midFlat.toType ( dependencies, inData )
+            case 'tuple':
+            case 'tuples':
+                            let breadData = breadcrumbs.toType ( dependencies, inData )
+                            return help.reduceTuples ( dependencies, breadData )
             case 'breadcrumb' :
             case 'breadcrumbs':
                              return breadcrumbs.toType ( dependencies,inData )

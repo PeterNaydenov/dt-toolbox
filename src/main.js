@@ -5,7 +5,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 5.0.0
+    Version 4.0.7
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -22,9 +22,7 @@
          * Old internal data-type have a new name(breadcrumbs) and is fully supported(import/export);
          * Support for tuples(import and export);
          * Complete code refactoring;
-     - Refactoring for version 5.0.0
-         * Scan objects by using @peter.naydenov/walk
-         * 
+
 */
 
 
@@ -443,6 +441,8 @@ const mainlib = {
 
 
 
+
+    
     , purify () {
                 const
                        me = this
@@ -568,16 +568,15 @@ const mainlib = {
                                             selection = convert.to ( 'breadcrumbs', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)])
                                     }
                                 break
+                case 'tuple'  :
                 case 'tuples' :
-                                let tupleData;
                                 if ( hasSelection ) {
                                         let tupSelect = convert.from ( 'midFlat' ).toFlat ( mainlib.dependencies(), me._select.result );
-                                        tupleData = convert.to ( 'breadcrumbs', mainlib.dependencies(), tupSelect )
+                                        selection = convert.to ( 'tuples', mainlib.dependencies(), tupSelect )
                                     }
                                 else {
-                                        tupleData = convert.to  ( 'breadcrumbs', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)]);
+                                        selection = convert.to  ( 'tuples', mainlib.dependencies(), [me._select.structure, help.extractSelection(me)]);
                                     }
-                                selection = help.reduceTuples ( mainlib.dependencies(), tupleData )
                                 break
                 case 'file'        :
                 case 'files'       :

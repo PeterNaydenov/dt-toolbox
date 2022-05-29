@@ -2,14 +2,26 @@
 
 
 
+### 4.0.7 (2022-03-03)
+- [x] Library '@peter.naydenov/walk' was included as a dependency;
+- [x] Cleaning: Method 'help.generateObject' was removed. Not in use anymore;
+- [x] Cleaning: Method 'help.generateList' was removed. Not in use anymore;
+- [x] Cleaning: Old convertor file 'convertors_oldVersion.js' was removed;
+- [x] Refactoring: Convertor 'standard' is using 'walk'; 
+- [x] Fix: Initialization with 'tuples' doesn't work;
+
+
+
 ### 4.0.6 (2022-03-03)
 - [x] Fix: Sometimes empty array structures are converted to empty objects;
+- [ ] Bug: Initialization with 'tuples' doesn't work;
 
 
 
 ### 4.0.5 (2022-03-01)
 - [x] Fix: Arrays are recognized as objects. Object members of arrays are recognized as arrays;
 - [ ] Bug: Sometimes empty array structures are converted to empty objects;
+- [ ] Bug: Initialization with 'tuples' doesn't work;
 
 
 
@@ -19,6 +31,7 @@
 - [x] Fix: Operation "add" treats numbers as string;
 - [x] Fix: Convertor from 'breadcrumbs' breaks;
 - [ ] Bug: Arrays are recognized as objects. Object members of arrays are recognized as arrays;
+- [ ] Bug: Initialization with 'tuples' doesn't work;
 
 
 
@@ -29,6 +42,7 @@
 - [ ] Bug: Boolean values "true" are converted to 1(number);
 - [ ] Bug: Operation "add" treats numbers as string;
 - [ ] Bug: Convertor from 'breadcrumbs' breaks;
+- [ ] Bug: Initialization with 'tuples' doesn't work;
 
 
 
@@ -47,6 +61,7 @@
 - [ ] Bug: Boolean values "true" are converted to 1(number);
 - [ ] Bug: Operation "add" treats numbers as string;
 - [ ] Bug: Convertor from 'breadcrumbs' breaks;
+- [ ] Bug: Initialization with 'tuples' doesn't work;
 
 
 
@@ -56,6 +71,7 @@
 - [x] Fix: Methods "add/update/overwrite/combine/append/prepend" expect by default data-type 'standard'. Should be a 'flat' data-type. This update is coming as major release because may require some changes. Everything else is according documentation for version 3.x.x;
 - [ ] Bug: Methods 'keep' and 'remove' received `flat keys` instead of `breadcrumbs keys`
 - [ ] Bug: Initialize with breadcrumbs is not working at all;
+- [ ] Bug: Initialization with 'tuples' doesn't work;
 - [ ] Bug: Convertor for 'midFlat' is loosing empty data-structures;
 - [ ] Bug: Boolean values "true" are converted to 1(number);
 - [ ] Bug: Operation "add" treats numbers as string;

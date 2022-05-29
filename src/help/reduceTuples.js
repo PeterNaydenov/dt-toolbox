@@ -1,17 +1,21 @@
-function reduceTuples ( dependencies, breadcrumbData ) {
-    const { help } = dependencies;
-    let  tupleKeys = Object.keys ( breadcrumbData );
+'use strict'
 
-    return tupleKeys.reduce ( (res,k) => {
-                                let 
-                                      arr = k.substr(5).split('/')
-                                    , ln = arr.length
-                                    , lastEl = arr[ln-1]
-                                    ;
-                                if ( help.hasNumbers([lastEl]) )   arr.pop ()    
-                                res.push ( [ arr.join('/'), breadcrumbData[k]])
-                                return res
-                        },[])
+function reduceTuples ( dependencies, breadcrumbData ) {
+  // *** Converts breadcrumbs to array of tuples
+    const 
+          { help, walk } = dependencies
+        , result = []
+        ;
+    walk ( breadcrumbData, ( v, k ) => {
+                      let 
+                            arr = k.substr(5).split('/')
+                          , ln = arr.length
+                          , lastEl = arr[ln-1]
+                          ;
+                      if ( help.hasNumbers([lastEl]) )   arr.pop ()    
+                      result.push ( [ arr.join('/'), v])
+            })
+    return result
 } // reduceTuples func.
 
 
