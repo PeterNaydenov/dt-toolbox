@@ -173,8 +173,6 @@ const mainlib = {
 
 
 
-
-
     , errorLog ( callback ) {   // Executes callback with errors as argument
                     callback ( this._error )
                     return this
