@@ -1,6 +1,6 @@
 ## Release History
 
-### 5.0.0 (2023-05-12)
+### 6.0.0 (2023-05-12)
 - [x] Version 5 is full rethinking of the idea and rewrite from scratch;
 - [x] Simplified API interface;
 - [x] New internal data-model;
