@@ -1,47 +1,34 @@
 'use strict'
 
-const 
-     breadcrumbs = require ( './breadcrumbs' )
-   , std         = require ( './standard'    )
-   , midFlat     = require ( './midflat'      )
-   ;
+import std     from './standard.js'
+import midFlat from './midflat.js'
+import tuples  from './tuples.js'
 
 
 
 const selectConvertorFrom = 
         ( type ) => 
         ( dependencies, inData ) => {
-                    let 
-                          { help } = dependencies
-                        , vBuffer = []   // keep values during key's sanitize procedure
-                        , rawKeys
-                        , keyList
-                        , rawValue
-                        ;
                     switch ( type ) {
                                 case 'std'     :
                                 case 'standard':
                                                   return   std.toFlat ( dependencies, inData )
                                 case 'tuple'   :
                                 case 'tuples'  :
-                                                  inData = help.tuplesToBradcrumbs ( dependencies, inData )
+                                                  return tuples.toFlat ( dependencies, inData )
                                 case 'breadcrumb'  :
                                 case 'breadcrumbs' :
-                                                  rawKeys  = Object.keys ( inData )
-                                                  vBuffer  = rawKeys.map ( k => inData[k] )
-                                                  keyList  = help.sanitizeFlatKeys ( rawKeys )
-                                                  rawValue = help.zipObject ( keyList, vBuffer )
-                                                  return   breadcrumbs.toFlat ( dependencies, rawValue )
+                                                  const br = Object.entries ( inData );
+                                                  return tuples.toFlat ( dependencies, br )
                                 case 'file'    :
                                 case 'files'   :
-                                                  rawKeys = inData.map ( el => {  // extract keys from files
-                                                                        let arr = el.split('/');
-                                                                        vBuffer.push ( arr.pop() )
-                                                                        return arr.join ( '/' )
-                                                                })
-                                                  keyList  = help.sanitizeFlatKeys ( rawKeys )
-                                                  rawValue = help.zipObject ( keyList, vBuffer )
-                                                  return   breadcrumbs.toFlat ( dependencies, rawValue )
+                                                  const tups = inData.map ( el => {
+                                                                                let ar = el.split ( '/' );
+                                                                                if ( ar.length === 1 )  ar = [ 'root'].concat(ar)
+                                                                                const v = ar.pop ()
+                                                                                return [ ar.join('/'), v ]
+                                                                        })
+                                                  return tuples.toFlat ( dependencies, tups )
                                 case 'midFlat' :
                                                   return midFlat.toFlat ( dependencies, inData )
                             }
@@ -61,29 +48,49 @@ function from ( type ) {   // convert from something to flat...
 
 
 function to ( type, dependencies, inData ) {   // convert from flat to 'data-type'...
-        const { help } = dependencies;
+        const 
+              breadcrumbs = {}
+            , check = new Set()
+            , extend = new Set()
+            ;
+        let tups, count = 0;
         switch ( type ) {
             case 'std' :
             case 'standard':
-                             return std.toType ( dependencies, inData )
+                             return std.toType ( inData )
             case 'midFlat' : 
-                             return midFlat.toType ( dependencies, inData )
+                             return midFlat.toType ( inData )
             case 'tuple':
             case 'tuples':
-                            let breadData = breadcrumbs.toType ( dependencies, inData )
-                            return help.reduceTuples ( dependencies, breadData )
+                            return tuples.toType ( inData )
+            case 'files':
+                           tups = tuples.toType ( inData );
+                           return tups.map ( ([k,v]) => `${k}/${v}`)
             case 'breadcrumb' :
             case 'breadcrumbs':
-                             return breadcrumbs.toType ( dependencies,inData )
+                           let current;
+                           tups = tuples.toType ( inData )
+                           tups.forEach ( ([k,v]) => check.has(k) ? extend.add(k) : check.add(k)  )
+                           tups.forEach ( ([k,v]) => {
+                                                if ( extend.has(k) ) {
+                                                        if ( current !== k ) {
+                                                                        current = k
+                                                                        count = 0
+                                                            }
+                                                        let key = `${k}/${count}`;
+                                                        breadcrumbs[key] = v
+                                                        count++
+                                                    }
+                                                else {
+                                                        breadcrumbs[k] = v
+                                                    }
+                                        })
+                           return breadcrumbs
             } //switch type
     } // to func.
 
 
 
-
-
-module.exports = { from, to }
-
-
+export default { from, to }
 
 

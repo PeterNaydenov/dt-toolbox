@@ -2,151 +2,95 @@
 
 
 
-function toFlat ( dependencies, d ) {   // Converts data to shortFlat
-        if ( Object.keys(d).length === 0 ) {
-                let 
-                      structure = [ [ 'object', 0 ]   ]
-                    , value = {}
-                    ;
-                return [ structure, value ]
-          }
-        let 
-              structure = []
-            , value     = {}
-            , { help }  = dependencies
-            , keyList   = Object            // Provides keys in order: from larger to shorter 
-                                .keys ( d )
-                                .map ( x => x.trim().replace(/\/$/,'').split('/')  )
-                                .sort ( (a,b) => b.length - a.length   )
-            , tProps    = {}                // { objectLocation<string> : childObjectNames<set> }
-            , structRaw = [ 'root' ]        // objectLocation strings
-            , propDone  = []
+function toFlat ( dependencies, d ) {   // Converts data to 'dt' model
+        const 
+              entries = Object.entries ( d )
+            , { walk } = dependencies ()
+            , indexes = {}
+            , dt = []
+            , containers = {}
+            , buffer = {}
             ;
+                        function findContainers ( br ) {
+                                        if ( !containers[br] )   containers[br] = 'object'
+                                        const arr = br.split ( '/' );
+                                        if ( arr.length == 1 )   return
+                                        arr.pop ()
+                                        if ( arr.length == 1 )   return
+                                        findContainers ( arr.join('/') )
+                                } // findContainers func.
 
-        keyList.forEach ( keyArr => {   // Setup our temp structures: tProps and structRaw
-                                keyArr.forEach ( (k,i) => {
-                                                let parent = keyArr.slice( 0, i ).join ( '/' );
-                                                if ( !parent         )   return
-                                                if ( !tProps[parent] ) { 
-                                                        tProps[parent] = new Set()
-                                                        structRaw.push ( parent )
-                                                        }
-                                                tProps[parent].add ( k )
-                                        })
+                        function checkData ( br, midData ) {
+                                        const k = Object.keys ( midData );
+                                        k.forEach ( key => {
+                                                        if ( !isNaN(key) )   containers[br] = 'array'
+                                                })
+                                } // checkData func.
+
+        entries.forEach ( ([br, midData]) => {
+                        if ( !br.startsWith('root') )   br = `root/${br}`
+                        findContainers ( br )
+                        checkData ( br, midData )
+                        buffer[br] = midData
                 })
 
-        Array.from ( structRaw.reduce ((res,ls)=> {   // Add flat objects paths
-                                                res.add ( ls )
-                                                let flatList;
-                                                const spot = tProps[ls];
-                                                if ( spot == null )   return res
-                                                flatList = Array.from ( spot )
-                                                flatList.forEach ( el => res.add ( `${ls}/${el}` )   )
-                                                return res
-                                }, new Set()   )
-                )
-             .sort ()
-             .forEach ( (path,i) => {   // Build the structure rows    
-                                                let position;
-                                                if ( !structure[i]       ) {  
-                                                                structure[i] = [ 'object', i ]
-                                                                propDone [i] = path
-                                                        }
-                                                if ( propDone[i]  )   path = propDone[i]
-                                                if ( path == null )   return
-
-                                                const flatList = tProps[path];
-                                                if ( !flatList ) return
-                                                
-                                                let 
-                                                          flat = Array.from(flatList)
-                                                        , isArray = help.hasNumbers ( flat )
-                                                        ;
-                                                if ( isArray )   structure[i][0] = 'array'
-
-                                                flatList.forEach ( name => {
-                                                                position = structure.length
-                                                                propDone[position] = `${path}/${name}`
-                                                                structure.push ( ['object' , position])
-                                                        })
-                        })
-
-        propDone.forEach ( (k,i) => {   // Setup values
-                                let 
-                                     keyList = Object.keys ( d[k] ).map ( k => k.trim().replace (/\/$/,'')   )   // Prevents key to end on empty-space or '/'
-                                   , isArray = help.hasNumbers ( keyList )
-                                   , kSplit  = k.split ( '/' )
-                                   , kProp  
-                                   , breadcrumbs
-                                   ;
-
-                                kProp = kSplit.pop()
-                                breadcrumbs = kSplit.join('/')
-
-                                let ix = propDone.indexOf (breadcrumbs);
-                                if ( ix >= 0 )   structure[ix].push ( [i, kProp] )
-                                if ( isArray )   structure[i][0] = 'array'
-
-                                propDone [i] = k
-                                for (let el in d[k] ) {
-                                                let val = d[k][el];
-                                                if ( val === '_fake$$$' )   return   // Remove fake data generated from 'toType' function
-                                                value [`root/${i}/${el}` ] = val
+        // Add containers to other data in buffer. Modify the data according the container type
+        const containerEntries = Object.entries ( containers );
+        containerEntries.forEach ( ([ k, t]) => {
+                        if ( buffer[k] === 'object' )   return
+                        if ( buffer[k] ) {
+                                const isArray = buffer[k] instanceof Array;
+                                if ( t === 'array' && !isArray ) {
+                                                const list = Object.values ( buffer[k] )
+                                                buffer[k] = list
                                         }
-            }) // keys foreach
-        return [ structure, value ]
+                                return
+                            }
+                        const structure = ( t === 'object' ) ? {} : [];
+                        buffer[k] = structure
+                }) // containerEntries forEach
+
+        const bufferEntries = Object.entries ( buffer ).sort();
+        bufferEntries.forEach ( ([ breadcrumbs, flatData]) => {
+                        const 
+                              name = breadcrumbs.split ( '/' ).pop ()
+                            , parent = breadcrumbs.replace ( `/${name}`, '' )
+                            , dcopy  = flatData instanceof Array ? [...flatData] : {...flatData}
+                            , line = [ name, dcopy, breadcrumbs, [] ]
+                            ;
+                        
+                        indexes[breadcrumbs] = line
+                        dt.push ( line )
+                        if ( breadcrumbs === 'root' )   return
+                        if ( !parent                )   return
+                        if ( indexes[parent] )   indexes[parent][3].push ( breadcrumbs )
+                }) // forEach entry
+
+        const copy = walk ({ data : d })
+        return [ copy, indexes, dt ]
     } // toFlat func.
 
 
 
-
-
-function toType ( dependencies, [structure, value] ) {   // Converts data to midFlat
-          let
-              result = { 'root': {} }
-            , keys   = {'0':'root'}
-            , activeKey
-            ;
-        structure.forEach ( (row,i) => {   // Define relation between structure number and midkeys. Var 'keys'.
-                        if ( keys[i] != null )   activeKey = keys[i]
-                        else                     activeKey = 'root'
-
-                        row.forEach ( (el,j) => {   // Collect all defined sub structures
-                                        if ( j < 2 )   return
-                                        let 
-                                            [ objNumber, objName ] = el
-                                           , midKey = `${activeKey}/${objName}`
-                                           ;
-                                        result [ midKey  ] = {}
-                                        keys [ objNumber ] = midKey
-                                })
-                })
-        let 
-              valueKeys = Object.keys ( value )
-            , valueCheck = new Set ()
-            ;
-        for (let k of valueKeys ) {    // Organize values per midFlat object
-                        let 
-                              [ , n ,prop ] = k.split ( '/' )
-                            , midKey = keys[n]
-                            ;
-                        valueCheck.add(n)
-                        result[midKey][prop] = value[k]
-                    }
-        structure.forEach ( row => {   // Set a fake value into array objects. Preserve 'array' during midflat operations
-                        let 
-                              [ type, n, ...objects ] = row
-                            ,  midKey     = keys [ n ]
-                            , noValue = !valueCheck.has(n.toString())
-                            , hasNoObjects = !( objects.length > 0 )
-                            ;
-                        if ( type === 'array' && noValue && hasNoObjects )   result[midKey]['-1'] = '_fake$$$'
-                })
+function toType ( dt ) {   // Converts data to midFlat
+        const result = {};
+        dt.forEach ( line => {
+                    const 
+                          [ , flatData, breadcrumbs ] = line
+                        , isEmpty = (Object.keys ( flatData ).length === 0)
+                        ;
+                    if ( isEmpty )   return
+                    const 
+                          br = breadcrumbs.replace ( 'root/', '' )
+                        , d = flatData instanceof Array ? [...flatData] : {...flatData}
+                        ;
+                    result [br] = d
+            }) // forEach line
         return result
 } // toType func.
 
 
 
-module.exports = { toFlat, toType }
+export default { toFlat, toType }
 
 
