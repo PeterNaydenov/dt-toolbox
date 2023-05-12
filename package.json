@@ -1,34 +1,9 @@
 {
   "name": "dt-toolbox",
-  "version": "4.0.7",
   "description": "Data manipulation tool",
-  "main": "src/main.js",
-  "scripts": {
-    "test": "mocha test",
-    "build": "webpack",
-    "cover": "nyc mocha test"
-  },
-  "directories": {
-    "test": "test"
-  },
-  "dependencies": {
-    "@peter.naydenov/walk": "1.1.0"
-  },
-  "devDependencies": {
-    "@babel/core": "7.18.2",
-    "@babel/preset-env": "7.18.2",
-    "babel-loader": "8.2.5",
-    "chai": "4.3.6",
-    "mocha": "10.0.0",
-    "nyc": "15.1.0",
-    "uglifyjs-webpack-plugin": "2.2.0",
-    "webpack": "5.72.1",
-    "webpack-cli": "4.9.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PeterNaydenov/dt-toolbox.git"
-  },
+  "version": "5.0.0",
+  "license": "MIT",
+  "author": "Peter Naydenov",
   "keywords": [
     "flatten",
     "shallow",
@@ -37,13 +12,30 @@
     "structure",
     "dt"
   ],
-  "author": "Peter Naydenov",
-  "license": "MIT",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.js",
+    "test": "mocha test",
+    "cover" : "c8 mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PeterNaydenov/dt-toolbox.git"
+  },
   "bugs": {
     "url": "https://github.com/PeterNaydenov/dt-toolbox/issues"
   },
   "homepage": "https://github.com/PeterNaydenov/dt-toolbox#readme",
-  "nyc": {
+  "dependencies": {
+    "@peter.naydenov/walk": "4.0.0"
+  },
+  "devDependencies": {
+    "c8": "^7.13.0",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  },
+  "c8": {
     "include": [
       "src/**/*.js"
     ],
@@ -56,6 +48,5 @@
       "lcov",
       "text-summary"
     ]
-  },
-  "browserslist": "> 2%, not dead"
+  }
 }

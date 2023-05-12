@@ -1,7 +1,20 @@
 # Migration Guides
 
 
-## From v.2.x.x. - v.3.x.x
+## From v.4.x.x  - v.5.x.x
+
+The library "dt-toolbox" exist for a full 7 years and now version 5 is coming as full rewrite of the original idea. Difference are more then similarity and better aproach is to read a version 5 documentation first. Then you will find that:
+
+ - Data creation is very simular;
+ - Dt-Object becomes a storage and you can add more data to it;
+ - Dt-Object data will stay always immutable;
+ - For extracting data you can use 'query' and 'model' functions;
+ - For speed up a data evaluation dt-object has a dynamic filters;
+ - Import and export data-models from the previous version are available;
+
+
+
+## From v.2.x.x. - v.3.x.x (v.4.x.x )
 
 Upgrade to version 3 of the library will require some code changes. 
 

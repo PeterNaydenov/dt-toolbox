@@ -1,6 +1,12 @@
 ## Release History
 
-
+### 5.0.0 (2023-05-12)
+- [x] Version 5 is full rethinking of the idea and rewrite from scratch;
+- [x] Simplified API interface;
+- [x] New internal data-model;
+- [x] Multiple data inserts;
+- [x] Predefined and custom filters for faster data scan;
+- [x] Model and query functions to shape the results;
 
 ### 4.0.7 (2022-03-03)
 - [x] Library '@peter.naydenov/walk' was included as a dependency;
@@ -271,7 +277,6 @@
  - [x] Initial code;
  - [x] Test package;
  - [x] Documentation;
-
 
 
 

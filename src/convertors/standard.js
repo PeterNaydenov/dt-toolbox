@@ -2,45 +2,51 @@
 
 
 
-function toFlat ( dependencies, d ) {
-            let 
-                  value       = dependencies.empty ()
-                , { help, walk } = dependencies
-                , { findType    } = help
-                , structure = []
-                , objectCounter = 0
-                , currentObjectID = 0  // In use for values in keyCalls function 
-                , objectIndex = {}     // Map breadcrumb -> structure row number
-                ;
+function toFlat ( dependencies, d ) {   // Convert data to 'dt' model
+        const dataType = d instanceof Array ? [] : {}
+        const
+              { walk } = dependencies ()
+            , dt = [
+                  //  Store record line positions:
+                  //    0      1        2          3    
+                  // [ name, data , breadcrumbs, edges ] 
+                    [ 'root', dataType, 'root', [] ]
+                ]
+            , index = { 'root' : dt[0] }
+            , dtDATA = 1   // Const: Flat data object in store record line;
+            , dtEDGES = 3  // Const: Edges in store record line;
+            ;
 
-            function objectCalls (obj, breadcrumbs ) {
-                      let 
-                          location = breadcrumbs.split ( '/' )
-                        , objectName = location.pop()
-                        ;
+        function objCallbackFn ({ value, key, breadcrumbs }) {
+                        const 
+                              isArray = value instanceof Array ? true : false
+                            , dataType = isArray ? [] : {}
+                            , objectName = key
+                            , search = new RegExp (  `\/${key}$` )
+                            , parentName = breadcrumbs.replace ( search, '' )
+                            , newObject = [ objectName, dataType, breadcrumbs, [] ]
+                            ;
+                        index[ parentName][dtEDGES].push ( breadcrumbs )
+                        dt.push ( newObject )
+                        index [ breadcrumbs ] = dt.at(-1)
+                        return value
+                } // objCallbackFn
 
-                      structure.push ( [findType(obj), objectCounter])
-                      objectIndex[breadcrumbs] = objectCounter
-                      currentObjectID = objectCounter
+        function keyCallbackFn ({ value, key, breadcrumbs }) {
+                        const
+                              search = new RegExp (  `\/${key}$` )
+                            , parentName = breadcrumbs.replace ( search, '' )
+                            ; 
+                        index [parentName][dtDATA][key] = value
+                        return value
+                } // keyCallbackFn
 
-                      if ( location.length > 0 ) {  
-                                let 
-                                    hostName = location.join ( '/' )
-                                  , hostID   = objectIndex[hostName]
-                                  ;
-                                structure[hostID].push ([objectCounter, objectName])
-                          }
-                      objectCounter++
-                      return obj
-                } // objectCalls func.
-
-            function keyCalls ( v,k,breadcrumbs ) {
-                      value[`root/${currentObjectID}/${k}`] = v
-                      return v
-                } // keyCalls func.
-
-            walk ( d, [keyCalls, objectCalls])
-            return [ structure, value ]
+        const copy = walk ({
+                              data : d
+                            , keyCallback    : keyCallbackFn
+                            , objectCallback : objCallbackFn 
+                        })
+            return [ { root:copy }, index, dt ]   
     } // getFlat func.
 
 
@@ -52,39 +58,23 @@ function toFlat ( dependencies, d ) {
 
 
 
-function toType ( dependencies, [ structure, value ]) {
+function toType ( dt ) {
             let 
-                keys = Object.keys ( value )
-              , resultObjects = []
-              , resultMap = {}
-              ;
-
-            structure.forEach ( ([type, id, ...items]) => {   // Create data-structures
-                                    let local;
-                                    if ( type == 'array' )   local = []
-                                    else                     local = {}
-                                    
-                                    let selectedKeys = keys.filter ( k => k.includes(`root/${id}/`));
-                                    selectedKeys.forEach ( k => {   // Fill with primitive data
-                                                            let 
-                                                                  arr      = k.split ( '/' )
-                                                                , propName = arr [arr.length-1]
-                                                                ;
-                                                            local [propName]  = value[k]
-                                                    })
-                                    resultMap [id] = resultObjects.length
-                                    resultObjects.push ( local )
-                            })
-                            
-            structure.forEach ( ([ , id, ...items]) => {  // Conect data-structures
-                                    items.forEach ( ([link, propName]) => {
-                                                    link = Number(link) || link;
-                                                    let location = resultMap[link];
-                                                    resultObjects[id][propName] = resultObjects[ location ]
-                                            })
-                            })
-                            
-            return resultObjects[0]
+                  result = {}
+                , revDT = dt.reverse ()
+                ;
+            revDT.forEach ( ([ name, d, breadcrumbs, edges ]) => {
+                        const copy = d instanceof Array ? [...d] : {...d};
+                        
+                        result[breadcrumbs] = copy
+                        edges.forEach ( edge => {
+                                        if ( result[edge] ) {
+                                                const name = edge.replace (`${breadcrumbs}/`, '' );
+                                                result[breadcrumbs][name] = result[edge]
+                                            }  
+                                })
+                    })
+            return result['root']
     } // toType func.
 
 
@@ -99,6 +89,5 @@ function toType ( dependencies, [ structure, value ]) {
 
 
 
-module.exports = { toFlat, toType }
-
+export default { toFlat, toType }
 
