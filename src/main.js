@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 5.0.0
+    Version 6.0.0
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -23,7 +23,7 @@
          * Support for tuples(import and export);
          * Complete code refactoring;
          
-     - Refactoring and version 5.0.0  May 12th 2023
+     - Refactoring and version 6.0.0  May 12th 2023
          * Keeps only the idea, changes everything else;
          * Simplified API interface;
          * New internal data model;

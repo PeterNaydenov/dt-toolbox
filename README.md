@@ -1,10 +1,10 @@
-# DT Toolbox v.5.x.x
+# DT Toolbox v.6.x.x
 
  - [Documentation for old v.4.x.x and 3.x.x is here](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.4.x.x.md)
 
 
 
-## About version 5.x.x
+## About version 6.x.x
 * Version 5 is full rethinking of the idea and rewrite from scratch;
 * Simplified API interface;
 * New internal data-model;
