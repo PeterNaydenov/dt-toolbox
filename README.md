@@ -5,7 +5,7 @@
 
 
 ## About version 6.x.x
-* Version 5 is full rethinking of the idea and rewrite from scratch;
+* Version 6 is full rethinking of the idea and rewrite from scratch;
 * Simplified API interface;
 * New internal data-model;
 * Multiple data inserts;
