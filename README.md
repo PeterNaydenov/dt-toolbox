@@ -1141,6 +1141,7 @@ console.log ( result )
 ## External Links
 - [Migration guide](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Migration.guide.md)
 - [History of changes](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Changelog.md)
+- [DT-Queries. Some useful query functions for DT-Toolbox](https://github.com/PeterNaydenov/dt-queries)
 - [Documentation v.4.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.4.x.x.md)
 - [Documentation v.2.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.2.x.x.md)
 
