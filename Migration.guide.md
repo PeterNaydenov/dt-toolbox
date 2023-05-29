@@ -1,9 +1,9 @@
 # Migration Guides
 
 
-## From v.4.x.x  - v.5.x.x
+## From v.4.x.x  - v.6.x.x
 
-The library "dt-toolbox" exist for a full 7 years and now version 5 is coming as full rewrite of the original idea. Difference are more then similarity and better aproach is to read a version 5 documentation first. Then you will find that:
+The library "dt-toolbox" exist for a full 7 years and now version 6 is coming as full rewrite of the original idea. Difference are more then similarity and better aproach is to read a version 6 documentation first. Then you will find that:
 
  - Data creation is very simular;
  - Dt-Object becomes a storage and you can add more data to it;
