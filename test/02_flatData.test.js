@@ -141,10 +141,10 @@ it ( 'flatStore: connect', () => {
 
 it ( 'flatStore: connect. Duplicate relation information', () => {
         // Setup all flatRows first
-        flatStore.look ( ({ name, flatData, breadcrumbs }) => { 
+        flatStore.look ( ({ name, flatData, breadcrumbs, next }) => { 
                         flatStore.set ( name, flatData )   // Copy the data
                         if ( breadcrumbs.includes('/') )  flatStore.connect ([breadcrumbs])   // Connect object only when they are available. If parent or child object is missing - linking operation will be refused;
-                        return 'next'   // Call 'look' fn once per flatRow
+                        return next ()   // Call 'look' fn once per flatRow
                 })        
         const result = flatIO.getSelection ();
         result.forEach ( line => {
@@ -170,12 +170,12 @@ it ( 'flatStore: connect. Duplicate relation information', () => {
 
 it ( 'flatStore: connect. Short list of links', () => {
         // Setup all flatRows first
-        flatStore.look ( ({ name, flatData, breadcrumbs }) => {
+        flatStore.look ( ({ name, flatData, breadcrumbs, next }) => {
                         const testList = [ 'root', 'personal', 'hobbies', 'music' ];
-                        if ( !testList.includes(name) )   return 'next'    // Ignore part of the data 
+                        if ( !testList.includes(name) )   return next ()    // Ignore part of the data 
                         flatStore.set ( name, flatData )  // copy a not filtered flatData
                         if ( breadcrumbs.includes('/') )   flatStore.connect ([ breadcrumbs ]) // copy the connection
-                        return 'next'   // Call 'look' fn once per flatRow
+                        return next ()   // Call 'look' fn once per flatRow
                 })
         
         const result = flatIO.getSelection ();
@@ -209,14 +209,14 @@ it ( 'flatStore: look ', () => {
 
 
 
-it ( 'flatStore: look with next', () => {
+it ( 'flatStore: look with next()', () => {
     let i = 0;
-    flatStore.look ( ({empty}) => { 
+    flatStore.look ( ({empty, next }) => { 
                             if ( !empty )   i++   // Count of the object properties. Some objects don't have own properties. Such objects will provide 'empty' property to 'look' fn;
-                            return 'next'         // Call 'look' fn once per flatRow;
+                            return next ()        // Call 'look' fn once per flatRow;
                 })
     expect ( i ).to.be.equal ( 6 )  // Number of flatRows in the data 
-}) // it flatStore.look with 'next'
+}) // it flatStore.look with next()
 
 
 
@@ -309,9 +309,9 @@ it ( 'flatStore: try to use a non-existing filter', () => {
     let i = 0;
     flatStore
         .use ( 'some' )
-        .look ( () => {
+        .look ( ({next}) => {
                     i++ 
-                    return 'next'
+                    return next ()
                 })
     expect ( i ).to.be.equal ( 7 ) // will be executed on each dt-line
 }) // it flatStore.use a non-existing filter

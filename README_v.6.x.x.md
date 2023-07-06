@@ -1,16 +1,16 @@
-# DT Toolbox v.7.x.x
+# DT Toolbox v.6.x.x
 
-![version](https://img.shields.io/github/package-json/v/peterNaydenov/dt-toolbox)
-![license](https://img.shields.io/github/license/peterNaydenov/dt-toolbox)
-
- - [Documentatation for old v.6.x.x is here](htts://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.6.x.x.md)
+ - [Documentation for old v.4.x.x and 3.x.x is here](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.4.x.x.md)
 
 
 
-## Breaking changes 
-* In version 7 look functions have 2 new arguments: Function `finish` and `next`;
-* Instead of returning a string 'next'(in version 6) to stop iteration on current dt-line, now you have to `return next()`;
-* Function `finish` is a new option. Call `return finish()` to stop iteration on all dt-lines;
+## About version 6.x.x
+* Version 6 is full rethinking of the idea and rewrite from scratch;
+* Simplified API interface;
+* New internal data-model;
+* Multiple data inserts;
+* Predefined and custom filters for faster data scan;
+* Model and query functions to shape results;
 
 
 
@@ -37,7 +37,6 @@ This data-description is easy to read, saved, or transfered.
 
 ## Installation
 Install for node.js projects by writing in your terminal:
-
 ```
 npm install dt-toolbox
 ```
@@ -548,13 +547,11 @@ const result = dt.query ( store => {
                                             , breadcrumbs  // breadcrumbs for dt-line;
                                             , links        // List of tuples [[parent, child],...]. Parent and child are the dt-line names;
                                             , empty        // Will present only if object has no properties. Empty flatData for dt-line.
-                                            , next         // Function that can be returned to move to next dt-line
-                                            , finish       // Function that can be returned to stop execution of look function
                                             }) => {
                                                         //... body of look function
                                                         // Move fast to next dt-line by returning a string 'next'
-                                                        return next ()
-                                                        // unconditional `return next()` will executes the 'look' function once per dt-line
+                                                        return 'next'
+                                                        // unconditional return 'next' will executes the 'look' function once per dt-line
                                             })
                     })
 ```
@@ -581,10 +578,10 @@ const
     , res = dt.query ( store => {
                           store
                               .from ( 'root/personal/hobbies' )
-                              .look ( ({name, next }) => {
+                              .look ( ({name}) => {
                                                 console.log ( name )
                                                 // -> hobbies, music, sport
-                                                return next () // because we want to iterate once on each dt-line
+                                                return 'next' // because we want to iterate once on each dt-line
                                         })
                     });
 ```
@@ -619,10 +616,10 @@ const
     , res = dt.query ( store => {
                             store
                               .use ( 'object' )   // predefined filter 'object'
-                              .look ( ({name, next }) => {
+                              .look ( ({name}) => {
                                                 console.log ( name )
                                                 // -> root, personal, hobbies
-                                                return next () // because we want to iterate once on each dt-line
+                                                return 'next' // because we want to iterate once on each dt-line
                                         })
                     });
 ```
@@ -653,10 +650,10 @@ const
     , res = dt.query ( store => {
                             store
                               .get ( 'root/friends' )
-                              .look ( ({ flatData, next }) => {
+                              .look ( ({flatData}) => {
                                                 console.log ( flatData )
                                                 // -> [ 'Ivan', 'Dobroslav', 'Stefan' ]
-                                                return next ()   // because we want to iterate once on each dt-line
+                                                return 'next' // because we want to iterate once on each dt-line
                                         })
                     });
 ```
@@ -685,10 +682,10 @@ const
     , res = dt.query ( store => {
                             store
                               .find ( 'music' )
-                              .look ( ({flatData, next }) => {
+                              .look ( ({flatData}) => {
                                                 console.log ( flatData )
                                                 // -> [ 'punk', 'ska', 'metal', 'guitar' ]
-                                                return next () // because we want to iterate once on each dt-line
+                                                return 'next' // because we want to iterate once on each dt-line
                                         })
                     });
 ```
@@ -717,12 +714,12 @@ const
     , res = dt.query ( store => {
                             store
                               .like ( 'per' )
-                              .look ( ({flatData, breadcrumbs, next }) => {
+                              .look ( ({flatData, breadcrumbs}) => {
                                                 console.log ( flatData )
                                                 // -> { age: 49, eyes: 'blue' }
                                                 console.log ( breadcrumbs )
                                                 // -> 'root/personal'
-                                                return next ()   // because we want to iterate once on each dt-line
+                                                return 'next' // because we want to iterate once on each dt-line
                                         })
                     });
 ```
@@ -1012,13 +1009,13 @@ const result = dt.query ( store => {
                             store.set ( 'root', [])  // setup a root array element
                             store
                                 .use ( 'listObject' ) // use only objects that are members of array
-                                .look ( ({ name, flatData, next }) => {
+                                .look ( ({ name, flatData }) => {
                                             if ( flatData.age < 40 ) {  
                                                     store.set ( i, flatData )
                                                     connectBuffer.push ( `root/${i}` )
                                                     i++
                                                 }
-                                            return next ()
+                                            return 'next'
                                         })
                             store.connect ( connectBuffer )
                     })
@@ -1047,9 +1044,9 @@ const result = dt.query ( store => {
                                 store.set ( 'root', [])
                                 store
                                    .use ( 'listObject' ) // use only objects that are members of array
-                                   .look ( ({ flatData, next }) => {
+                                   .look ( ({ flatData }) => {
                                                if ( flatData.age < 40 )   store.push ( 'root', flatData.name )
-                                               return next ()
+                                               return 'next'
                                            })
                     })
                  .model ( () => ({as:'std'})   )
@@ -1078,10 +1075,10 @@ Return an object with two groups
                                store.connect ([ 'root/under40', 'root/over40' ])
                                store
                                    .use ( 'listObject' ) // use only objects that are members of array
-                                   .look ( ({ flatData, next }) => {
+                                   .look ( ({ flatData }) => {
                                                let location = ( flatData.age > 40 ) ? 'over40' : 'under40';
                                                store.push ( location, flatData.name )
-                                               return next ()
+                                               return 'next'
                                            })
                        })
                      .model ( () => ({ as : 'std'}))
@@ -1105,10 +1102,10 @@ console.log ( result )
 
 ```js
 const result = dt.query ( store => {
-                               store.look ( ({ name, flatData, breadcrumbs, next }) => {
+                               store.look ( ({ name, flatData, breadcrumbs }) => {
                                                store.set ( name, flatData )
                                                if ( breadcrumbs.includes('/') )   store.connect ([breadcrumbs])
-                                               return next ()
+                                               return 'next'
                                         })
                         })
                     .model ( () => ({as:'std'}))

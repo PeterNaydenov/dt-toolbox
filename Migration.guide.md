@@ -1,5 +1,34 @@
 # Migration Guides
 
+## From v.6.x.x  - v.7.x.x
+Look function can return `next` and `finish` functions. This functions are used to control the flow of the "**look**" function. If you `return next()`, the look function will continue to execute callback with next dt-line object. If you `return finish()`, the look function will end. 
+
+
+```js
+// was:
+dt.query ( (store) => {
+    store.look ( ({name, flatData, breadcrumbs}) => {
+        if ( flatData.includes('something') ) {
+                // do something
+                // return string 'next' to stop iteration on this dt-line
+                return 'next'
+        }
+    })
+})
+
+// become:
+dt.query ( (store) => {
+    store.look ( ({name, flatData, breadcrumbs, next, finish}) => {
+        if ( flatData.includes('something') ) {
+                // do something
+                // return `next()` to stop iteration on current dt-line
+                return next ()
+                // return `finish()` to stop iteration on all dt-lines (it's a new option)
+        }
+    })
+})
+
+```
 
 ## From v.4.x.x  - v.6.x.x
 

@@ -1,5 +1,12 @@
 ## Release History
 
+### 7.0.0 (2023-07-15)
+- [x] Method `look` has new arguments: functions `next` and `finish`;
+- [x] To stop iteration on current dt-line `return next()`;
+- [x] To stop iteration on all dt-lines `return finish()`;
+
+
+
 ### 6.0.0 (2023-05-12)
 - [x] Version 5 is full rethinking of the idea and rewrite from scratch;
 - [x] Simplified API interface;
@@ -7,6 +14,8 @@
 - [x] Multiple data inserts;
 - [x] Predefined and custom filters for faster data scan;
 - [x] Model and query functions to shape the results;
+
+
 
 ### 4.0.7 (2022-03-03)
 - [x] Library '@peter.naydenov/walk' was included as a dependency;
