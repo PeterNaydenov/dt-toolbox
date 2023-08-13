@@ -9,6 +9,7 @@ import { expect } from "chai"
 import mainLib from "../src/mainLib.js"
 import flatObject from '../src/flatObject/index.js'
 import convert from '../src/convertors/index.js'
+import dtbox from "../src/main.js";
 
 
 
@@ -54,9 +55,9 @@ it ( 'Create flat object', () => {
 
 
 
-it ( 'flatObject: insert', () => { 
+it ( 'flatObject: insert a dt-object', () => { 
     let i = 0, k = 0;
-    flat.insert ( 'base', mainLib.init (a, {type:'std'}) )
+    flat.insertSegment ( 'base', mainLib.init (a, {type:'std'}) )
     const res = flat.export ();
 
     res.forEach ( line => {
@@ -66,6 +67,34 @@ it ( 'flatObject: insert', () => {
                 })
     expect ( k/i ).to.be.equal ( 2 )   // Imported object is the same. So expectation is that rows will be doubled. 
 }) // it flatObject.insert
+
+
+
+
+it ( 'flatObject:: insert a non dt-object', () => {
+    flat.insertSegment ( 'base', a ) // Insert a non dt-object -> auto convert from std to dt-object
+    const res = flat.export ();
+    let i = 0;
+    res.forEach ( line => {
+                const [ name,, breadcrumbs ] = line;
+                if ( name === breadcrumbs ) i++
+            })  // forEach line
+    expect ( i ).to.be.equal ( 2 ) // 'root' and 'base' segments
+}) // it non dt-object
+
+
+
+it ( 'flatObject:: insert a dt model', () => {
+    const dtModel = dtbox.init ( a, { type : 'std' }).export ()
+    flat.insertSegment ( 'base', dtModel ) // Insert a dt model
+    const res = flat.export ();
+    let i = 0;
+    res.forEach ( line => {
+                const [ name,, breadcrumbs ] = line;
+                if ( name === breadcrumbs ) i++
+            })  // forEach line
+    expect ( i ).to.be.equal ( 2 ) // 'root' and 'base' segments
+}) // it dt model
 
 
 

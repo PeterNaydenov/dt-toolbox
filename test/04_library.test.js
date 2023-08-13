@@ -35,7 +35,7 @@ it ( 'Init', () => {
     const store = dtbox.init ( a );
 
     // Store should have these methods:
-    expect ( store ).to.have.property ( 'insert' )
+    expect ( store ).to.have.property ( 'insertSegment' )
     expect ( store ).to.have.property ( 'export' )
     expect ( store ).to.have.property ( 'copy' )
     expect ( store ).to.have.property ( 'model' )
@@ -59,7 +59,7 @@ it ( 'Export', () => {
         ;
     let i = 0;
 
-    store.insert ( 'extra', dtbox.init(b) )
+    store.insertSegment ( 'extra', dtbox.init(b) )
     const res = store.export ();
 
     expect ( res ).to.have.length ( 6 )
@@ -94,7 +94,7 @@ it ( 'Export. Single data segment', () => {
         ;
     let i = 0;
 
-    store.insert ( 'extra', dtbox.init(b) )
+    store.insertSegment ( 'extra', dtbox.init(b) )
     const res = store.export ('extra');
 
     expect ( res ).to.have.length ( 2 )
@@ -124,7 +124,7 @@ it ( 'Copy. Extra data segment', () => {
         ;
     let i = 0;
 
-    store.insert ( 'extra', dtbox.init(b) )
+    store.insertSegment ( 'extra', dtbox.init(b) )
     const res = store.copy ( 'extra' );
 
     expect ( res ).to.have.property ( 'shoes' )
@@ -212,6 +212,15 @@ it ( 'Convert. Wrong outgoing model', () => {
     let res = dtbox.convert ( a, { model:'none'});
     expect ( res ).to.be.null
 }) // it convert, wrong outgoing model
+
+
+it ( 'Segment list', () => {
+    let res = dtbox.init ( a );
+    res.insertSegment ( 'extraData', dtbox.init({ port: 1234, airport: 'JFK' }) )
+    const list = res.listSegments ();
+    expect ( list ).to.have.length ( 2 )
+    expect ( list ).to.contains ( 'extraData' )
+}) // it load
 
 
 

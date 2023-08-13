@@ -8,7 +8,10 @@ return function look ( fn ) {
                         const 
                               [ name, flatData, breadcrumbs, edges ] = line
                             ,  isArray = flatData instanceof Array ? true : false
+                            , next  = () => '$__NEXT__LOOK_'
+                            , finish = () => '$__FINISH__WITH__THE__LOOKING_'
                             ;
+                        let endLooking = false;
 
                         const links = edges.map ( edge => { 
                                                     let child = edge.replace ( `${breadcrumbs}/`, '')
@@ -19,8 +22,10 @@ return function look ( fn ) {
                                 if ( flatData.length === 0 )   empty([])
                                 else {
                                         flatData.every ( (value,key) => {
-                                                    const callback = fn({ value, key, name, flatData, breadcrumbs, links });
-                                                    return ( callback === 'next' ) ? false : true 
+                                                    if ( endLooking )   return false   // Cancel other iterations
+                                                    const callback = fn({ value, key, name, flatData, breadcrumbs, links, next, finish });
+                                                    if ( callback === finish() )   endLooking = true
+                                                    return ( [ finish(), next() ].includes ( callback )) ? false : true 
                                             })
                                     }
                             }
@@ -29,14 +34,16 @@ return function look ( fn ) {
                                 if ( test.length === 0 )   empty({})
                                 else {
                                         test.every ( ([key, value]) => {
-                                                    const callback = fn ({ value, key, name, flatData, breadcrumbs, links });
-                                                    return ( callback === 'next' ) ? false : true 
+                                                    if ( endLooking )   return false   // Cancel other iterations
+                                                    const callback = fn ({ value, key, name, flatData, breadcrumbs, links, next, finish });
+                                                    if ( callback === finish() )   endLooking = true
+                                                    return ( [ finish(), next()].includes ( callback )) ? false : true 
                                             })
                                     }
                                 
                             }
                         function empty ( flatData ) {
-                                    fn ({ value:null, key:null, name, flatData, breadcrumbs, links, empty: true })
+                                    fn ({ value:null, key:null, name, flatData, breadcrumbs, links, empty: true, next, finish })
                             } // empty func.
                         flatIO.resetScan ()
             })
