@@ -4,6 +4,10 @@
 - [x] Method `look` has new arguments: functions `next` and `finish`;
 - [x] To stop iteration on current dt-line `return next()`;
 - [x] To stop iteration on all dt-lines `return finish()`;
+- [x] Method `insert` was renamed to `insertSegment`;
+- [x] Method `listSegments` was added to show list of all segments in dt-object;
+- [x] Method `insertSegment` expect the incoming data as dt-object, but if is not - will assume it as a standard javascript object and will convert it to dt-object automatically;
+- [] Method `insertSegment` can recognize a dt model object.
 
 
 

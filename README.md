@@ -11,10 +11,17 @@
 * In version 7 look functions have 2 new arguments: Function `finish` and `next`;
 * Instead of returning a string 'next'(in version 6) to stop iteration on current dt-line, now you have to `return next()`;
 * Function `finish` is a new option. Call `return finish()` to stop iteration on all dt-lines;
+* Method `insert` was renamed to `insertSegment` to be clear that data is not mixed. Segments are separated peaces of data;
 
+
+
+## Other changes
+* Method `listSegments` was added to show list of all segments in dt-object;
+* Method `insertSegment` expect the incoming data as dt-object, but if is not - will assume it as a standard javascript object and will convert it to dt-object automatically;
 
 
 ## Description
+
 DT-Toolbox is created to simplify the work with deep nested javascript objects. The library was created as an immutable data-storage(dt-object), internally based on data-model called `DT-model`.
 
  ## What is DT-model?
@@ -54,12 +61,12 @@ import dtbox from 'dt-toolbox'
 Use Dt-toolbox methods(init and load) to create a `dt-object`. 
 
 DT-object:
-- Provides multiple insertion of data chunks. Data from each insertion stays differentiated;
+- Provides multiple insertion of data segments. Data from each insertion stays differentiated;
 - Has prebuilded filters for fast search of data;
 - Can create and register a customized filters for fast search of data;
 - Can apply `query functions` to find, extract and reshape the data;
 - Can apply `model function` to reshape the final result;
-- Can executes 'query' and 'model' function over all available data in the storage (All insertions);
+- Can executes 'query' and 'model' function over all available data in the storage (All data segments);
 - Execution of query/model functions will not change anything inside the host dt-object;
 
 The **dt-object** contains internally a `dt-storage` object, that is available during call of the 'query' or 'model' functions. Dt-storage have couple of methods for searching data as well can create a new **DT-model** structures and fill them with data. 
@@ -71,7 +78,7 @@ Query functions are returning a **new instance of dt-object** with the result, c
   'list'        : 'Scan only dt-lines where flatData is an array'
 , 'listObject'  : 'Scan objects that are members of array'
 , 'object'      : 'Scan just dt-lines where flatData is an object'
-, 'root'        : 'Scan only root dt-lines of each data insert'
+, 'root'        : 'Scan only root dt-lines of each data segment'
 ```
 Filters are very simple functions to build. Here is one example of how we can create filter for finding object with specific key and value in it.
 ```js
@@ -117,13 +124,14 @@ Take a look on the library APIs and see the '**Examples**' section bellow.
 ### dt-object API Fast Reference
 
 ```js
-    insert   : 'Inserts a new data in the dt-object. Insertion should be provided as dt-object.'
+    insertSegment  : 'Inserts a new data-segment in the dt-object. Insertion should be provided as a dt-object.'
   , 'export' : 'Returns the DT-model from dt-object - part or full'
   , copy     : 'Creates a copy of original provided data'
   , query    : 'Executes a "query" function on the dt-object. Returns a new dt-object with the result'
   , model    : 'Executes a "model" function on the dt-object. Returns a data model'
   , setupFilter : 'Evaluate data according "filter" function and create a shorter scan list that can be used by "dt-storage" during execution of query and model functions'
   , index    : 'Provides a copy of specified dt-line by breadcrumbs'
+  , listSegments : 'Returns a list of all segments in dt-object'
 ```
 
 ### dt-storage API Fast Reference
@@ -313,8 +321,8 @@ const walk = dtbox.getWalk ();
 ## DT-object API
 
 
-### dt.insert ()
-Extend the dt-object with a new data. Insertion should be provided as dt-object.
+### dt.insertSegment ()
+Extend the dt-object with a new data segment. Insertion should be provided as dt-object.
 
 ```js
 const a = [ // it's a 'file' data-model
@@ -332,10 +340,10 @@ const a = [ // it's a 'file' data-model
     ];
 const b = { shoes: [ 'Puma', 'UA' ]}
 const dt = dtbox.init ( a, { model : 'file' })  // create a dt-object
-dt.insert ( 
-         'extra' // object name
+dt.insertSegment ( 
+         'extra'        // object name
         , dtbox.init(b) // the extra object
-    ) // insert to 'dt' storage extra 
+    ) // insert to 'dt' storage data segment named 'extra' with data from 'b' object
 
 /**
    dt internal interpretation:
@@ -370,7 +378,7 @@ dt.insert (
             , 'root/shoes/summer' // -> location
             , [] // -> edges
         ]
-     // ---> Here are the elements that are coming from 'insert'   
+     // ---> Here are the elements that are coming from 'insertSegment'   
     , [
             'extra' // -> dt-line name. Object name of insert will become root element for data segment.
             , {} // -> flatData
@@ -426,7 +434,7 @@ const
     , c = { vitamins : [ 'a', 'b', 'c' ]}
     , dt = dtbox.init ( b )
     ;
-dt.insert ( 'extra', c )
+dt.insertSegment ( 'extra', c )
 const deepCopy = dt.copy ()
 // it equal to: const deepCopy = dt.copy ('root')
 const onlyExtra = dt.copy ( 'extra' )
@@ -506,7 +514,14 @@ const [ name, flatData, breadcrumbs, edges ] = dt.index ( br )
 // edges === []
 ```
 
+### dt.listSegments ()
 
+Returns a list of all data segment names. Result is always an array with at least one element - 'root'.
+
+```js
+dt.listSegments () 
+// [ 'root', 'extra' ]
+```
 
 
 
@@ -596,7 +611,7 @@ List of predefined filters:
  - 'list'        : Scan only dt-lines where flatData is an array;
  - 'listObject'  : Scan objects that are members of array;
  - 'object'      : Scan just dt-lines where flatData is an object;
- - 'root'        : Scan only root dt-lines of each data insert;
+ - 'root'        : Scan only root dt-lines of each data segment;
 
 If filter do not exist, look function will be executed on each dt-line.
 

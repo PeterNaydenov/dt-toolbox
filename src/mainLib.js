@@ -32,6 +32,15 @@ const mainLib = {
                             , convert
                             , INIT_DATA_TYPES
                             , main : () => ({ load : mainLib.load })
+                            , isDTO : d  => typeof d.insertSegment  === 'function'
+                            , isDTM : d => {
+                                                if ( !(d    instanceof Array))   return false
+                                                if ( !(d[0] instanceof Array))   return false
+                                                if ( d[0].length !== 4       )   return false
+                                                if ( d[0][0] !== 'root'      )   return false
+                                                return true
+                                        }
+                            , 
                         }
             } // dependencies func.
 

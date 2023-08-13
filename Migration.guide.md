@@ -30,6 +30,26 @@ dt.query ( (store) => {
 
 ```
 
+Method `insert` was renamed to `insertSegment` to be clear that data is not mixed. Segments are separated peaces of data.
+
+```js 
+// before
+  const dt = dtbox.init ( a );
+  dt.insert ( 'specificDataName' b ) // b is a dt-object
+
+// after
+  const dt = dtbox.init ( a );
+  dt.insertSegment ( 'specificDataName' b ) // b is a dt-object
+// it's possible to insert a standard js object but it's not recomended
+// dt.insertSegment ( 'specialDataName', a )  // a is a standard js object
+// also possible to insert a dt model object directly
+// dt.insertSegment ( 'specialDataName', c )  // Where c = b.export(). A dt model object. 
+```
+
+Method `listSegments` was added to show list of all segments in dt-object.
+
+
+
 ## From v.4.x.x  - v.6.x.x
 
 The library "dt-toolbox" exist for a full 7 years and now version 6 is coming as full rewrite of the original idea. Difference are more then similarity and better aproach is to read a version 6 documentation first. Then you will find that:
