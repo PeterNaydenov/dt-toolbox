@@ -3,8 +3,8 @@
 ![version](https://img.shields.io/github/package-json/v/peterNaydenov/dt-toolbox)
 ![license](https://img.shields.io/github/license/peterNaydenov/dt-toolbox)
 
- - [Documentatation for v.6.x.x is here](htts://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.6.x.x.md)
- - [Migration guide from v.6.x.x to v.7.x.x](htts://github.com/PeterNaydenov/dt-toolbox/blob/master/MIGRATION.md)
+- [Documentatation for v.6.x.x is here](htts://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.6.x.x.md)
+- [Migration guide from v.6.x.x to v.7.x.x](htts://github.com/PeterNaydenov/dt-toolbox/blob/master/MIGRATION.md)
 
 
 ## Last Updates
