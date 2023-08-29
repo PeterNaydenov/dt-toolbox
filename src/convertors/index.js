@@ -65,7 +65,7 @@ function to ( type, dependencies, inData ) {   // convert from flat to 'data-typ
                             return tuples.toType ( inData )
             case 'files':
                            tups = tuples.toType ( inData );
-                           return tups.map ( ([k,v]) => `${k}/${v}`)
+                           return tups.map ( ([k,v]) =>  (( k === 'root' ) ? v : `${k}/${v}`)   )
             case 'breadcrumb' :
             case 'breadcrumbs':
                            let current;
@@ -77,7 +77,7 @@ function to ( type, dependencies, inData ) {   // convert from flat to 'data-typ
                                                                         current = k
                                                                         count = 0
                                                             }
-                                                        let key = `${k}/${count}`;
+                                                        let key = ( k === 'root' ) ? count : `${k}/${count}` 
                                                         breadcrumbs[key] = v
                                                         count++
                                                     }

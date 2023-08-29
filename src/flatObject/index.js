@@ -8,6 +8,9 @@ import copy        from './copy.js'
 import model       from './model.js'
 import query       from './query.js'
 import setupFilter from './setupFilter.js'
+import extractList from './extractList.js'
+
+
 
 
 
@@ -31,20 +34,24 @@ function flatObject ( dependencies, d ) {
                                                               return res
                                                         }, [] )
                                 }
-                    , index  : n => {
-                                        if ( n == null )   return null
-                                        let r  = flatIO.getLine(n)
-                                        if ( r ) {
-                                              let [ name, d, breadcrumbs, links ] = r;
-                                              let copy;
-                                              if ( d instanceof Array )   copy = [...d ]
-                                              else                        copy = {...d }
-                                              return [ name, copy, breadcrumbs, [...links] ]
-                                          }
-                                        else return null
-                                  } // index
+                    , index
                 }
             ;
+
+        function index (n) {
+                        if ( n == null )   return null
+                        let r  = flatIO.getLine(n)
+                        if ( r ) {
+                              let [ name, d, breadcrumbs, links ] = r;
+                              let copy;
+                              if ( d instanceof Array )   copy = [...d ]
+                              else                        copy = {...d }
+                              return [ name, copy, breadcrumbs, [...links] ]
+                          }
+                        else return null
+            } // index func.
+            
+        objectAPI [ 'extractList' ] = extractList ( dependencies, flatIO, index )
         return objectAPI
     } // flatObject func.
 

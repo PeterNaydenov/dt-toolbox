@@ -1,5 +1,15 @@
 ## Release History
 
+
+### 7.1.0 (2023-08-28)
+- [x] Method `extractList` was added;
+- [x] Fix: Method `model` recognizes '**files**' as a model;
+- [x] Fix: Tuple model if data is just an array is wrong;
+- [x] Fix: Convertor to files shows 'root' in the beginning of the path;
+- [x] Fix: Convertor to breadcrumbs shows 'root' in the beginning of the path;
+
+
+
 ### 7.0.0 (2023-07-15)
 - [x] Method `look` has new arguments: functions `next` and `finish`;
 - [x] To stop iteration on current dt-line `return next()`;
@@ -8,6 +18,10 @@
 - [x] Method `listSegments` was added to show list of all segments in dt-object;
 - [x] Method `insertSegment` expect the incoming data as dt-object, but if is not - will assume it as a standard javascript object and will convert it to dt-object automatically;
 - [] Method `insertSegment` can recognize a dt model object.
+- [] Bug: Method `model` doesn't recognize '**files**' as a model;
+- [] Bug: Tuple model if data is just an array is wrong;
+- [] Bug: Convertor to files shows 'root' in the beginning of the path;
+- [] Bug: Convertor to breadcrumbs shows 'root' in the beginning of the path;
 
 
 

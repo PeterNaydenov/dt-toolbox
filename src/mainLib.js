@@ -5,8 +5,8 @@
 import walk from '@peter.naydenov/walk'
 
 import flatObject from './flatObject/index.js'        // Flat data api.
-import flatData   from './flatData/index.js'            // Query data api. Used in model functions 
-import convert   from './convertors/index.js'        // Convertors
+import flatData   from './flatData/index.js'          // Query data api. Used in model functions 
+import convert   from './convertors/index.js'       // Convertors
 
 
 

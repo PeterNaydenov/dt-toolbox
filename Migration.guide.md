@@ -48,7 +48,24 @@ Method `insert` was renamed to `insertSegment` to be clear that data is not mixe
 
 Method `listSegments` was added to show list of all segments in dt-object.
 
+After version 7.1.x method `extractList` was added. Method helps to extract from dt-object multiple segments and properties, defined in a list. Options are coming as a second argument. Use them to define a model of extracted data.
 
+```js
+const 
+    first = { name: 'first', data: 'first data' }
+  , second = { name: 'second', data: 'second data' }
+  , third = { name: 'third', data: 'third data' }
+  ;
+const storage = dtbox.init ( first );   // first will become a root segment
+storage.insertSegment ( 'second', second );
+storage.insertSegment ( 'third', third );
+
+const [ a, b c, firstData ] = storage.extractList ( ['first', 'second', 'third', 'data' ], { type: 'std' } ));
+// a -> { name: 'first', data: 'first data' }
+// b -> { name: 'second', data: 'second data' }
+// c -> { name: 'third', data: 'third data' }
+// firstData -> 'first data' // Field 'data' from main dt-line of 'root' segment.
+```
 
 ## From v.4.x.x  - v.6.x.x
 

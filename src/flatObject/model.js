@@ -10,7 +10,7 @@ return function model () {
         , { convert } = dependencies ()
         , selection = flatIO.getSelection ()
         , data = ( selection.length === 0 ) ? flatIO.export() : selection
-        , CONVERTOR_NAMES = [ 'standard', 'std', 'midFlat', 'tuple', 'tuples', 'breadcrumb', 'breadcrumbs' ]
+        , CONVERTOR_NAMES = [ 'standard', 'std', 'midFlat', 'tuple', 'tuples', 'breadcrumb', 'breadcrumbs', 'files', 'file' ]
         , hasConvertor = as ? CONVERTOR_NAMES.includes ( as ) : false
         ;
 
