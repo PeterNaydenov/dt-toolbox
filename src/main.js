@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 6.0.0
+    Version 7.1.0
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -30,6 +30,10 @@
          * Data inserts;
          * Filters for faster data scan;
          * Model and query functions to shape results;
+    
+     - Version 7.1.0 published on August 29th, 2023
+            * Some fixes on version v.7.0.0;
+            * New method `extractList` for multiple data extraction from dt-model;
 */
 
 

@@ -10,6 +10,7 @@ import mainLib from "../src/mainLib.js"
 import flatObject from '../src/flatObject/index.js'
 import convert from '../src/convertors/index.js'
 import dtbox from "../src/main.js";
+import ex from "../src/flatObject/export.js";
 
 
 
@@ -218,6 +219,59 @@ it ( 'flatObject. Index', () => {
     expect ( fd ).to.contains ( 'Stefan') 
     expect ( breadcrumbs ).to.be.equal ( br )
 }) // it flatObject.index
+
+
+
+it ( 'ExtractList with options', () => {
+     const 
+        sample1 = {
+                      name: 'Peter'
+                    , friends : [ 'Ivan', 'Dobroslav', 'Stefan' ]
+                }
+        , sample2 = {
+                          user : 'Peter'
+                        , sportnames : [ 'fencing', 'skating', 'ski' ]
+                        , gear : [ 'fencing sabre', 'skating shoes', 'ski' ]
+                    }
+        , sample3 = [ 'punk', 'ska', 'metal', 'guitar' ]
+        ;
+    const storage = dtbox.init ( sample1, { type : 'std' })
+    storage.insertSegment ( 'sports', dtbox.init ( sample2))
+    storage.insertSegment ( 'music', dtbox.init ( sample3))
+
+    expect ( storage.listSegments() ).to.contains ( 'root' )
+    expect ( storage.listSegments() ).to.contains ( 'sports' )
+    expect ( storage.listSegments() ).to.contains ( 'music' )
+
+    const [ theName, missing, res1, res2 ] = storage.extractList ( [ 'name', 'aloha', 'sports' , 'music'], {as:'std'} );  // as standard data-model
+
+    expect ( theName ).to.be.equal ( 'Peter' )   
+    expect ( missing ).to.be.equal ( null    )   // Request for missing segment or flatData-property in first dt-line of root segment - will return null.
+
+    expect ( res1 ).to.have.property ( 'sportnames' )
+    expect ( res1.sportnames ).to.have.length ( 3 )
+    expect ( res2 ).to.have.length ( 4 )
+    expect ( res2 ).to.contains ( 'punk' )
+
+
+
+    const [ res3, res4, nameAgain ] = storage.extractList ( [ 'sports' , 'music', 'name' ], {as:'files'} );  // as files
+    
+    expect ( nameAgain ).to.be.equal ( 'Peter' )   // Options works only on segments. So, if response is not a segment will skip a conversion.
+    expect ( res3 ).to.have.length ( 7 )
+    expect ( res3 ).to.contains ( 'gear/ski' )
+    expect ( res3 ).to.contains ( 'sportnames/fencing' )
+
+    expect ( res4 ).to.have.length ( 4 )
+    expect ( res4 ).to.contains ( 'punk' )
+    expect ( res4 ).to.contains ( 'ska' )
+    expect ( res4 ).to.contains ( 'metal' )
+    expect ( res4 ).to.contains ( 'guitar' )
+
+}) // it extractList
+
+
+
 
 }) // describe flatObject
 

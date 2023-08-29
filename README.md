@@ -3,21 +3,14 @@
 ![version](https://img.shields.io/github/package-json/v/peterNaydenov/dt-toolbox)
 ![license](https://img.shields.io/github/license/peterNaydenov/dt-toolbox)
 
- - [Documentatation for old v.6.x.x is here](htts://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.6.x.x.md)
+ - [Documentatation for v.6.x.x is here](htts://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.6.x.x.md)
+ - [Migration guide from v.6.x.x to v.7.x.x](htts://github.com/PeterNaydenov/dt-toolbox/blob/master/MIGRATION.md)
 
 
+## Last Updates
 
-## Breaking changes 
-* In version 7 look functions have 2 new arguments: Function `finish` and `next`;
-* Instead of returning a string 'next'(in version 6) to stop iteration on current dt-line, now you have to `return next()`;
-* Function `finish` is a new option. Call `return finish()` to stop iteration on all dt-lines;
-* Method `insert` was renamed to `insertSegment` to be clear that data is not mixed. Segments are separated peaces of data;
+After version 7.1.x `dt-object` api has a new method `extractList` that helps to extract a multiple segments or properties, defined as a list. Use '**options**'(the second argument) to define a model of extracted data if needed. Reed about `extractList` bellow.
 
-
-
-## Other changes
-* Method `listSegments` was added to show list of all segments in dt-object;
-* Method `insertSegment` expect the incoming data as dt-object, but if is not - will assume it as a standard javascript object and will convert it to dt-object automatically;
 
 
 ## Description
@@ -132,6 +125,7 @@ Take a look on the library APIs and see the '**Examples**' section bellow.
   , setupFilter : 'Evaluate data according "filter" function and create a shorter scan list that can be used by "dt-storage" during execution of query and model functions'
   , index    : 'Provides a copy of specified dt-line by breadcrumbs'
   , listSegments : 'Returns a list of all segments in dt-object'
+  , extractList : 'Extracts a list of segments and/or properties from dt-object'
 ```
 
 ### dt-storage API Fast Reference
@@ -463,9 +457,10 @@ function modelFn ( store, a,v,g ) { // optional arguments will come directly aft
                 as : 'std' // property 'as' will execute final conversion. Model name should be from supported list of the library.
                 }
     }
+// Supported model-names are:
+// 'standard', 'std', 'midFlat', 'tuple', 'tuples', 'breadcrumb', 'breadcrumbs'
 
 const result = dt.model ( modelFn, a,v,g ) // modelFn is the only required argument. All other arguments are optional.
-
 ```
 
 ### dt.setupFilter ()
@@ -523,6 +518,30 @@ dt.listSegments ()
 // [ 'root', 'extra' ]
 ```
 
+### dt.extractList ()
+
+After version 7.1.x method `extractList` was added. Method can extract a list of segments and properties as a single instruction. Options are coming as a second argument. Use optioins(the second argument) to define a model of extracted data if needed. Modeling is applied only on objects. 
+
+If requested segment or property is not available, response will be '**null**'.
+Segments have priority over properties. If there is a segment with the same name as a property, segment will be extracted.
+
+```js
+const 
+    first = { name: 'first', data: 'first data' }
+  , second = { name: 'second', data: 'second data' }
+  , third = { name: 'third', data: 'third data' }
+  ;
+const storage = dtbox.init ( first );   // first will become a root segment
+storage.insertSegment ( 'second', second );
+storage.insertSegment ( 'third', third );
+
+const [ a, b c, firstData, otherData ] = storage.extractList ( ['first', 'second', 'third', 'data', 'secondData' ], { type: 'std' } ));
+// a -> { name: 'first', data: 'first data' }
+// b -> { name: 'second', data: 'second data' }
+// c -> { name: 'third', data: 'third data' }
+// firstData -> 'first data' // Field 'data' from main dt-line of 'root' segment.
+// otherData -> null // There is no 'secondData' in 'root' segment. No segment 'secondData' as well.
+```
 
 
 
@@ -1157,8 +1176,8 @@ console.log ( result )
 
 
 ## External Links
-- [Migration guide](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Migration.guide.md)
 - [History of changes](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Changelog.md)
+- [Migration guide](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Migration.guide.md)
 - [DT-Queries. Some useful query functions for DT-Toolbox](https://github.com/PeterNaydenov/dt-queries)
 - [Documentation v.4.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.4.x.x.md)
 - [Documentation v.2.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.2.x.x.md)

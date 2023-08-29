@@ -140,18 +140,18 @@ function toFlat ( dependencies, d ) {   // Converts data to 'dt' model
 
 function toType ( dt ) {   // Converts data to tuples
         let result = [];
+        
         dt.forEach ( line => {
                     const 
                           [ name, flatData, breadcrumbs ] = line
                         , isArray = flatData instanceof Array ? true : false
-                        // , result = []
                         ;
                     let nakedBread = '';
                     if ( name !== 'root' )    nakedBread = breadcrumbs.replace ( `root/`, '' )
 
                     if ( isArray ) {
-                                if ( nakedBread.length == 0 )   result.push (['root', el])
-                                else   flatData.forEach ( el => result.push ([nakedBread, el]))
+                                if ( nakedBread.length == 0 )   flatData.forEach ( (el,i) => result.push ([`root`, el]))
+                                else                            flatData.forEach (  el    => result.push ([nakedBread, el]))
                                 return
                         }
                     

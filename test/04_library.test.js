@@ -117,6 +117,19 @@ it ( 'Export. Single data segment', () => {
 
 
 
+it ( 'Export a non existing data segment', () => {
+    const 
+          store = dtbox.init ( a )
+        , b = { shoes : [ 'Puma', 'UA'] }
+        ;
+    store.insertSegment ( 'extra', dtbox.init(b) )
+    const res = store.export ('extraData');
+
+    expect ( res ).to.have.length ( 0 )
+}) // it. Export a non existing data segment
+
+
+
 it ( 'Copy. Extra data segment', () => {
     const 
           store = dtbox.init ( a )
