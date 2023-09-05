@@ -4,9 +4,10 @@
 
 import walk from '@peter.naydenov/walk'
 
-import flatObject from './flatObject/index.js'        // Flat data api.
-import flatData   from './flatData/index.js'          // Query data api. Used in model functions 
-import convert   from './convertors/index.js'       // Convertors
+import flatObject from './flatObject/index.js'     // Flat data api.
+import flatData   from './flatData/index.js'       // Query data api. Used in model functions 
+import convert   from './convertors/index.js'    // Convertors
+import draft     from './draft/index.js'         // Build a dt-model api
 
 
 
@@ -31,7 +32,7 @@ const mainLib = {
                             , flatObject
                             , convert
                             , INIT_DATA_TYPES
-                            , main : () => ({ load : mainLib.load })
+                            , main : { load : mainLib.load }
                             , isDTO : d  => typeof d.insertSegment  === 'function'
                             , isDTM : d => {
                                                 if ( !(d    instanceof Array))   return false
@@ -40,7 +41,7 @@ const mainLib = {
                                                 if ( d[0][0] !== 'root'      )   return false
                                                 return true
                                         }
-                            , 
+                            , draft
                         }
             } // dependencies func.
 
@@ -56,11 +57,8 @@ const mainLib = {
                             console.error ( `Can't understand your data-model: ${model}. Please, find what is possible on https://github.com/PeterNaydenov/dt-toolbox` )
                             return null
                         }
-                    const 
-                          d  = convert.from(model).toFlat ( dependencies, inData )
-                        , flat =  flatObject ( dependencies, d )
-                        ;
-                    return flat
+                    const d  = convert.from(model).toFlat ( dependencies, inData );
+                    return flatObject ( dependencies, d )
             } // init func.
 
 

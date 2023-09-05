@@ -8,7 +8,7 @@
 
 
 function get ( flatIO ) {
-return function find ( name ) {
+return function get ( name ) {
         const list = [];
         flatIO.getScanList().every ( line => {
                         const loc = line[2];

@@ -6,8 +6,7 @@ function extractList ( dependencies, flatIO, indexFn ) {
 return function exportList ( list, options={} ) {
             const 
                       root     = indexFn ( 'root' )
-                    , { main } = dependencies ()
-                    , { load } = main ()
+                    , { main:{load} } = dependencies ()
                     , possibleAs = ['standard', 'std', 'midFlat', 'tuple', 'tuples', 'breadcrumb', 'breadcrumbs', 'files', 'file' ]
                     ;
             let 

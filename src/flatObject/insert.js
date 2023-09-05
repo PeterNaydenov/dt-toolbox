@@ -8,7 +8,6 @@ return function insert ( name, inData ) {
             if ( isDTO(inData) ) {
                         d    = inData.export ()
                         copy = inData.copy ()
-                        
                }
             else if ( isDTM(inData) ) {
                         d = walk ({ data : inData })
