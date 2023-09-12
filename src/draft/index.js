@@ -1,3 +1,7 @@
+/**
+ *  Build a new dt-model api
+ */
+
 import push from './push.js'
 import set from './set.js'
 import connect from './connect.js'

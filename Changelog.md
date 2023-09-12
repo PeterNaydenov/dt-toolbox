@@ -1,7 +1,13 @@
 ## Release History
 
+### 7.1.2 (2023-09-12)
+- [x] Fix: Dt-Storage method 'from' is not filtering the list if requested 'breadcrumbs' does not exist;
+
+
+
 ### 7.1.1 (2023-09-05 )
 - [x] Fix: Multiple queries in same programming scope;
+- [ ] Bug: Dt-Storage method 'from' is not filtering the list if requested 'breadcrumbs' does not exist;
 
 
 
@@ -12,6 +18,7 @@
 - [x] Fix: Convertor to files shows 'root' in the beginning of the path;
 - [x] Fix: Convertor to breadcrumbs shows 'root' in the beginning of the path;
 - [ ] Bug: Multiple queries in same programming scope;
+- [ ] Bug: Dt-Storage method 'from' is not filtering the list if requested 'breadcrumbs' does not exist;
 
 
 
@@ -28,6 +35,7 @@
 - [ ] Bug: Convertor to files shows 'root' in the beginning of the path;
 - [ ] Bug: Convertor to breadcrumbs shows 'root' in the beginning of the path;
 - [ ] Bug: Multiple queries in same programming scope;
+- [ ] Bug: Dt-Storage method 'from' is not filtering the list if requested 'breadcrumbs' does not exist;
 
 
 

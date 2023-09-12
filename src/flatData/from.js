@@ -9,7 +9,10 @@ return function fr ( breadcrumbs ) {
             , list    = []
             ;
 
-        if ( !start )   return this
+        if ( !start ) {  
+                flatIO.setupScanList ( [] )
+                return this
+           }
         list.push ( start )
         findDeep ( indexes, list, start[3] )
         flatIO.setupScanList ( list )

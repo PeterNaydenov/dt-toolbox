@@ -7,7 +7,6 @@
 
 import { expect } from "chai"
 import dtbox from "../src/main.js"
-import query from "../src/flatObject/query.js";
 
 
 
@@ -68,7 +67,7 @@ it ( 'Mulitple queries from a single dt-object in same', () => {
     expect ( r2 ).to.have.property ( 'continent' )
     expect ( r2 ).to.have.property ( 'country' )
     
-}) // it init 
+}) // it Mulitple queries
 
 
 

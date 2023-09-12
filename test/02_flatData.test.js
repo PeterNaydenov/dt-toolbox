@@ -147,6 +147,16 @@ it ( 'flatStore: from', () => {
 
 
 
+it ( 'flatStore: from not available location', () => {
+    let i = 0;
+    flatStore
+         .from ( 'root/personal/none' )
+         .look ( ({ name }) => i++ )
+    expect ( i ).to.be.equal ( 0 )
+}) // it from not available location
+
+
+
 it ( 'flatStore: like. Single word.', () => {
     let i = 0;
     flatStore
