@@ -13,7 +13,8 @@ After version 7.1.x `dt-object` api has a new method `extractList` that helps to
 
 ## Description
 
-DT-Toolbox is created to simplify the work with deep nested javascript objects. The library was created as an immutable data-storage(dt-object), internally based on data-model called `DT-model`.
+DT-Toolbox is a tool, created to simplify the work with deep nested javascript objects. 
+The library creates an immutable data-storage(dt-object). Storage data representation is based on data-model called `DT-model`.
 
  ## What is DT-model?
 It's an internal 'dt-object' data description. Data is an array of lines where each line has 4 components:
@@ -26,11 +27,20 @@ It's an internal 'dt-object' data description. Data is an array of lines where e
 // Where ->
 // name: string. Name of the dt-line;
 // flatData:  object or array of primitive types;
-// breadcrumbs: string. Bredcrumbs description of the current dt-line;
-// edges: string[]. List of breadcrumbs of the related dt-lines;
+// breadcrumbs: string. Bredcrumbs description(identifier) of the current dt-line;
+// edges: string[]. List of breadcrumbs of the related dt-lines(children);
 ```
 
 This data-description is easy to read, saved, or transfered.
+
+DT-model can become a storage for multiple data blocks - `data-segments`. Each data-segment can be extracted but also can be queried and modeled together with other data-segments in a way to create a new dt-object.
+
+Concept `state` - A specific shape of DT-model where all primitive states are stored in 'root' object and the other states as separated data-segments. Root data-segment is a flat object (single row without edges).
+
+There is a library [@peter.naydenov/dt-queries](https://github.com/PeterNaydenov/dt-queries) that contains query functions that can be useful with data manipulation:
+- splitSegments: Splits a solid data into multiple data-segments;
+- joinSegments : Consolidate multiple data-segments in a single solid data;
+- updateState  : Updates the state with new data. Takes only declared data-segments and root data properties;
 
 
 ## Installation
@@ -52,7 +62,7 @@ import dtbox from 'dt-toolbox'
 Use Dt-toolbox methods(init and load) to create a `dt-object`. 
 
 DT-object:
-- Provides multiple insertion of data segments. Data from each insertion stays differentiated;
+- Provides multiple insertion of data-segments. Data from each insertion stays differentiated;
 - Has prebuilded filters for fast search of data;
 - Can create and register a customized filters for fast search of data;
 - Can apply `query functions` to find, extract and reshape the data;
@@ -1174,9 +1184,9 @@ console.log ( result )
 
 
 ## External Links
+- [DT-Queries. Some useful query functions for DT-Toolbox](https://github.com/PeterNaydenov/dt-queries)
 - [History of changes](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Changelog.md)
 - [Migration guide](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Migration.guide.md)
-- [DT-Queries. Some useful query functions for DT-Toolbox](https://github.com/PeterNaydenov/dt-queries)
 - [Documentation v.4.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.4.x.x.md)
 - [Documentation v.2.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.2.x.x.md)
 
