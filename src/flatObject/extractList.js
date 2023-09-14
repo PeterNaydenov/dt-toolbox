@@ -6,8 +6,7 @@ function extractList ( dependencies, flatIO, indexFn ) {
 return function exportList ( list, options={} ) {
             const 
                       root     = indexFn ( 'root' )
-                    , { main:{load} } = dependencies ()
-                    , possibleAs = ['standard', 'std', 'midFlat', 'tuple', 'tuples', 'breadcrumb', 'breadcrumbs', 'files', 'file' ]
+                    , { main:{load}, INIT_DATA_TYPES } = dependencies ()
                     ;
             let 
                   error = false
@@ -19,7 +18,7 @@ return function exportList ( list, options={} ) {
                             error = true
                             errorMsg = `Options should be an object and property "as" is required`
                         }
-                    if ( !error && !possibleAs.includes(options.as) ) {  
+                    if ( !error && !INIT_DATA_TYPES.includes(options.as) ) {  
                             error = true
                             errorMsg = `Invalid option "as" value: ${options.as}. Choose one of: std, standard, ''`
                         }
