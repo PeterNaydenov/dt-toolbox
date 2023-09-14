@@ -28,7 +28,7 @@ return function exportList ( list, options={} ) {
             return list
                         .map ( name => {
                                             let lines = flatIO.export ( name );
-                                            if ( lines.length === 0 )  return root[1][name] ? root[1][name] : null
+                                            if ( lines.length === 0 )  return root[1].hasOwnProperty(name) ? root[1][name] : null
                                             else                       return lines
                                         })
                         .map ( item => {

@@ -1,13 +1,20 @@
 ## Release History
 
+### 7.1.3 (2023-09-14)
+- [x] Fix: extractList: Negative value is treated as property does not exist and returns null instead of real value;
+
+
+
 ### 7.1.2 (2023-09-12)
 - [x] Fix: Dt-Storage method 'from' is not filtering the list if requested 'breadcrumbs' does not exist;
+- [ ] Bug: extractList: Negative value is treated as property does not exist and returns null instead of real value;
 
 
 
 ### 7.1.1 (2023-09-05 )
 - [x] Fix: Multiple queries in same programming scope;
 - [ ] Bug: Dt-Storage method 'from' is not filtering the list if requested 'breadcrumbs' does not exist;
+- [ ] Bug: extractList: Negative value is treated as property does not exist and returns null instead of real value;
 
 
 

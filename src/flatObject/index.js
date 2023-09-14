@@ -38,9 +38,9 @@ function flatObject ( dependencies, d ) {
                 }
             ;
 
-        function index (n) {
+        function index ( n ) {
                         if ( n == null )   return null
-                        let r  = flatIO.getLine(n)
+                        let r  = flatIO.getLine ( n )
                         if ( r ) {
                               let [ name, d, breadcrumbs, links ] = r;
                               let copy;

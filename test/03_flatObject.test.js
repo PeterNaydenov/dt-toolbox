@@ -10,7 +10,6 @@ import mainLib from "../src/mainLib.js"
 import flatObject from '../src/flatObject/index.js'
 import convert from '../src/convertors/index.js'
 import dtbox from "../src/main.js";
-import ex from "../src/flatObject/export.js";
 
 
 
@@ -226,6 +225,7 @@ it ( 'ExtractList with options', () => {
      const 
         sample1 = {
                       name: 'Peter'
+                    , bad : false
                     , friends : [ 'Ivan', 'Dobroslav', 'Stefan' ]
                 }
         , sample2 = {
@@ -243,10 +243,11 @@ it ( 'ExtractList with options', () => {
     expect ( storage.listSegments() ).to.contains ( 'sports' )
     expect ( storage.listSegments() ).to.contains ( 'music' )
 
-    const [ theName, missing, res1, res2 ] = storage.extractList ( [ 'name', 'aloha', 'sports' , 'music'], {as:'std'} );  // as standard data-model
+    const [ theName, bad, missing, res1, res2 ] = storage.extractList ( [ 'name', 'bad', 'aloha', 'sports' , 'music'], {as:'std'} );  // as standard data-model
 
     expect ( theName ).to.be.equal ( 'Peter' )   
     expect ( missing ).to.be.equal ( null    )   // Request for missing segment or flatData-property in first dt-line of root segment - will return null.
+    expect ( bad ).to.be.false                   // Negative value should be returned as is. Only missing property should return null.
 
     expect ( res1 ).to.have.property ( 'sportnames' )
     expect ( res1.sportnames ).to.have.length ( 3 )
