@@ -3,7 +3,7 @@
 
 
 function extractList ( dependencies, flatIO, indexFn ) {
-return function exportList ( list, options={} ) {
+return function extractList ( list, options={} ) {
             const 
                       root     = indexFn ( 'root' )
                     , { main:{load}, INIT_DATA_TYPES } = dependencies ()
