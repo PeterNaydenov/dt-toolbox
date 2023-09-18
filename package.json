@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/PeterNaydenov/dt-toolbox#readme",
   "dependencies": {
-    "@peter.naydenov/walk": "4.0.0"
+    "@peter.naydenov/walk": "4.1.0"
   },
   "devDependencies": {
     "c8": "^8.0.1",

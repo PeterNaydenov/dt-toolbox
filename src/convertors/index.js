@@ -65,7 +65,11 @@ function to ( type, dependencies, inData ) {   // convert from flat to 'data-typ
                             return tuples.toType ( inData )
             case 'files':
                            tups = tuples.toType ( inData );
-                           return tups.map ( ([k,v]) =>  (( k === 'root' ) ? v : `${k}/${v}`)   )
+                           return tups.map ( ([k,v]) => { 
+                                            if ( typeof v === 'function' )   return `${k}/function:${v.name}`
+                                            if ( v?.nodeType )               return `${k}/HtmlElement:${v.tagName? v.tagName.toLowerCase() : 'notSpecified'}`
+                                            return (( k === 'root' ) ? v : `${k}/${v}`)   
+                                        })
             case 'breadcrumb' :
             case 'breadcrumbs':
                            let current;

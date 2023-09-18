@@ -221,6 +221,63 @@ it ( 'flatObject. Index', () => {
 
 
 
+it ( 'ExtractList, no options', () => {
+            const 
+                sample1 = {
+                              name: 'Peter'
+                            , bad : false
+                            , topFn : () => 24
+                            , pretendHTML : { nodeType : 1, tagName : 'DIV' }
+                            , friends : [ 'Ivan', 'Dobroslav', 'Stefan' ]
+                        }
+                , sample2 = {
+                                user : 'Peter'
+                                , sportnames : [ 'fencing', 'skating', 'ski' ]
+                                , gear : [ 'fencing sabre', 'skating shoes', 'ski' ]
+                            }
+                , sample3 = [ 'punk', 'ska', 'metal', 'guitar' ]
+                , fn = () => 12
+                ;
+            const storage = dtbox.init ( sample1, { type : 'std' })
+            storage.insertSegment ( 'sports', dtbox.init ( sample2))
+            storage.insertSegment ( 'music', dtbox.init ( sample3))    
+            storage.insertSegment ( 'extra', dtbox.init ({fn}))
+
+            const [ 
+                    theName
+                    , topFn
+                    , pretendHTML
+                    , bad
+                    , missing
+                    , res1
+                    , res2
+                    , funObject 
+                ] = storage.extractList ([ 
+                                          'name'
+                                        , 'topFn'
+                                        , 'pretendHTML'
+                                        , 'bad'
+                                        , 'aloha'
+                                        , 'sports' 
+                                        , 'music'
+                                        , 'extra'
+                                    ]);  
+            
+            expect ( theName ).to.be.equal ( 'Peter' )
+            expect ( topFn() ).to.be.equal ( 24 )                                          // Function are copied by reference
+            expect ( pretendHTML ).to.be.deep.equal ( { nodeType : 1, tagName : 'DIV' } )  // DOM elements are copied by reference
+            expect ( bad ).to.be.false
+            expect ( missing ).to.be.equal ( null )   // Request for missing segment or flatData-property in first dt-line of root segment - will return null.
+            expect ( res1 ).to.have.property ( 'insertSegment' )
+            expect ( res2 ).to.have.property ( 'insertSegment' )
+            expect ( funObject ).to.have.property ( 'insertSegment' )
+
+            let [ fRes ] = funObject.extractList ( ['fn'])
+            expect ( fRes() ).to.be.equal ( 12 )
+    }) // it extractList, no options
+
+
+
 it ( 'ExtractList with options', () => {
      const 
         sample1 = {

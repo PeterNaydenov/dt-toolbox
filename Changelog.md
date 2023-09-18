@@ -1,5 +1,13 @@
 ## Release History
 
+
+### 7.2.0 (2023-09-18)
+- [x] Convertors recognize HTML DOM nodes. Makes a copy by reference;
+- [x] Convertors recognize functions. Makes a copy by reference;
+- [x] Model 'files' is not possible for functions and DOM nodes, so the value in the result will be string. For functions will be `function:functionName` and for DOM nodes will be `htmlElement:elementName`;
+
+
+
 ### 7.1.3 (2023-09-14)
 - [x] Fix: extractList: Negative value is treated as property does not exist and returns null instead of real value;
 

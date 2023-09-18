@@ -3,7 +3,7 @@
 
 
 function extractList ( dependencies, flatIO, indexFn ) {
-return function extractList ( list, options={} ) {
+return function extractList ( list, options ) {
             const 
                       root     = indexFn ( 'root' )
                     , { main:{load}, INIT_DATA_TYPES } = dependencies ()
@@ -12,7 +12,7 @@ return function extractList ( list, options={} ) {
                   error = false
                 , errorMsg = ''
                 ;
-
+                
             if ( options ) {
                     if ( !options.as ) {
                             error = true
@@ -22,7 +22,7 @@ return function extractList ( list, options={} ) {
                             error = true
                             errorMsg = `Invalid option "as" value: ${options.as}. Choose one of: std, standard, ''`
                         }
-                    if ( error )  throw new Error ( `Invalid option "as" value: ${options.as}` )
+                    if ( error )  throw new Error ( errorMsg )
                 }
 
             return list

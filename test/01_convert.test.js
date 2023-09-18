@@ -13,6 +13,8 @@ import walk from "@peter.naydenov/walk"
 
 const a = {
     name: 'Peter'
+  , pretendHTML: { nodeType: 1, tagName: 'DIV' }
+  , fun : () => 12
   , friends : [ 'Ivan', 'Dobroslav', 'Stefan' ]
   , personal : {
                     age     : 49
@@ -37,6 +39,8 @@ it ( 'Standard -> DT', () => {
             const [ copy, indexes, dt ] = convert.from('std').toFlat ( dependencies, a )
             let i = 0;
             expect ( dt ).to.have.length ( 10 )
+            expect ( dt[0][1] ).to.have.property ( 'pretendHTML' )   // HTML DOM nodes - copy by reference
+            expect ( dt[0][1].fun() ).to.be.equal ( 12 )             // functions - copy by reference
             dt.forEach ( line => {
                       const [ name ] = line; 
                       if ( name === 'root' ) i++
@@ -49,11 +53,15 @@ it ( 'Standard -> DT', () => {
 
 it ( 'DT -> Standard', () => {
             const flRows = [
-                              [ 'root', { name: 'Peter' }, 'root', ['root/personal']]
-                            , [ 'personal', { age:49, eyes: 'blue'}, 'root/personal', ['root/personal/hobbies']]
+                              [ 'root', { name: 'Peter', fun: () => 12 }, 'root', ['root/personal']]
+                            , [ 'personal', { age:49, eyes: 'blue', pretendHTML:{nodeType:1}}, 'root/personal', ['root/personal/hobbies']]
                             , [ 'hobbies', ['music', 'sport', 'photography'], 'root/personal/hobbies', [] ]
                         ]
             const res = convert.to ( 'std', dependencies, flRows )
+
+            expect ( res.personal ).to.have.property ( 'pretendHTML' )
+            expect ( res.fun() ).to.be.equal ( 12 )
+            expect ( res ).to.have.property ( 'name' )
             expect ( res.name ).to.be.equal ( 'Peter' )
             expect ( res?.personal?.hobbies ).to.have.length ( 3 )
     }) // it flatRows->std
@@ -66,6 +74,8 @@ it ( 'Tuples -> DT', () => {
 
                         , [ 'private/hair', 'brown']
                         , [ 'private/eyes', 'blue' ]
+                        , [ 'private/pretendHTML', { nodeType: 1 } ]
+                        , [ 'private/fun', () => 12 ]
 
                         , ['familyMembers', 'Veselina']
                         , ['familyMembers', 'Iskra']
@@ -92,6 +102,7 @@ it ( 'Tuples -> DT', () => {
 
     const [ copy, index, flatRows ] = convert.from ( 'tuples' ).toFlat ( dependencies, tuples );
     let i = 0;
+    
     flatRows.forEach ( line => {
                 const [ name, data, breadcrumbs, edges ] = line;
                 if ( name === 'root' ) {
@@ -100,6 +111,10 @@ it ( 'Tuples -> DT', () => {
                           expect ( edges ).to.contains ( 'root/private' )
                           expect ( edges ).to.contains ( 'root/familyMembers' )
                           i++
+                    }
+                if ( name === 'private' ) { 
+                            expect ( data.fun() ).to.be.equal ( 12 )
+                            expect ( data ).to.have.property ( 'pretendHTML' )
                     }
                 if ( name === 'shoes' ) {
                           expect ( breadcrumbs ).to.be.equal ( 'root/shoes' )
@@ -290,7 +305,9 @@ it ( 'DT -> Files', () => {
           [ , , dt ] = convert.from('std').toFlat ( dependencies, a )
         , res = convert.to ( 'files', dependencies, dt )
         ;    
-    expect ( res ).to.have.length ( 21 )
+    expect ( res ).to.have.length ( 23 )
+    expect ( res ).to.contains ( 'fun/function:fun' )
+    expect ( res ).to.contains ( 'pretendHTML/HtmlElement:div' )
     expect ( res ).to.contains ( 'name/Peter' )
     expect ( res ).to.contains ( 'personal/hobbies/sport/ski' )
     expect ( res ).to.contains ( 'personal/collections/0/type/music' )
