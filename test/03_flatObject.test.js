@@ -244,7 +244,7 @@ it ( 'ExtractList, no options', () => {
             storage.insertSegment ( 'extra', dtbox.init ({fn}))
 
             const [ 
-                    theName
+                      theName
                     , topFn
                     , pretendHTML
                     , bad
@@ -327,6 +327,31 @@ it ( 'ExtractList with options', () => {
     expect ( res4 ).to.contains ( 'guitar' )
 
 }) // it extractList
+
+
+it ('ExtractList dt-object', () => {
+    const 
+        sample1 = {
+                      name: 'Peter'
+                    , bad : false
+                    , friends : [ 'Ivan', 'Dobroslav', 'Stefan' ]
+                }
+        , sample2 = {
+                          user : 'Peter'
+                        , sportnames : [ 'fencing', 'skating', 'ski' ]
+                        , gear : [ 'fencing sabre', 'skating shoes', 'ski' ]
+                    }
+        , sample3 = [ 'punk', 'ska', 'metal', 'guitar' ]
+        ;
+    const storage = dtbox.init ( sample1, { type : 'std' })
+    storage.insertSegment ( 'sports', dtbox.init ( sample2))
+    storage.insertSegment ( 'music', dtbox.init ( sample3))
+
+    const [ res1, res2, name ] = storage.extractList ( [ 'sports' , 'music', 'name' ], {as:'dt-object'} );
+    expect ( res1 ).to.have.property ( 'query' )
+    expect ( res2 ).to.have.property ( 'query' )
+    expect ( name ).to.be.equal ( 'Peter' )   // Options works only on segments. So, if response is not a segment will skip a conversion.
+}) // it extractList dt-object
 
 
 

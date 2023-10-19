@@ -9,7 +9,7 @@ return function model () {
       , selectionIx = {}
       ;
     const 
-          { convert, draft } = dependencies ()
+          { convert, draft, INIT_DATA_TYPES, main:{load} } = dependencies ()
         , draft_API = {
                           set     : draft.set ( selection, selectionIx )      // Selection: Creates a new row;
                         , connect : draft.connect ( selectionIx )             // Selection: Creates an edges among rows;
@@ -19,18 +19,19 @@ return function model () {
         , [ fn, ...args ] = arguments
         , { as } = fn ( {...flatStore,...draft_API}, ...args ) || {}
         , data = ( selection.length === 0 ) ? flatIO.export() : selection
-        , CONVERTOR_NAMES = [ 'standard', 'std', 'midFlat', 'tuple', 'tuples', 'breadcrumb', 'breadcrumbs', 'files', 'file' ]
-        , hasConvertor = as ? CONVERTOR_NAMES.includes ( as ) : false
+        , hasConvertor = as ? INIT_DATA_TYPES.includes ( as ) : false
         ;
 
     let result;
+    if ( as === 'dt-object'  ) {  
+                return load ( data )
+        }
     if ( as && !hasConvertor ) {
                 console.error ( `Model '${as}' is unknown data-model.` )
                 return null
         }
-        
     if ( as )   result = convert.to ( as, dependencies, data )
-    else        result = data
+    else        result = load ( data )
     flatIO.resetScan ()
     return result
 }} // model func.

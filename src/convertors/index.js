@@ -50,14 +50,19 @@ function from ( type ) {   // convert from something to flat...
 function to ( type, dependencies, inData ) {   // convert from flat to 'data-type'...
         const 
               breadcrumbs = {}
+            , { walk } = dependencies ()
             , check = new Set()
             , extend = new Set()
             ;
         let tups, count = 0;
         switch ( type ) {
+            case 'flat':
+            case 'dt-model':
+                             return walk ({data:inData })
             case 'std' :
             case 'standard':
                              return std.toType ( inData )
+            case 'midflat'  :
             case 'midFlat' : 
                              return midFlat.toType ( inData )
             case 'tuple':

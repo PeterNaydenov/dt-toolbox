@@ -16,8 +16,8 @@ const INIT_DATA_TYPES = [
                 , 'tuple', 'tuples'
                 , 'breadcrumb', 'breadcrumbs'
                 , 'file', 'files'
-                , 'midFlat'
-                , 'flat'
+                , 'midFlat', 'midflat'
+                , 'flat', 'dt-model'
             ]
     ;
 
@@ -57,7 +57,9 @@ const mainLib = {
                             console.error ( `Can't understand your data-model: ${model}. Please, find what is possible on https://github.com/PeterNaydenov/dt-toolbox` )
                             return null
                         }
-                    const d  = convert.from(model).toFlat ( dependencies, inData );
+                    const d  = ['flat', 'dt-model'].includes ( model ) ? 
+                                                mainLib.load ( inData ) : 
+                                                convert.from ( model ).toFlat ( dependencies, inData );
                     return flatObject ( dependencies, d )
             } // init func.
 

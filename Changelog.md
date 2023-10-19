@@ -1,6 +1,16 @@
 ## Release History
 
 
+
+### 7.3.0 ( 2023-10-19 )
+- [x] Model function recognize a `dt-model` model. Result is equal to result of `export`;
+- [x] Model function recognize a `dt-object` model. Returns a new dt-object;
+- [x] Method `extractList` recognize a `dt-model` and `dt-object` models;
+- [x] Method `init` recognize a `dt-model` model. Result is equal to result of `load`;
+- [x] Update of @peter.naydenov/walk to version 4.2.0;
+
+
+
 ### 7.2.0 (2023-09-18)
 - [x] Convertors recognize HTML DOM nodes. Makes a copy by reference;
 - [x] Convertors recognize functions. Makes a copy by reference;
