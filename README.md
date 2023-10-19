@@ -2,6 +2,12 @@
 
 ![version](https://img.shields.io/github/package-json/v/peterNaydenov/dt-toolbox)
 ![license](https://img.shields.io/github/license/peterNaydenov/dt-toolbox)
+![npm](https://img.shields.io/npm/dt/dt-toolbox)
+![issues](https://img.shields.io/github/issues/peterNaydenov/dt-toolbox)
+![language](https://img.shields.io/github/languages/top/peterNaydenov/dt-toolbox)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/peterNaydenov/dt-toolbox)
+![npm bundle size](https://img.shields.io/bundlephobia/min/dt-toolbox)
+
 
 
 
