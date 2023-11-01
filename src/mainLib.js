@@ -23,6 +23,31 @@ const INIT_DATA_TYPES = [
 
 
 
+/**
+* @typedef {(number|string|boolean)} Primitives
+*
+* @typedef {Object} Line
+* @description dt-model line
+* @property {string} 0 - name of the dt-line.
+* @property {(Primitives[]|Object<string,Primitives>)} 1 - object or array with primitive values only
+* @property {string} 2 - breadcrumbs of the dt-line
+* @property {Array<string>} 3 - children breadcrumbs(edges).
+*
+*
+*
+* @typedef {Line[]} Dtmodel
+* @description dt-model
+*
+*
+*
+* @typedef {Object} Initoptions
+* @description dtbox.init options
+* @default '{ "model" : "std" }'
+* @property {string} model - data model according library's data models.(Look at the documentation)
+*/
+
+
+
 const mainLib = {
 
     dependencies () {
@@ -43,11 +68,18 @@ const mainLib = {
                                         }
                             , draft
                         }
-            } // dependencies func.
+            },   // dependencies func.
 
 
 
-    , init ( inData, options={} ) {
+/**
+ * @function init
+ * @description Create a dt-object from data source
+ * @param {Array|Object} inData - data source
+ * @param {Initoptions} options - options {}
+ * @returns {DTObject} - dt-object
+ */
+    init ( inData, options={} ) {
                     let 
                           defaultOptions = { model : 'std' }
                         , { model } = Object.assign ( {}, defaultOptions, options )
@@ -61,11 +93,17 @@ const mainLib = {
                                                 mainLib.load ( inData ) : 
                                                 convert.from ( model ).toFlat ( dependencies, inData );
                     return flatObject ( dependencies, d )
-            } // init func.
+            }, // init func.
 
 
 
-    , load ( inData ) {
+/**
+ * @function load
+ * @description Load data from dt-model
+ * @param {Dtmodel} inData - dt-model data to be loaded
+ * @returns {DTObject} - dt-object
+ */
+    load ( inData ) {
                 const index = {};
                 inData.forEach ( line => {
                                         const [ , ,breadcrumbs ] = line;
@@ -73,11 +111,18 @@ const mainLib = {
                                 })
                 const copy = walk ({data: inData });
                 return flatObject ( mainLib.dependencies, [copy, index, inData ] )
-            } // load func.
+            }, // load func.
 
 
 
-    , flating ( inData, options={} ) {
+/**
+ * 
+ * @function flating
+ * @param {Array|Object} inData - data source
+ * @param {Initoptions} options - options. Example: { model : 'std' }
+ * @returns {Dtmodel} - dt-model
+ */
+     flating ( inData, options={} ) {
                 let 
                        defaultOptions = { model : 'std' }
                     ,  { model } = Object.assign ( {}, defaultOptions, options )
@@ -85,11 +130,9 @@ const mainLib = {
                     if ( !INIT_DATA_TYPES.includes(model) )   return null
                     let [,,dt] = convert.from ('std').toFlat ( mainLib.dependencies, inData );
                     return dt
-            } // flating func.
+            }, // flating func.
 
-
-
-    , converting ( inData, options={} ) {
+     converting ( inData, options={} ) {
                 let 
                        defaultOptions = { model : 'std', as: 'std' }
                     ,  { model, as } = Object.assign ( {}, defaultOptions, options )
@@ -99,11 +142,16 @@ const mainLib = {
                     let [,,dt] = convert.from ('std').toFlat ( mainLib.dependencies, inData );
 
                     return convert.to ( as, mainLib.dependencies, dt )
-            } // flating func.
+            }, // flating func.
 
 
-            
-    , getWalk : () => walk
+
+/**
+ * @function getWalk
+ * @description Extract the 'walk' (@peter.naydenov/walk) from dt-toolbox library
+ * @returns {Function} - walk function
+ */
+    getWalk : () => walk
 
 } // mainLib
 

@@ -69,13 +69,6 @@ it ( 'Mulitple queries from a single dt-object in same', () => {
     
 }) // it Mulitple queries
 
-
-
-
-
-
-
-
 }) // describe dt-toolbox
 
 

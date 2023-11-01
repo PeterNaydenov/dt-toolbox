@@ -43,12 +43,16 @@ const { init, load, flating, converting, getWalk } =  mainLib;
 
 
 
+
+
+
+
 const dtbox = {
-              init : init
-            , load : load
-            , flat : flating
-            , convert : converting
-            , getWalk
+            init,
+            load, 
+            flat : flating, 
+            convert : converting,
+            getWalk
         } // dtbox func.
 
 
