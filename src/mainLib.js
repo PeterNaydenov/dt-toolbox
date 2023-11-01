@@ -26,24 +26,11 @@ const INIT_DATA_TYPES = [
 /**
 * @typedef {(number|string|boolean)} Primitives
 *
-* @typedef {Object} Line
-* @description dt-model line
-* @property {string} 0 - name of the dt-line.
-* @property {(Primitives[]|Object<string,Primitives>)} 1 - object or array with primitive values only
-* @property {string} 2 - breadcrumbs of the dt-line
-* @property {Array<string>} 3 - children breadcrumbs(edges).
-*
-*
-*
-* @typedef {Line[]} Dtmodel
-* @description dt-model
-*
 *
 *
 * @typedef {Object} Initoptions
 * @description dtbox.init options
-* @default '{ "model" : "std" }'
-* @property {string} model - data model according library's data models.(Look at the documentation)
+* @property {string} [model='std'] model - data model according library's data models.(Look at the documentation)
 */
 
 
@@ -75,8 +62,9 @@ const mainLib = {
 /**
  * @function init
  * @description Create a dt-object from data source
- * @param {Array|Object} inData - data source
- * @param {Initoptions} options - options {}
+ * @param {(Array|Object)} inData - data source
+ * @param {Object} options - options {}
+ * @param {('std'|'tuples'|'breadcrumbs'|'files'|'midFlat'|'flat'|'dt-model')} options.model - model of the data source
  * @returns {DTObject} - dt-object
  */
     init ( inData, options={} ) {
@@ -95,12 +83,14 @@ const mainLib = {
                     return flatObject ( dependencies, d )
             }, // init func.
 
-
-
 /**
  * @function load
  * @description Load data from dt-model
- * @param {Dtmodel} inData - dt-model data to be loaded
+ * @param {{0:string,1:(Array<Primitives>|Object<string,Primitives>),2:string,3:string[]}} inData - dt-model:
+ * @param inData[]0 - name of the dt-line;
+ * @param inData[]1 - flat data;
+ * @param inData[]2 - breadcrumbs of the dt-line;
+ * @param inData[]3 - children breadcrumbs(edges);
  * @returns {DTObject} - dt-object
  */
     load ( inData ) {
@@ -118,8 +108,10 @@ const mainLib = {
 /**
  * 
  * @function flating
- * @param {Array|Object} inData - data source
- * @param {Initoptions} options - options. Example: { model : 'std' }
+ * @description Create a dt-model from data source
+ * @param {(Array|Object)} inData - data source. Object or array.
+ * @param {Object} options - options.
+ * @param {('std'|'tuples'|'breadcrumbs'|'files'|'midFlat'|'flat'|'dt-model')} options.model - model of the data source
  * @returns {Dtmodel} - dt-model
  */
      flating ( inData, options={} ) {
@@ -132,6 +124,15 @@ const mainLib = {
                     return dt
             }, // flating func.
 
+/**
+ * @function converting
+ * @description Convert data from one model to another
+ * @param {Array|Object} inData - data source
+ * @param {Object} options
+ * @param {string} options.model - model of the data source
+ * @param {string} options.as - model to be converted to
+ * @returns {Array|Object} - converted data
+ */
      converting ( inData, options={} ) {
                 let 
                        defaultOptions = { model : 'std', as: 'std' }
@@ -148,8 +149,8 @@ const mainLib = {
 
 /**
  * @function getWalk
- * @description Extract the 'walk' (@peter.naydenov/walk) from dt-toolbox library
- * @returns {Function} - walk function
+ * @description Extract the 'walk' (@peter.naydenov/walk) dependency from dt-toolbox library
+ * @returns {Function} - the 'walk' function
  */
     getWalk : () => walk
 
