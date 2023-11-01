@@ -1,9 +1,15 @@
 'use strict'
 
-
 function setupFilter ( flatIO ) {
-    return ( name, filterFn )  => flatIO.setupFilter ( name, filterFn )
-} // setupFilter func.
+/**
+ * @function setupFilter
+ * @param {string} name - name of the filter
+ * @param {function} filterFn - filter function
+ * @returns {void}
+ */
+return function setupFilter ( name, filterFn ) {
+        flatIO.setupFilter ( name, filterFn )
+}} // setupFilter func.
 
 
 
