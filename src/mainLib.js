@@ -25,20 +25,26 @@ const INIT_DATA_TYPES = [
 
 /**
 * @typedef {(number|string|boolean)} Primitives
+* @typedef {('std'|'tuples'|'breadcrumbs'|'files'|'midFlat'|'flat'|'dt-model')} DtmodelNames
+* @typedef {(filterName:string,fn:function)=>void} setupFilterFn
+* @typedef {(segmentName:string, segment:DTObject)=>void} insertSegmentFn
+* @typedef {(request:Array<string>,options:{as:DtmodelNames}=) => Array<RequestedModel>} extractListFn;
 *
 *
 *
 * @typedef DTObject
 * @type {Object}
-* @property {Function} insertSegment - Extends available data with new data segment;
-* @property {Function} export - Returns a dt-model of the data;
-* @property {Function} copy - Creates deep copy of original data;
+* @property {insertSegmentFn} insertSegment - Extends available data with new data segment;
+* @property {(segmentName:string)=>Dtmodel} export - Returns a dt-model of the data;
+* @property {Function} copy - Creates deep copy of original data segment;
 * @property {Function} model - Arrange data according specific data-model. Model should come as a function;
 * @property {Function} query - Request, and evaluate data. Returns a new flat object;
-* @property {Function} setupFilter - Functions should filter content according some criteria. Generated indexes will help for data search in;
+* @property {setupFilterFn} setupFilter - Functions should filter content according some criteria. Generated indexes will help for data search in;
 * @property {Function} listSegments - Returns list of segments in flat data;
 * @property {Function} index - Returns segment by index;
-* @property {Function} extractList - Returns list of segments by index;
+* @property {extractListFn} extractList - Extracts list of data segments;
+*
+*
 *
 *
 *
@@ -134,7 +140,7 @@ const mainLib = {
  * @param {(Array|Object)} inData - data source. Object or array.
  * @param {Object} options - options.
  * @param {('std'|'tuples'|'breadcrumbs'|'files'|'midFlat'|'flat'|'dt-model')} options.model - model of the data source
- * @returns {Dtmodel} - dt-model
+ * @returns {Dtmodel[]} - dt-model
  */
      flating ( inData, options={} ) {
                 let 

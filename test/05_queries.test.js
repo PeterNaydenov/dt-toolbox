@@ -69,6 +69,12 @@ it ( 'Mulitple queries from a single dt-object in same', () => {
     
 }) // it Mulitple queries
 
+it ( 'tt', () => {
+    const x = dtbox.init ({name:'Peter', personal:{age:49, eyes:'blue'}} );
+    
+}) // it tt
+
+
 }) // describe dt-toolbox
 
 
