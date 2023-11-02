@@ -549,7 +549,7 @@ const storage = dtbox.init ( first );   // first will become a root segment
 storage.insertSegment ( 'second', second );
 storage.insertSegment ( 'third', third );
 
-const [ a, b c, firstData, otherData ] = storage.extractList ( ['first', 'second', 'third', 'data', 'secondData' ], { type: 'std' } ));
+const [ a, b c, firstData, otherData ] = storage.extractList ( ['first', 'second', 'third', 'data', 'secondData' ], { as: 'std' } ));
 // a -> { name: 'first', data: 'first data' }
 // b -> { name: 'second', data: 'second data' }
 // c -> { name: 'third', data: 'third data' }
