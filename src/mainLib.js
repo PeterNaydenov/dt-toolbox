@@ -29,19 +29,20 @@ const INIT_DATA_TYPES = [
 * @typedef {(filterName:string,fn:function)=>void} setupFilterFn
 * @typedef {(segmentName:string, segment:DTObject)=>void} insertSegmentFn
 * @typedef {(request:Array<string>,options:{as:DtmodelNames}=) => Array<RequestedModel>} extractListFn;
+* @typedef {(fn:queryFunction, ...args)=>DTObject} QueryFn
+* @typedef {(breadcrumbs:string) => dtLine } IndexFn
 *
 *
 *
-* @typedef DTObject
-* @type {Object}
+* @typedef {Object} DTObject
 * @property {insertSegmentFn} insertSegment - Extends available data with new data segment;
 * @property {(segmentName:string)=>Dtmodel} export - Returns a dt-model of the data;
 * @property {Function} copy - Creates deep copy of original data segment;
 * @property {Function} model - Arrange data according specific data-model. Model should come as a function;
-* @property {Function} query - Request, and evaluate data. Returns a new flat object;
+* @property {QueryFn} query - Request, and evaluate data. Returns a new flat object;
 * @property {setupFilterFn} setupFilter - Functions should filter content according some criteria. Generated indexes will help for data search in;
 * @property {Function} listSegments - Returns list of segments in flat data;
-* @property {Function} index - Returns segment by index;
+* @property {IndexFn} index - Returns dt-line by breadcrumbs;
 * @property {extractListFn} extractList - Extracts list of data segments;
 *
 *
