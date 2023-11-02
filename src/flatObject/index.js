@@ -21,7 +21,7 @@ function flatObject ( dependencies, d ) {
             , objectAPI = {
                     // I/O Operations
                       insertSegment : insert ( dependencies, flatIO )         // Extends available data with new data segment;
-                    , export : ex     ( dependencies, flatIO )                // Returns flat data;
+                    , export : ex     ( dependencies, flatIO )                // Returns a flat data;
                     , copy   : copy   ( dependencies, flatIO )                // Creates deep copy of original data
                     , model  : model  ( dependencies, flatIO, flatStore )      // Arrange data according specific data-model. Model should come as a function;
                     , query  : query  ( dependencies, flatIO, flatStore )      // Request, and evaluate data. Returns a new flat object;

@@ -28,6 +28,28 @@ const INIT_DATA_TYPES = [
 *
 *
 *
+* @typedef DTObject
+* @type {Object}
+* @property {Function} insertSegment - Extends available data with new data segment;
+* @property {Function} export - Returns a dt-model of the data;
+* @property {Function} copy - Creates deep copy of original data;
+* @property {Function} model - Arrange data according specific data-model. Model should come as a function;
+* @property {Function} query - Request, and evaluate data. Returns a new flat object;
+* @property {Function} setupFilter - Functions should filter content according some criteria. Generated indexes will help for data search in;
+* @property {Function} listSegments - Returns list of segments in flat data;
+* @property {Function} index - Returns segment by index;
+* @property {Function} extractList - Returns list of segments by index;
+*
+*
+*
+* @typedef {{0:string,1:(Array<Primitives>|Object<string,Primitives>),2:string,3:string[]}} Dtmodel - dt-model
+* @param Dtmodel[]0 - name of the dt-line;
+* @param Dtmodel[]1 - flat data;
+* @param Dtmodel[]2 - breadcrumbs of the dt-line;
+* @param Dtmodel[]3 - children breadcrumbs(edges);
+*
+*
+*
 * @typedef {Object} Initoptions
 * @description dtbox.init options
 * @property {string} [model='std'] model - data model according library's data models.(Look at the documentation)
