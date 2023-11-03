@@ -2,6 +2,12 @@
 
 
 
+### 7.4.0 ( 2023-11-3)
+- [x] Types were added to the project;
+
+
+
+
 ### 7.3.0 ( 2023-10-19 )
 - [x] Model function recognize a `dt-model` model. Result is equal to result of `export`;
 - [x] Model function recognize a `dt-object` model. Returns a new dt-object;
