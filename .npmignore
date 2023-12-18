@@ -1,0 +1,7 @@
+test
+test-data
+.DS_Store
+.gitignore
+.nyc_output
+coverage
+package-lock.json
