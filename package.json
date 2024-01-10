@@ -28,11 +28,11 @@
   },
   "homepage": "https://github.com/PeterNaydenov/dt-toolbox#readme",
   "dependencies": {
-    "@peter.naydenov/walk": "4.2.0"
+    "@peter.naydenov/walk": "4.2.1"
   },
   "devDependencies": {
-    "c8": "^8.0.1",
-    "chai": "^4.3.10",
+    "c8": "^9.0.0",
+    "chai": "^5.0.0",
     "mocha": "^10.2.0"
   },
   "c8": {

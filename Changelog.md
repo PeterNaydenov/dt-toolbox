@@ -2,6 +2,13 @@
 
 
 
+### 7.4.1 ( 2024-01-10)
+- [x] Dependencies updates. @peter.naydenov/walk to version 4.2.1;
+- [x] Dev dependencies updates. Chai to version 5.0.0;
+- [x] Dev dependencies updates. C8 to version 9.0.0;
+
+
+
 ### 7.4.0 ( 2023-11-3)
 - [x] Types were added to the project;
 
