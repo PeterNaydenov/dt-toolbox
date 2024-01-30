@@ -3,21 +3,24 @@
   "description": "Data manipulation tool",
   "version": "7.4.1",
   "license": "MIT",
-  "author": "Peter Naydenov",
-  "keywords": [
-    "flatten",
-    "shallow",
-    "data",
-    "object",
-    "structure",
-    "dt"
-  ],
-  "main": "src/main.js",
+  "author": "Peter Naydenov",  
+  "main": "./dist/dtbox.umd.js",
   "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/dtbox.esm.mjs",
+      "require": "./dist/dtbox.cjs",
+      "default": "./dist/dtbox.umd.js"
+    },
+    "./package.json": "./package.json",
+    "./dist/*": "./dist/*",
+    "./src/*": "./src/*"
+  },
   "scripts": {
     "start": "node src/main.js",
     "test": "mocha test",
-    "cover": "c8 mocha test"
+    "cover": "c8 mocha test",
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -28,12 +31,16 @@
   },
   "homepage": "https://github.com/PeterNaydenov/dt-toolbox#readme",
   "dependencies": {
-    "@peter.naydenov/walk": "4.2.1"
+    "@peter.naydenov/walk": "4.2.3"
   },
   "devDependencies": {
-    "c8": "^9.0.0",
-    "chai": "^5.0.0",
-    "mocha": "^10.2.0"
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "c8": "^9.1.0",
+    "chai": "^5.0.3",
+    "mocha": "^10.2.0",
+    "rollup": "^4.9.6"
   },
   "c8": {
     "include": [
@@ -48,5 +55,13 @@
       "lcov",
       "text-summary"
     ]
-  }
+  },
+  "keywords": [
+    "flatten",
+    "shallow",
+    "data",
+    "object",
+    "structure",
+    "dt"
+  ]
 }

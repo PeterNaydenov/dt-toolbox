@@ -2,7 +2,7 @@
 
 
 
-import walk from '@peter.naydenov/walk'
+import walk      from '@peter.naydenov/walk'    // Docs: https://github.com/PeterNaydenov/walk#readme
 
 import flatObject from './flatObject/index.js'     // Flat data api.
 import flatData   from './flatData/index.js'       // Query data api. Used in model functions 

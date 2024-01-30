@@ -1,4 +1,4 @@
-'use struct'
+'use strict'
 
 function ex ( flatStorage ) {
 return function ex ( name ) {
