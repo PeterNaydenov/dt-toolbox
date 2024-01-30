@@ -12,7 +12,7 @@
 
 
 ## Last Updates
-- After version 7.4.2 - use with require or import. Folder 'dist' contains the library in commonjs, esm and umd formats;
+- After version 7.4.2 - load the library with `require` or `import`. Folder '**dist**' contains the library in commonjs, esm and umd formats;
 - After version 7.3.0 extractList options.as can receive a `dt-model` and `dt-object`;
 - After version 7.1.x `dt-object` api has a new method `extractList` that helps to extract a multiple segments or properties, defined as a list. Use '**options**'(the second argument) to define a model of extracted data if needed. Reed about `extractList` bellow.
 
