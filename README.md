@@ -59,7 +59,10 @@ npm install dt-toolbox
 
 Once it has been installed, it can be used by writing this line of JavaScript:
 ```js
+// if you are using es6 modules:
 import dtbox from 'dt-toolbox'
+// if you are using commonjs:
+const dtbox = require ( 'dt-toolbox' );
 ```
 
 
