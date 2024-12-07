@@ -1,6 +1,13 @@
 ## Release History
 
 
+
+### 7.4.3 ( 2024-12-07)
+- [x] Update a 'walk' library to version 5.x.x;
+- [x] Dev dependencies updates;
+
+
+
 ### 7.4.2 ( 2024-01-30)
 - [x] Dependencies updates. @peter.naydenov/walk to version 4.2.3;
 - [x] Dev dependencies updates. Chai to version 5.0.3;

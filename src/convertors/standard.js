@@ -3,30 +3,26 @@
 
 
 function toFlat ( dependencies, d ) {   // Convert data to 'dt' model
-        const dataType = d instanceof Array ? [] : {}
         const
               { walk } = dependencies ()
-            , dt = [
-                  //  Store record line positions:
-                  //    0      1        2          3    
-                  // [ name, data , breadcrumbs, edges ] 
-                    [ 'root', dataType, 'root', [] ]
-                ]
-            , index = { 'root' : dt[0] }
+            , dt = []
+            , index = {}
             , dtDATA = 1   // Const: Flat data object in store record line;
             , dtEDGES = 3  // Const: Edges in store record line;
             ;
 
         function objCallbackFn ({ value, key, breadcrumbs }) {
                         const 
-                              isArray = value instanceof Array ? true : false
+                              isRoot = (breadcrumbs === 'root' ) && ( key === 'root' )
+                            , isArray = value instanceof Array ? true : false
                             , dataType = isArray ? [] : {}
                             , objectName = key
                             , search = new RegExp (  `\/${key}$` )
                             , parentName = breadcrumbs.replace ( search, '' )
                             , newObject = [ objectName, dataType, breadcrumbs, [] ]
                             ;
-                        index[ parentName][dtEDGES].push ( breadcrumbs )
+                       
+                        if ( !isRoot )   index[ parentName][dtEDGES].push ( breadcrumbs )
                         dt.push ( newObject )
                         index [ breadcrumbs ] = dt.at(-1)
                         return value

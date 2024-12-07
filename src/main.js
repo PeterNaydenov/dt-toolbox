@@ -34,6 +34,10 @@
      - Version 7.1.0 published on August 29th, 2023
             * Some fixes on version v.7.0.0;
             * New method `extractList` for multiple data extraction from dt-model;
+            
+     - Version 7.4.3 published on December 7th, 2024
+            * Update a 'walk' library to version 5.x.x;
+            * Development dependencies updates;
 */
 
 
