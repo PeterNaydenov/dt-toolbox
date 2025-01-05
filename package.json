@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/PeterNaydenov/dt-toolbox#readme",
   "dependencies": {
-    "@peter.naydenov/walk": "5.0.0"
+    "@peter.naydenov/walk": "5.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.2",

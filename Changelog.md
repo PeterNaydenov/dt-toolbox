@@ -2,6 +2,12 @@
 
 
 
+### 7.4.4 ( 2025-01-05)
+- [x] Update a 'walk' library to version 5.0.1;
+- [x] Dev dependencies updates;
+
+
+
 ### 7.4.3 ( 2024-12-07)
 - [x] Update a 'walk' library to version 5.x.x;
 - [x] Dev dependencies updates;
