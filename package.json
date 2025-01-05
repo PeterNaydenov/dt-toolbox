@@ -1,7 +1,7 @@
 {
   "name": "dt-toolbox",
   "description": "Data manipulation tool",
-  "version": "7.4.3",
+  "version": "7.4.4",
   "license": "MIT",
   "author": "Peter Naydenov",
   "main": "./dist/dtbox.umd.js",
