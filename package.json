@@ -34,7 +34,7 @@
     "@peter.naydenov/walk": "5.0.1"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-commonjs": "^28.0.8",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
     "c8": "^10.1.3",
