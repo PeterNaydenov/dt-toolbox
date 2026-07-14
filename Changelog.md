@@ -2,6 +2,10 @@
 
 
 
+### 7.4.6 ( 2026-07-14)
+- [x] Dependencies updates. @peter.naydenov/walk to version 5.0.6;
+
+
 ### 7.4.5 ( 2026-10-25)
 - [x] Update a 'walk' library to version 5.0.2;
 - [x] Dev dependencies updates;
