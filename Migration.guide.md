@@ -30,7 +30,7 @@ dt.query ( (store) => {
 
 ```
 
-Method `insert` was renamed to `insertSegment` to be clear that data is not mixed. Segments are separated peaces of data.
+Method `insert` was renamed to `insertSegment` to be clear that data is not mixed. Segments are separated pieces of data.
 
 ```js 
 // before
@@ -39,7 +39,7 @@ Method `insert` was renamed to `insertSegment` to be clear that data is not mixe
 
 // after
   const dt = dtbox.init ( a );
-  dt.insertSegment ( 'specificDataName' b ) // b is a dt-object
+  dt.insertSegment ( 'specificDataName', b ) // b is a dt-object
 // it's possible to insert a standard js object but it's not recomended
 // dt.insertSegment ( 'specialDataName', a )  // a is a standard js object
 // also possible to insert a dt model object directly
@@ -60,7 +60,7 @@ const storage = dtbox.init ( first );   // first will become a root segment
 storage.insertSegment ( 'second', second );
 storage.insertSegment ( 'third', third );
 
-const [ a, b c, firstData ] = storage.extractList ( ['first', 'second', 'third', 'data' ], { type: 'std' } ));
+const [ a, b, c, firstData ] = storage.extractList ( ['first', 'second', 'third', 'data' ], { as: 'std' } ));
 // a -> { name: 'first', data: 'first data' }
 // b -> { name: 'second', data: 'second data' }
 // c -> { name: 'third', data: 'third data' }
@@ -69,9 +69,9 @@ const [ a, b c, firstData ] = storage.extractList ( ['first', 'second', 'third',
 
 ## From v.4.x.x  - v.6.x.x
 
-The library "dt-toolbox" exist for a full 7 years and now version 6 is coming as full rewrite of the original idea. Difference are more then similarity and better aproach is to read a version 6 documentation first. Then you will find that:
+The library "dt-toolbox" has existed for a full 7 years and now version 6 is coming as full rewrite of the original idea. Differences are more than similarities and a better approach is to read a version 6 documentation first. Then you will find that:
 
- - Data creation is very simular;
+ - Data creation is very similar;
  - Dt-Object becomes a storage and you can add more data to it;
  - Dt-Object data will stay always immutable;
  - For extracting data you can use 'query' and 'model' functions;
@@ -122,7 +122,7 @@ Method 'spread' has a lot of changes. Instruction 'st' now is available as 'stan
 
 
 ### [x] Data-type 'dt'
-Internal data representation in the library was changed. I have recognized the need of information about data structures and their relations. So data-type `dt` was depricated as main internal representation data-type and we started to use `flat`. If you have build your application around 'dt' data-type, the library will continue to support it (load/spread). Code change required.
+Internal data representation in the library was changed. I have recognized the need for information about data structures and their relations. So data-type `dt` was deprecated as main internal representation data-type and we started to use `flat`. If you have built your application around 'dt' data-type, the library will continue to support it (load/spread). Code change required.
 
 Old code:
 ```js
@@ -159,7 +159,7 @@ dtbox
 ### [x] Select methods 'folder' and 'space' were renamed
 Method `folder` was used to search for specific string into keys. Name is not very intuitive and was renamed to `find`. Library has also another problematic method name - `space`. Space can select internal flat structures by breadcrumb representation. Name `folder` is more appropriate here, so `space` was renamed to `folder`. 
 
- Method `space` still exists but was depricated.
+ Method `space` still exists but was deprecated.
 
 
  Old code:
