@@ -46,6 +46,9 @@ it ( 'Init', () => {
 
 
 it ( 'Init with non-existing model', () => {
+    // Bug fix: unknown models used to silently return null. init() still
+    // returns null (per existing API) because the user's data wasn't valid
+    // for any model. flat() and convert() throw instead.
     const store = dtbox.init ( a , { model: 'halo' });
     expect ( store ).to.be.null
 })
@@ -173,8 +176,8 @@ it ( 'Flat. No options', () => {
 
 
 it ( 'Flat with options -> wrong model name', () => {
-    let res = dtbox.flat ( a, { model:'extra'} );
-    expect ( res ).to.be.null
+    // Bug fix: unknown models used to silently return null. They now throw.
+    expect ( () => dtbox.flat ( a, { model:'extra'} ) ).to.throw ( /data-model/ )
 }) // it flat with wrong model name
 
 
@@ -215,15 +218,15 @@ it ( 'Convert. Options: "model" and "as"', () => {
 
 
 it ( 'Convert. Wrong outgoing model', () => {
-    let res = dtbox.convert ( a, { as:'none'});
-    expect ( res ).to.be.null
+    // Bug fix: wrong models used to silently return null. They now throw.
+    expect ( () => dtbox.convert ( a, { as:'none'}) ).to.throw ( /data-model/ )
 }) // it convert, wrong outgoing model
 
 
 
 it ( 'Convert. Wrong outgoing model', () => {
-    let res = dtbox.convert ( a, { model:'none'});
-    expect ( res ).to.be.null
+    // Bug fix: wrong models used to silently return null. They now throw.
+    expect ( () => dtbox.convert ( a, { model:'none'}) ).to.throw ( /data-model/ )
 }) // it convert, wrong outgoing model
 
 
