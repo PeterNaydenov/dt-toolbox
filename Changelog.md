@@ -217,9 +217,9 @@
 - [x] Export API was removed. Methods were moved to main API or removed;
 - [x] Method that is searching for string in keys was renamed from 'folder' to 'find';
 - [x] Method 'folder' works like 'space' in previous versions. That makes more sense...;
-- [x] Method 'space' is depricated;
+- [x] Method 'space' is deprecated;
 - [x] New method 'purify'. Removes empty structures from the selection;
-- [x] Method 'loadFast' was depricated. Use 'load' instead;
+- [x] Method 'loadFast' was deprecated. Use 'load' instead;
 - [x] Added support for different data-models: standard, tuples, flat, midFlat, breadcrumbs, files;
 - [x] New method 'flatten' was added;
 - [x] New method 'mix' was added;
