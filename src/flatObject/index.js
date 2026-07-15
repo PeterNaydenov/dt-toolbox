@@ -40,17 +40,44 @@ function flatObject ( dependencies, d ) {
 
         function index ( n ) {
                         if ( n == null )   return null
+                        // 1) Try the exact dt-line first
                         let r  = flatIO.getLine ( n )
                         if ( r ) {
                               let [ name, d, breadcrumbs, links ] = r;
                               let copy;
-                              if ( d instanceof Array )   copy = [...d ]
-                              else                        copy = {...d }
+                              if ( d === null || d === undefined )   copy = d
+                              else if ( typeof d !== 'object' )      copy = d
+                              else if ( d instanceof Array )        copy = [...d]
+                              else                                   copy = {...d}
                               return [ name, copy, breadcrumbs, [...links] ]
                           }
-                        else return null
-            } // index func.
-            
+                        // 2) Try a scalar property on a parent dt-line.
+                        // E.g. 'root/a' for the 'a' property of the 'root' dt-line,
+                        // which lives in root flatData, not as its own dt-line.
+                        const lastSlash = n.lastIndexOf ( '/' )
+                        if ( lastSlash > 0 ) {
+                                const parentBr  = n.slice ( 0, lastSlash )
+                                const propName  = n.slice ( lastSlash + 1 )
+                                const parent    = flatIO.getLine ( parentBr )
+                                if ( parent ) {
+                                        const [ , parentData ] = parent
+                                        if ( parentData && typeof parentData === 'object' && !Array.isArray(parentData)
+                                                && Object.prototype.hasOwnProperty.call ( parentData, propName ) ) {
+                                                const value = parentData[ propName ]
+                                                let copy
+                                                if ( value === null || value === undefined )  copy = value
+                                                else if ( typeof value !== 'object' )           copy = value
+                                                else if ( value instanceof Array )             copy = [...value]
+                                                else if ( value instanceof Date )              copy = new Date ( value.getTime () )
+                                                else if ( value instanceof RegExp )             copy = new RegExp ( value.source, value.flags )
+                                                else                                            copy = { ...value }
+                                                return [ propName, copy, n, [] ]
+                                            }
+                                    }
+                            }
+                        return null
+                    } // index func.
+
         objectAPI [ 'extractList' ] = extractList ( dependencies, flatIO, index )
         return objectAPI
     } // flatObject func.

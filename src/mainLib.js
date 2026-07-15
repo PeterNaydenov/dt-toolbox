@@ -21,6 +21,31 @@ const INIT_DATA_TYPES = [
             ]
     ;
 
+/**
+ * Detect circular references in data before it gets walked.
+ * Without this, `init()` enters infinite recursion and crashes Node
+ * with "JavaScript heap out of memory".
+ * @param {*} data - data to scan
+ * @param {WeakSet} [seen] - internal set of already-visited objects
+ * @returns {boolean} true if a cycle is detected
+ */
+const hasCircularRef = ( data, seen = new WeakSet() ) => {
+        if ( data === null || typeof data !== 'object' )   return false
+        if ( seen.has ( data ) )                            return true
+        seen.add ( data )
+        if ( Array.isArray ( data ) ) {
+                for ( const v of data ) {
+                        if ( hasCircularRef ( v, seen ) )   return true
+                    }
+            }
+        else {
+                for ( const k in data ) {
+                        if ( hasCircularRef ( data[k], seen ) )   return true
+                    }
+            }
+        return false
+    };
+
 
 
 /**
@@ -97,7 +122,7 @@ const mainLib = {
  * @returns {DTObject} - dt-object
  */
     init ( inData, options={} ) {
-                    let 
+                    let
                           defaultOptions = { model : 'std' }
                         , { model } = Object.assign ( {}, defaultOptions, options )
                         , dependencies = mainLib.dependencies
@@ -106,9 +131,22 @@ const mainLib = {
                             console.error ( `Can't understand your data-model: ${model}. Please, find what is possible on https://github.com/PeterNaydenov/dt-toolbox` )
                             return null
                         }
-                    const d  = ['flat', 'dt-model'].includes ( model ) ? 
-                                                mainLib.load ( inData ) : 
-                                                convert.from ( model ).toFlat ( dependencies, inData );
+                    // Circular reference guard: `walk` recurses without tracking, so
+                    // cycles cause a fatal OOM crash. Catch them up-front.
+                    if ( inData && typeof inData === 'object' && hasCircularRef ( inData ) ) {
+                            throw new Error ( 'Circular reference detected in data. dt-toolbox cannot initialise a self-referencing object.' )
+                        }
+                    // Primitive inputs (number, string, boolean, null, undefined) are
+                    // wrapped in { value: <primitive> } so the data is preserved
+                    // and round-trippable. Before the fix, primitives silently
+                    // produced empty dt-objects and the value was lost.
+                    let actualData = inData
+                    if ( inData === null || inData === undefined || typeof inData !== 'object' ) {
+                            actualData = { value: inData }
+                        }
+                    const d  = ['flat', 'dt-model'].includes ( model ) ?
+                                                mainLib.load ( actualData ) :
+                                                convert.from ( model ).toFlat ( dependencies, actualData );
                     return flatObject ( dependencies, d )
             }, // init func.
 
@@ -144,11 +182,19 @@ const mainLib = {
  * @returns {Dtmodel[]} - dt-model
  */
      flating ( inData, options={} ) {
-                let 
+                let
                        defaultOptions = { model : 'std' }
                     ,  { model } = Object.assign ( {}, defaultOptions, options )
                     ;
-                    if ( !INIT_DATA_TYPES.includes(model) )   return null
+                    if ( !INIT_DATA_TYPES.includes(model) ) {
+                            throw new Error ( `Can't understand your data-model: ${model}. Supported: ${INIT_DATA_TYPES.join(', ')}` )
+                        }
+                    // Reject non-object input with a clear error.
+                    // Before the fix, flat(null)/flat(undefined)/flat(42) silently
+                    // returned [].
+                    if ( inData === null || inData === undefined || typeof inData !== 'object' ) {
+                            throw new Error ( `flat(data, options) requires an object or array. Got: ${inData === null ? 'null' : typeof inData}${inData === null ? '' : ' (' + inData + ')'}` )
+                        }
                     let [,,dt] = convert.from ('std').toFlat ( mainLib.dependencies, inData );
                     return dt
             }, // flating func.
@@ -163,12 +209,19 @@ const mainLib = {
  * @returns {Array|Object} - converted data
  */
      converting ( inData, options={} ) {
-                let 
+                let
                        defaultOptions = { model : 'std', as: 'std' }
                     ,  { model, as } = Object.assign ( {}, defaultOptions, options )
                     ;
-                    if ( !INIT_DATA_TYPES.includes(model) )   return null
-                    if ( !INIT_DATA_TYPES.includes(as)    )   return null
+                    if ( !INIT_DATA_TYPES.includes(model) ) {
+                            throw new Error ( `Can't understand source data-model: ${model}. Supported: ${INIT_DATA_TYPES.join(', ')}` )
+                        }
+                    if ( !INIT_DATA_TYPES.includes(as) ) {
+                            throw new Error ( `Can't understand target data-model: ${as}. Supported: ${INIT_DATA_TYPES.join(', ')}` )
+                        }
+                    if ( inData === null || inData === undefined || typeof inData !== 'object' ) {
+                            throw new Error ( `convert(data, options) requires an object or array. Got: ${inData === null ? 'null' : typeof inData}` )
+                        }
                     let [,,dt] = convert.from ('std').toFlat ( mainLib.dependencies, inData );
 
                     return convert.to ( as, mainLib.dependencies, dt )
