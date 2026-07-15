@@ -14,7 +14,7 @@
 ## Last Updates
 - After version 7.4.2 - load the library with `require` or `import`. Folder '**dist**' contains the library in commonjs, esm and umd formats;
 - After version 7.3.0 extractList options.as can receive a `dt-model` and `dt-object`;
-- After version 7.1.x `dt-object` api has a new method `extractList` that helps to extract a multiple segments or properties, defined as a list. Use '**options**'(the second argument) to define a model of extracted data if needed. Reed about `extractList` bellow.
+- After version 7.1.x `dt-object` api has a new method `extractList` that helps to extract a multiple segments or properties, defined as a list. Use '**options**'(the second argument) to define a model of extracted data if needed. Read about `extractList` bellow.
 
 
 
@@ -34,11 +34,11 @@ It's an internal 'dt-object' data description. Data is an array of lines where e
 // Where ->
 // name: string. Name of the dt-line;
 // flatData:  object or array of primitive types;
-// breadcrumbs: string. Bredcrumbs description(identifier) of the current dt-line;
+// breadcrumbs: string. Breadcrumbs description(identifier) of the current dt-line;
 // edges: string[]. List of breadcrumbs of the related dt-lines(children);
 ```
 
-This data-description is easy to read, saved, or transfered.
+This data-description is easy to read, saved, or transferred.
 
 DT-model can become a storage for multiple data blocks - `data-segments`. Each data-segment can be extracted but also can be queried and modeled together with other data-segments in a way to create a new dt-object.
 
@@ -73,7 +73,7 @@ Use Dt-toolbox methods(init and load) to create a `dt-object`.
 
 DT-object:
 - Provides multiple insertion of data-segments. Data from each insertion stays differentiated;
-- Has prebuilded filters for fast search of data;
+- Has prebuilt filters for fast search of data;
 - Can create and register a customized filters for fast search of data;
 - Can apply `query functions` to find, extract and reshape the data;
 - Can apply `model function` to reshape the final result;
@@ -125,10 +125,10 @@ Take a look on the library APIs and see the '**Examples**' section bellow.
 ### dt-toolbox API Fast Reference
 
 ```js
-    init    : 'Create a new dt-object from data that is not a DT-model and needs a convertion'
+    init    : 'Create a new dt-object from data that is not a DT-model and needs a conversion'
   , load    : 'Create a new dt-object from data that is a DT-model'
   , flat     : 'Convert a data to DT-model without creation of dt-object'
-  , convert : 'Direct convertion from model to model without creation of dt-object'
+  , convert : 'Direct conversion from model to model without creation of dt-object'
   , getWalk : 'Returns a instance of "walk" library'
 ```
 
@@ -175,7 +175,7 @@ Object `dt-storage` is available as argument to '**query**' and '**model**' func
 ## DT Toolbox API
 
 ### dtbox.init ()
-Create a new dt-object from data that is not a DT-model and needs a convertion. Please take a look on section `Init/Export Data-Models` for more details.
+Create a new dt-object from data that is not a DT-model and needs a conversion. Please take a look on section `Init/Export Data-Models` for more details.
 
 ```js
 const data = {  // Standard JS object
@@ -292,7 +292,7 @@ const inFlatModel = dtbox.flat ( a ) // Default data-model is set to 'standard'(
 
 
 ### dtbox.convert ()
-Direct convertion from model to model without creation of dt-object.
+Direct conversion from model to model without creation of dt-object.
 
 ```js
 
@@ -491,9 +491,9 @@ function blueFn ({
                     , breadcrumbs // Location description
                     , edges       // List of breadcrumbs related to this dt-line
                 }) {
-            if ( flatData.hasOwnProperty('eyes') && flatData.eyes === 'blue' )   return true   // confirm that dt-line should be in that filter list 
+            if ( flatData.hasOwnProperty('eyes') && flatData.eyes === 'blue' )   return true   // confirm that dt-line should be in that filter list
             return false // ignore this dt-line
-    // dt-lines that are 
+            // dt-lines that are returned as `true` are added to the filter scan-list
 }
 
 dt.setupFilter (
@@ -538,7 +538,7 @@ dt.listSegments ()
 
 ### dt.extractList ()
 
-After version 7.1.x method `extractList` was added. Method can extract a list of segments and properties as a single instruction. Options are coming as a second argument. Use optioins(the second argument) to define a model of extracted data if needed. Modeling is applied only on objects. 
+After version 7.1.x method `extractList` was added. Method can extract a list of segments and properties as a single instruction. Options are coming as a second argument. Use options (the second argument) to define a model of extracted data if needed. Modeling is applied only on objects. 
 
 If requested segment or property is not available, response will be '**null**'.
 Segments have priority over properties. If there is a segment with the same name as a property, segment will be extracted.
@@ -553,7 +553,7 @@ const storage = dtbox.init ( first );   // first will become a root segment
 storage.insertSegment ( 'second', second );
 storage.insertSegment ( 'third', third );
 
-const [ a, b c, firstData, otherData ] = storage.extractList ( ['first', 'second', 'third', 'data', 'secondData' ], { as: 'std' } ));
+const [ a, b, c, firstData, otherData ] = storage.extractList ( ['first', 'second', 'third', 'data', 'secondData' ], { as: 'std' } ));
 // a -> { name: 'first', data: 'first data' }
 // b -> { name: 'second', data: 'second data' }
 // c -> { name: 'third', data: 'third data' }
@@ -960,7 +960,7 @@ It's a two level deep javascript object. First object properties represent the l
 
 
 ### Breadcrumbs
-It's a flat interpratation of the data and looks like this:
+It's a flat interpretation of the data and looks like this:
 
 ```js
 {
