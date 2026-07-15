@@ -2,6 +2,28 @@
 
 
 
+### 7.4.7 ( 2026-07-15)
+- [x] Fix: circular reference in data no longer crashes Node with OOM — `init` now throws a clear error;
+- [x] Fix: Date and RegExp instances are now preserved when round-tripping through `init`/`model` (they were silently collapsed to `{}` by the walk library);
+- [x] Fix: NaN and Infinity values are now preserved through `init`/`model` round-trips;
+- [x] Fix: `model({as:'std'})` no longer drops data from extra segments — extra segments are now merged into the result;
+- [x] Fix: `store.set` with a non-root breadcrumbs or a primitive value (string/number/boolean/null) now returns the value correctly through `model` (was: char-indexed string, missing data, or `undefined`);
+- [x] Fix: `dt.index('root/a')` and other scalar-property breadcrumbs now return the property value (was: `null` for any scalar);
+- [x] Fix: `dt.export(name)` now throws a clear error for non-string argument types (was: silently returned the whole model for some, `[]` for others);
+- [x] Fix: `dt.copy(name)` now throws a clear error for non-string argument types (was: inconsistent `null` vs root-copy behavior);
+- [x] Fix: `dt.extractList(['c/d'])` now resolves nested property paths via the dt-model (was: always returned `null` for any nested path);
+- [x] Fix: `dt.insertSegment` now throws clear errors for missing/invalid `name` and for `data` that is `null`/`undefined`/a primitive (was: cryptic `Cannot read properties of ...reading '0'`);
+- [x] Fix: `init(42)` / `init('hello')` / `init(true)` / `init(null)` now work — primitive values are wrapped in `{ value: <primitive> }` and preserved through the round-trip;
+- [x] Fix: `dt.model(() => ({as: 42}))` / `({as: {}})` / unknown model names now throw clear errors (was: `console.error` + return `null`);
+- [x] Fix: `dtbox.flat(null)` / `flat(undefined)` / `flat(42)` / `flat('hello')` now throw clear errors (was: silently returned `[]`);
+- [x] Fix: `dtbox.flat(data, {model:'unknown'})` and `dtbox.convert(data, {as:'unknown'})` now throw clear errors (was: silently returned `null`);
+- [x] New regression test file `test/06_bugfixes.test.js` covering all of the above with 51 new tests;
+- [x] Two existing test cases updated to match the new throw-on-invalid-model behaviour for `flat` and `convert`;
+- [x] Fix: `insertSegment` no longer accepts a segment name that already exists — it now throws a clear error. Before the fix, the second insert created a duplicate dt-line at the same breadcrumbs, and `model({as:'std'})` / `extractList` silently kept the first segment and dropped the second;
+- [x] Fix: `insertSegment` no longer accepts segment names containing `/` — it now throws a clear error. The `/` is the breadcrumbs separator in the dt-model, so a name like `'a/b'` would create ambiguous dt-lines that silently broke `index()`, `extractList()`, and `model()` lookups;
+
+
+
 ### 7.4.6 ( 2026-07-14)
 - [x] Dependencies updates. @peter.naydenov/walk to version 5.0.6;
 
