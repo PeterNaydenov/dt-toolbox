@@ -2,6 +2,11 @@
 
 
 
+### 7.4.8 ( 2026-07-20)
+- Dependency update. @peter.naydenov/walk to version 5.0.7;
+
+
+
 ### 7.4.7 ( 2026-07-15)
 - [x] Fix: circular reference in data no longer crashes Node with OOM — `init` now throws a clear error;
 - [x] Fix: Date and RegExp instances are now preserved when round-tripping through `init`/`model` (they were silently collapsed to `{}` by the walk library);
