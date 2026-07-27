@@ -5,7 +5,7 @@
 
 
 
-import { expect } from "chai"
+import { expect } from "vitest"
 import dtbox from "../src/main.js"
 
 
@@ -60,12 +60,13 @@ it ( 'Mulitple queries from a single dt-object in same', () => {
     const r1 = store.query ( querySegment, 'extra' ).model ( () => ({ as :'std' }))
     const r2 = store.query ( querySegment, 'location' ).model ( () => ({ as :'std' }))
 
-    expect ( r1 ).to.have.property ( 'port' )
-    expect ( r1 ).to.have.property ( 'airport' )
-    expect ( r1.nearTo ).to.be.an('array').that.includes ( 'Burgas' )
+    expect ( r1 ).toHaveProperty ( 'port' )
+    expect ( r1 ).toHaveProperty ( 'airport' )
+    expect ( Array.isArray ( r1.nearTo ) ).toBe ( true )
+    expect ( r1.nearTo ).toContain ( 'Burgas' )
     
-    expect ( r2 ).to.have.property ( 'continent' )
-    expect ( r2 ).to.have.property ( 'country' )
+    expect ( r2 ).toHaveProperty ( 'continent' )
+    expect ( r2 ).toHaveProperty ( 'country' )
     
 }) // it Mulitple queries
 

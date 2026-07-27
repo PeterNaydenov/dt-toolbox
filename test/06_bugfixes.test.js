@@ -9,7 +9,7 @@
 
 
 
-import { expect } from "chai"
+import { expect } from "vitest"
 import dtbox from "../src/main.js"
 
 
@@ -24,19 +24,19 @@ describe ( 'bug fix 1: circular reference in init', () => {
     it ( 'throws a clear error for direct self-reference', () => {
         const o = { a: 1 }
         o.b = o
-        expect ( () => dtbox.init ( o ) ).to.throw ( /Circular reference/ )
+        expect ( () => dtbox.init ( o ) ).toThrow ( /Circular reference/ )
     })
 
     it ( 'throws a clear error for indirect self-reference', () => {
         const a = { a: 1 }
         const b = { b: a }
         a.b = b
-        expect ( () => dtbox.init ( a ) ).to.throw ( /Circular reference/ )
+        expect ( () => dtbox.init ( a ) ).toThrow ( /Circular reference/ )
     })
 
     it ( 'does not throw for normal objects', () => {
         const a = { x: { y: { z: 1 } } }
-        expect ( () => dtbox.init ( a ) ).to.not.throw ()
+        expect ( () => dtbox.init ( a ) ).not.toThrow ()
     })
 })
 
@@ -48,28 +48,28 @@ describe ( 'bug fix 2-3: Date and RegExp round-trip preservation', () => {
     it ( 'preserves a top-level Date through init+model', () => {
         const dt = dtbox.init ( { date: new Date ( '2024-01-15T10:30:00Z' ) } )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m.date ).to.be.instanceOf ( Date )
-        expect ( m.date.toISOString () ).to.equal ( '2024-01-15T10:30:00.000Z' )
+        expect ( m.date ).toBeInstanceOf ( Date )
+        expect ( m.date.toISOString () ).toEqual ( '2024-01-15T10:30:00.000Z' )
     })
 
     it ( 'preserves a nested Date through init+model', () => {
         const dt = dtbox.init ( { a: { b: { date: new Date ( '2024-12-25' ) } } } )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m.a.b.date ).to.be.instanceOf ( Date )
-        expect ( m.a.b.date.toISOString () ).to.equal ( '2024-12-25T00:00:00.000Z' )
+        expect ( m.a.b.date ).toBeInstanceOf ( Date )
+        expect ( m.a.b.date.toISOString () ).toEqual ( '2024-12-25T00:00:00.000Z' )
     })
 
     it ( 'preserves a RegExp through init+model', () => {
         const dt = dtbox.init ( { regex: /test/gi } )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m.regex ).to.be.instanceOf ( RegExp )
-        expect ( m.regex.toString () ).to.equal ( '/test/gi' )
+        expect ( m.regex ).toBeInstanceOf ( RegExp )
+        expect ( m.regex.toString () ).toEqual ( '/test/gi' )
     })
 
     it ( 'preserves RegExp flags', () => {
         const dt = dtbox.init ( { r: /abc/m } )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m.r.flags ).to.equal ( 'm' )
+        expect ( m.r.flags ).toEqual ( 'm' )
     })
 })
 
@@ -81,19 +81,19 @@ describe ( 'bug fix 4: NaN and Infinity preservation', () => {
     it ( 'preserves NaN through init+model', () => {
         const dt = dtbox.init ( { value: NaN } )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( Number.isNaN ( m.value ) ).to.be.true
+        expect ( Number.isNaN ( m.value ) ).toBe ( true )
     })
 
     it ( 'preserves Infinity through init+model', () => {
         const dt = dtbox.init ( { value: Infinity } )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m.value ).to.equal ( Infinity )
+        expect ( m.value ).toEqual ( Infinity )
     })
 
     it ( 'preserves -Infinity through init+model', () => {
         const dt = dtbox.init ( { value: -Infinity } )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m.value ).to.equal ( -Infinity )
+        expect ( m.value ).toEqual ( -Infinity )
     })
 })
 
@@ -108,19 +108,19 @@ describe ( 'bug fix 5: model({as:std}) preserves extra segments', () => {
         dt.insertSegment ( 's2', { c: 3 } )
         const m = dt.model ( () => ({ as: 'std' }) )
         // Root and segments are all present
-        expect ( m ).to.have.property ( 'a', 1 )
-        expect ( m ).to.have.property ( 's1' )
-        expect ( m.s1 ).to.have.property ( 'b', 2 )
-        expect ( m ).to.have.property ( 's2' )
-        expect ( m.s2 ).to.have.property ( 'c', 3 )
+        expect ( m ).toHaveProperty ( 'a', 1 )
+        expect ( m ).toHaveProperty ( 's1' )
+        expect ( m.s1 ).toHaveProperty ( 'b', 2 )
+        expect ( m ).toHaveProperty ( 's2' )
+        expect ( m.s2 ).toHaveProperty ( 'c', 3 )
     })
 
     it ( 'other models still work the same way', () => {
         const dt = dtbox.init ( { a: 1 } )
         dt.insertSegment ( 's1', { b: 2 } )
         const bc = dt.model ( () => ({ as: 'breadcrumbs' }) )
-        expect ( bc ).to.have.property ( 'a', 1 )
-        expect ( bc ).to.have.property ( 's1/b', 2 )
+        expect ( bc ).toHaveProperty ( 'a', 1 )
+        expect ( bc ).toHaveProperty ( 's1/b', 2 )
     })
 })
 
@@ -133,35 +133,35 @@ describe ( 'bug fix 6-7: store.set with non-root and primitive values', () => {
         const dt = dtbox.init ( { name: 'Peter' } )
         const r = dt.query ( store => { store.set ( 'nonroot', { key: 'value' } ) } )
                          .model ( () => ({ as: 'std' }) )
-        expect ( r ).to.deep.equal ( { nonroot: { key: 'value' } } )
+        expect ( r ).toEqual ( { nonroot: { key: 'value' } } )
     })
 
     it ( 'query + model with primitive set preserves the value', () => {
         const dt = dtbox.init ( { name: 'Peter' } )
         const r = dt.query ( store => { store.set ( 'extra/data', 'new value' ) } )
                          .model ( () => ({ as: 'std' }) )
-        expect ( r ).to.deep.equal ( { 'extra/data': 'new value' } )
+        expect ( r ).toEqual ( { 'extra/data': 'new value' } )
     })
 
     it ( 'query + model with primitive set (number)', () => {
         const dt = dtbox.init ( {  } )
         const r = dt.query ( store => { store.set ( 'counter', 42 ) } )
                          .model ( () => ({ as: 'std' }) )
-        expect ( r ).to.deep.equal ( { counter: 42 } )
+        expect ( r ).toEqual ( { counter: 42 } )
     })
 
     it ( 'query + model with primitive set (boolean)', () => {
         const dt = dtbox.init ( {  } )
         const r = dt.query ( store => { store.set ( 'flag', true ) } )
                          .model ( () => ({ as: 'std' }) )
-        expect ( r ).to.deep.equal ( { flag: true } )
+        expect ( r ).toEqual ( { flag: true } )
     })
 
     it ( 'query + model with primitive set (null)', () => {
         const dt = dtbox.init ( {  } )
         const r = dt.query ( store => { store.set ( 'nothing', null ) } )
                          .model ( () => ({ as: 'std' }) )
-        expect ( r ).to.deep.equal ( { nothing: null } )
+        expect ( r ).toEqual ( { nothing: null } )
     })
 })
 
@@ -173,22 +173,22 @@ describe ( 'bug fix 8: index returns scalar property values', () => {
     it ( 'returns scalar property at "root/a"', () => {
         const dt = dtbox.init ( { a: 1, b: { c: { d: 1 } } } )
         const r = dt.index ( 'root/a' )
-        expect ( r[0] ).to.equal ( 'a' )
-        expect ( r[1] ).to.equal ( 1 )
-        expect ( r[2] ).to.equal ( 'root/a' )
+        expect ( r[0] ).toEqual ( 'a' )
+        expect ( r[1] ).toEqual ( 1 )
+        expect ( r[2] ).toEqual ( 'root/a' )
     })
 
     it ( 'returns nested scalar property at "root/b/c/d"', () => {
         const dt = dtbox.init ( { a: 1, b: { c: { d: 42 } } } )
         const r = dt.index ( 'root/b/c/d' )
-        expect ( r[0] ).to.equal ( 'd' )
-        expect ( r[1] ).to.equal ( 42 )
-        expect ( r[2] ).to.equal ( 'root/b/c/d' )
+        expect ( r[0] ).toEqual ( 'd' )
+        expect ( r[1] ).toEqual ( 42 )
+        expect ( r[2] ).toEqual ( 'root/b/c/d' )
     })
 
     it ( 'returns null for non-existent path', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( dt.index ( 'root/x' ) ).to.be.null
+        expect ( dt.index ( 'root/x' ) ).toBeNull ()
     })
 })
 
@@ -199,22 +199,22 @@ describe ( 'bug fix 8: index returns scalar property values', () => {
 describe ( 'bug fix 9-10: export with invalid argument types', () => {
     it ( 'throws for non-string argument', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.export ( 42 ) ).to.throw ( /export\(name\)/ )
+        expect ( () => dt.export ( 42 ) ).toThrow ( /export\(name\)/ )
     })
 
     it ( 'throws for null', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.export ( null ) ).to.throw ( /export\(name\)/ )
+        expect ( () => dt.export ( null ) ).toThrow ( /export\(name\)/ )
     })
 
     it ( 'returns [] for non-existent segment', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( dt.export ( 'nonexistent' ) ).to.deep.equal ( [] )
+        expect ( dt.export ( 'nonexistent' ) ).toEqual ( [] )
     })
 
     it ( 'export("a") returns [] for a property (not a segment)', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( dt.export ( 'a' ) ).to.deep.equal ( [] )
+        expect ( dt.export ( 'a' ) ).toEqual ( [] )
     })
 })
 
@@ -225,17 +225,17 @@ describe ( 'bug fix 9-10: export with invalid argument types', () => {
 describe ( 'bug fix 11: copy() argument validation', () => {
     it ( 'throws for non-string argument', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.copy ( 42 ) ).to.throw ( /copy\(name\)/ )
+        expect ( () => dt.copy ( 42 ) ).toThrow ( /copy\(name\)/ )
     })
 
     it ( 'throws for null', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.copy ( null ) ).to.throw ( /copy\(name\)/ )
+        expect ( () => dt.copy ( null ) ).toThrow ( /copy\(name\)/ )
     })
 
     it ( 'returns null for non-existent segment', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( dt.copy ( 'nonexistent' ) ).to.be.null
+        expect ( dt.copy ( 'nonexistent' ) ).toBeNull ()
     })
 })
 
@@ -247,21 +247,21 @@ describe ( 'bug fix 12: extractList resolves nested property paths', () => {
     it ( 'returns the value at a nested path', () => {
         const dt = dtbox.init ( { a: 1, b: 2, c: { d: 3, e: 4 } } )
         const r = dt.extractList ( [ 'a', 'c/d', 'c/e' ], { as: 'std' } )
-        expect ( r ).to.deep.equal ( [ 1, 3, 4 ] )
+        expect ( r ).toEqual ( [ 1, 3, 4 ] )
     })
 
     it ( 'returns the segment object for a segment name', () => {
         const dt = dtbox.init ( { a: 1 } )
         dt.insertSegment ( 'extra', { x: 1, y: 2 } )
         const r = dt.extractList ( [ 'extra', 'extra/x' ], { as: 'std' } )
-        expect ( r[0] ).to.deep.equal ( { x: 1, y: 2 } )
-        expect ( r[1] ).to.equal ( 1 )
+        expect ( r[0] ).toEqual ( { x: 1, y: 2 } )
+        expect ( r[1] ).toEqual ( 1 )
     })
 
     it ( 'returns null for non-existent path', () => {
         const dt = dtbox.init ( { a: 1, c: { d: 3 } } )
         const r = dt.extractList ( [ 'c/nonexist' ], { as: 'std' } )
-        expect ( r ).to.deep.equal ( [ null ] )
+        expect ( r ).toEqual ( [ null ] )
     })
 })
 
@@ -272,37 +272,37 @@ describe ( 'bug fix 12: extractList resolves nested property paths', () => {
 describe ( 'bug fix 13-16: insertSegment error messages', () => {
     it ( 'throws clear error for null data', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( 'extra', null ) ).to.throw ( /requires a value/ )
+        expect ( () => dt.insertSegment ( 'extra', null ) ).toThrow ( /requires a value/ )
     })
 
     it ( 'throws clear error for undefined data', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( 'extra', undefined ) ).to.throw ( /requires a value/ )
+        expect ( () => dt.insertSegment ( 'extra', undefined ) ).toThrow ( /requires a value/ )
     })
 
     it ( 'throws clear error for primitive data (number)', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( 'extra', 42 ) ).to.throw ( /requires an object/ )
+        expect ( () => dt.insertSegment ( 'extra', 42 ) ).toThrow ( /requires an object/ )
     })
 
     it ( 'throws clear error for primitive data (string)', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( 'extra', 'hello' ) ).to.throw ( /requires an object/ )
+        expect ( () => dt.insertSegment ( 'extra', 'hello' ) ).toThrow ( /requires an object/ )
     })
 
     it ( 'throws clear error for empty segment name', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( '', { x: 1 } ) ).to.throw ( /non-empty string/ )
+        expect ( () => dt.insertSegment ( '', { x: 1 } ) ).toThrow ( /non-empty string/ )
     })
 
     it ( 'throws clear error for non-string segment name', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( 42, { x: 1 } ) ).to.throw ( /non-empty string/ )
+        expect ( () => dt.insertSegment ( 42, { x: 1 } ) ).toThrow ( /non-empty string/ )
     })
 
     it ( 'still accepts arrays (they are valid data)', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( 'extra', [ 1, 2, 3 ] ) ).to.not.throw ()
+        expect ( () => dt.insertSegment ( 'extra', [ 1, 2, 3 ] ) ).not.toThrow ()
     })
 })
 
@@ -314,31 +314,31 @@ describe ( 'bug fix 17: init() accepts primitive values', () => {
     it ( 'init(number) returns a dt-object preserving the number', () => {
         const dt = dtbox.init ( 42 )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m ).to.deep.equal ( { value: 42 } )
+        expect ( m ).toEqual ( { value: 42 } )
     })
 
     it ( 'init(string) returns a dt-object preserving the string', () => {
         const dt = dtbox.init ( 'hello' )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m ).to.deep.equal ( { value: 'hello' } )
+        expect ( m ).toEqual ( { value: 'hello' } )
     })
 
     it ( 'init(boolean) returns a dt-object preserving the boolean', () => {
         const dt = dtbox.init ( true )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m ).to.deep.equal ( { value: true } )
+        expect ( m ).toEqual ( { value: true } )
     })
 
     it ( 'init(null) returns a dt-object with null value', () => {
         const dt = dtbox.init ( null )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( m ).to.have.property ( 'value', null )
+        expect ( m ).toHaveProperty ( 'value', null )
     })
 
     it ( 'init(NaN) returns a dt-object preserving NaN', () => {
         const dt = dtbox.init ( NaN )
         const m = dt.model ( () => ({ as: 'std' }) )
-        expect ( Number.isNaN ( m.value ) ).to.be.true
+        expect ( Number.isNaN ( m.value ) ).toBe ( true )
     })
 })
 
@@ -349,17 +349,17 @@ describe ( 'bug fix 17: init() accepts primitive values', () => {
 describe ( 'bug fix 18-19: model({as:non-string}) validation', () => {
     it ( 'throws for numeric as', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.model ( () => ({ as: 42 }) ) ).to.throw ( /'as' value to be a string/ )
+        expect ( () => dt.model ( () => ({ as: 42 }) ) ).toThrow ( /'as' value to be a string/ )
     })
 
     it ( 'throws for object as', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.model ( () => ({ as: {} }) ) ).to.throw ( /'as' value to be a string/ )
+        expect ( () => dt.model ( () => ({ as: {} }) ) ).toThrow ( /'as' value to be a string/ )
     })
 
     it ( 'throws for unknown model name', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.model ( () => ({ as: 'unknown-model' }) ) ).to.throw ( /is unknown/ )
+        expect ( () => dt.model ( () => ({ as: 'unknown-model' }) ) ).toThrow ( /is unknown/ )
     })
 
     it ( 'throws clear error (no console.error side effect)', () => {
@@ -369,11 +369,11 @@ describe ( 'bug fix 18-19: model({as:non-string}) validation', () => {
         let errorCalled = false
         console.error = () => { errorCalled = true }
         try {
-            expect ( () => dt.model ( () => ({ as: 'unknown' }) ) ).to.throw ()
+            expect ( () => dt.model ( () => ({ as: 'unknown' }) ) ).toThrow ()
         } finally {
             console.error = origError
         }
-        expect ( errorCalled ).to.be.false
+        expect ( errorCalled ).toBe ( false )
     })
 })
 
@@ -383,23 +383,23 @@ describe ( 'bug fix 18-19: model({as:non-string}) validation', () => {
 
 describe ( 'bug fix 20-21: flat() edge cases', () => {
     it ( 'throws for null input', () => {
-        expect ( () => dtbox.flat ( null ) ).to.throw ( /object or array/ )
+        expect ( () => dtbox.flat ( null ) ).toThrow ( /object or array/ )
     })
 
     it ( 'throws for undefined input', () => {
-        expect ( () => dtbox.flat ( undefined ) ).to.throw ( /object or array/ )
+        expect ( () => dtbox.flat ( undefined ) ).toThrow ( /object or array/ )
     })
 
     it ( 'throws for primitive input (number)', () => {
-        expect ( () => dtbox.flat ( 42 ) ).to.throw ( /object or array/ )
+        expect ( () => dtbox.flat ( 42 ) ).toThrow ( /object or array/ )
     })
 
     it ( 'throws for primitive input (string)', () => {
-        expect ( () => dtbox.flat ( 'hello' ) ).to.throw ( /object or array/ )
+        expect ( () => dtbox.flat ( 'hello' ) ).toThrow ( /object or array/ )
     })
 
     it ( 'throws for unknown model', () => {
-        expect ( () => dtbox.flat ( { a: 1 }, { model: 'unknown' } ) ).to.throw ( /data-model/ )
+        expect ( () => dtbox.flat ( { a: 1 }, { model: 'unknown' } ) ).toThrow ( /data-model/ )
     })
 })
 
@@ -411,7 +411,7 @@ describe ( 'bug fix 22: insertSegment with duplicate name', () => {
     it ( 'throws a clear error when inserting a duplicate segment', () => {
         const dt = dtbox.init ( { a: 1 } )
         dt.insertSegment ( 'extra', { x: 1 } )
-        expect ( () => dt.insertSegment ( 'extra', { y: 2 } ) ).to.throw ( /already exists/ )
+        expect ( () => dt.insertSegment ( 'extra', { y: 2 } ) ).toThrow ( /already exists/ )
     })
 
     it ( 'allows the same name after a model/query resets state', () => {
@@ -419,7 +419,7 @@ describe ( 'bug fix 22: insertSegment with duplicate name', () => {
         const dt = dtbox.init ( { a: 1 } )
         dt.insertSegment ( 'extra', { x: 1 } )
         dt.query ( store => { store.look ( ({ next }) => next () ) } )
-        expect ( () => dt.insertSegment ( 'extra', { y: 2 } ) ).to.throw ( /already exists/ )
+        expect ( () => dt.insertSegment ( 'extra', { y: 2 } ) ).toThrow ( /already exists/ )
     })
 
     it ( 'no longer creates duplicate dt-lines at the same breadcrumbs', () => {
@@ -427,7 +427,7 @@ describe ( 'bug fix 22: insertSegment with duplicate name', () => {
         dt.insertSegment ( 'extra', { x: 1 } )
         try { dt.insertSegment ( 'extra', { y: 2 } ) } catch (e) {}
         const lines = dt.export ().filter ( l => l[0] === 'extra' )
-        expect ( lines.length ).to.equal ( 1 )
+        expect ( lines.length ).toEqual ( 1 )
     })
 })
 
@@ -438,21 +438,21 @@ describe ( 'bug fix 22: insertSegment with duplicate name', () => {
 describe ( 'bug fix 23: insertSegment with / in segment name', () => {
     it ( 'throws a clear error for names containing /', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( 'a/b', { x: 1 } ) ).to.throw ( /breadcrumbs separator/ )
+        expect ( () => dt.insertSegment ( 'a/b', { x: 1 } ) ).toThrow ( /breadcrumbs separator/ )
     })
 
     it ( 'throws for any name with / at start, middle, or end', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( '/leading', { x: 1 } ) ).to.throw ( /breadcrumbs separator/ )
-        expect ( () => dt.insertSegment ( 'middle/', { x: 1 } ) ).to.throw ( /breadcrumbs separator/ )
-        expect ( () => dt.insertSegment ( '/both/', { x: 1 } ) ).to.throw ( /breadcrumbs separator/ )
+        expect ( () => dt.insertSegment ( '/leading', { x: 1 } ) ).toThrow ( /breadcrumbs separator/ )
+        expect ( () => dt.insertSegment ( 'middle/', { x: 1 } ) ).toThrow ( /breadcrumbs separator/ )
+        expect ( () => dt.insertSegment ( '/both/', { x: 1 } ) ).toThrow ( /breadcrumbs separator/ )
     })
 
     it ( 'still allows names with dots, spaces, and unicode', () => {
         const dt = dtbox.init ( { a: 1 } )
-        expect ( () => dt.insertSegment ( 'has.dot', { x: 1 } ) ).to.not.throw ()
-        expect ( () => dt.insertSegment ( 'has space', { x: 1 } ) ).to.not.throw ()
-        expect ( () => dt.insertSegment ( 'ünicode', { x: 1 } ) ).to.not.throw ()
+        expect ( () => dt.insertSegment ( 'has.dot', { x: 1 } ) ).not.toThrow ()
+        expect ( () => dt.insertSegment ( 'has space', { x: 1 } ) ).not.toThrow ()
+        expect ( () => dt.insertSegment ( 'ünicode', { x: 1 } ) ).not.toThrow ()
     })
 })
 

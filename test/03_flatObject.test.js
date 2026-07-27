@@ -5,7 +5,7 @@
 
 
 
-import { expect } from "chai"
+import { expect } from "vitest"
 import mainLib from "../src/mainLib.js"
 import flatObject from '../src/flatObject/index.js'
 import convert from '../src/convertors/index.js'
@@ -49,8 +49,8 @@ beforeEach ( () => {
 
 it ( 'Create flat object', () => {
      const res = flat.export ();
-     expect ( res instanceof Array )
-     expect ( res.length ).to.be.equal ( 7 )
+     expect ( res ).toBeInstanceOf ( Array )
+     expect ( res.length ).toBe ( 7 )
 }) // it
 
 
@@ -65,7 +65,7 @@ it ( 'flatObject: insert a dt-object', () => {
                         k++
                         if ( breadcrumbs.includes('base') )   i++
                 })
-    expect ( k/i ).to.be.equal ( 2 )   // Imported object is the same. So expectation is that rows will be doubled. 
+    expect ( k/i ).toBe ( 2 )   // Imported object is the same. So expectation is that rows will be doubled. 
 }) // it flatObject.insert
 
 
@@ -79,7 +79,7 @@ it ( 'flatObject:: insert a non dt-object', () => {
                 const [ name,, breadcrumbs ] = line;
                 if ( name === breadcrumbs ) i++
             })  // forEach line
-    expect ( i ).to.be.equal ( 2 ) // 'root' and 'base' segments
+    expect ( i ).toBe ( 2 ) // 'root' and 'base' segments
 }) // it non dt-object
 
 
@@ -93,14 +93,14 @@ it ( 'flatObject:: insert a dt model', () => {
                 const [ name,, breadcrumbs ] = line;
                 if ( name === breadcrumbs ) i++
             })  // forEach line
-    expect ( i ).to.be.equal ( 2 ) // 'root' and 'base' segments
+    expect ( i ).toBe ( 2 ) // 'root' and 'base' segments
 }) // it dt model
 
 
 
 it ( 'flatObject: copy', () => {
     let res = flat.copy ( 'root' );
-    expect ( res.personal.eyes ).to.be.equal ( 'blue' )
+    expect ( res.personal.eyes ).toBe ( 'blue' )
 }) // flatObject.copy
 
 
@@ -114,11 +114,11 @@ it ( 'flatObject: query', () => {
                                     store.use ('list').look ( ({ value, breadcrumbs }) => {
                                             if ( breadcrumbs.includes('music'))   store.push ( 'music', value )
                                         })
-                                    
+                                     
                                     store.save ( 'root', 'owner', 'Peter' )
                                     store.save ( 'check', 'test', true )
                                     store.connect (['root/check', 'root/music'])
-                                    expect ( extra.nn ).to.be.equal ( 'nn' )   // It's possible to provide external data to query fn
+                                    expect ( extra.nn ).toBe ( 'nn' )   // It's possible to provide external data to query fn
                         }, 
                             { nn : 'nn'}   // Extra data used in query function
                         )
@@ -128,17 +128,17 @@ it ( 'flatObject: query', () => {
                 const [ name, data, breadcrumbs, edges ] = line;
 
                 if ( name === 'root' ) {
-                        expect ( edges[0]).to.be.equal ( 'root/check' )
+                        expect ( edges[0]).toBe ( 'root/check' )
                     } // if 'root'
 
                 if ( name === 'music' ) {
-                        expect ( data ).to.include ( 'punk' )
+                        expect ( data ).toContain ( 'punk' )
                     } // if music
 
                 if ( name === 'check' ) {
-                    expect ( breadcrumbs ).to.be.equal ( 'root/check' )
-                    expect ( data ).to.have.property ( 'test' )
-                    expect ( data.test ).to.be.equal ( true )
+                    expect ( breadcrumbs ).toBe ( 'root/check' )
+                    expect ( data ).toHaveProperty ( 'test' )
+                    expect ( data.test ).toBe ( true )
                 }
         })  // for each 'res'    
 }) // it flatObject.query
@@ -147,7 +147,7 @@ it ( 'flatObject: query', () => {
 
 it ( 'flatObject: model, extra data', () => {
     flat.model ( ( store, extra ) => {
-                            expect ( extra.nn ).to.be.equal ( 'nn' )
+                            expect ( extra.nn ).toBe ( 'nn' )
                     },
                     { nn : "nn" } // It's possible to provide extra data to model fn
                     )
@@ -160,8 +160,8 @@ it ( 'flatObject: model, full data with data-model', () => {
                                     as: 'std'  // If there is a need to provide the result in specific predefined data-model. Convertors.
                                 })
                         )
-    expect ( res.name ).to.be.equal ( 'Peter' )
-    expect ( res?.personal?.hobbies?.music ).to.have.length ( 4 )
+    expect ( res.name ).toBe ( 'Peter' )
+    expect ( res?.personal?.hobbies?.music ).toHaveLength ( 4 )
 }) // it flatObject.model
 
 
@@ -181,13 +181,13 @@ it ( 'flatObject: model, Generate new structure with data-model', () => {
                             return { as: 'std' }
                     })
                     
-    expect ( res ).to.not.have.property ( 'name' )
-    expect ( res.collection ).to.be.equal ( 'hobbies' )
-    expect ( res ).to.have.property ( 'music')
-    expect ( res ).to.have.property ( 'sport' )
+    expect ( res ).not.toHaveProperty ( 'name' )
+    expect ( res.collection ).toBe ( 'hobbies' )
+    expect ( res ).toHaveProperty ( 'music')
+    expect ( res ).toHaveProperty ( 'sport' )
 
-    expect ( res.sport ).to.have.length ( 3 )
-    expect ( res.music ).to.have.length ( 4 )
+    expect ( res.sport ).toHaveLength ( 3 )
+    expect ( res.music ).toHaveLength ( 4 )
 }) // it flatObject.model - Generate new structure with data-model
 
 
@@ -201,7 +201,7 @@ it ( 'flatObject: setupFilter', () => {
 
     let i = 0;
     flat.query ( store =>  store.use ( 'test' ).look ( () => i++ )   )
-    expect ( i ).to.be.equal ( 4 )
+    expect ( i ).toBe ( 4 )
 }) // flatObject.setupFilter
 
 
@@ -212,11 +212,11 @@ it ( 'flatObject. Index', () => {
         , [ name, fd, breadcrumbs, edges ] = friends
         ;
 
-    expect ( name ).to.be.equal ( 'friends' )
-    expect ( fd ).to.contains ( 'Ivan') 
-    expect ( fd ).to.contains ( 'Dobroslav') 
-    expect ( fd ).to.contains ( 'Stefan') 
-    expect ( breadcrumbs ).to.be.equal ( br )
+    expect ( name ).toBe ( 'friends' )
+    expect ( fd ).toContain ( 'Ivan') 
+    expect ( fd ).toContain ( 'Dobroslav') 
+    expect ( fd ).toContain ( 'Stefan') 
+    expect ( breadcrumbs ).toBe ( br )
 }) // it flatObject.index
 
 
@@ -263,17 +263,17 @@ it ( 'ExtractList, no options', () => {
                                         , 'extra'
                                     ]);  
             
-            expect ( theName ).to.be.equal ( 'Peter' )
-            expect ( topFn() ).to.be.equal ( 24 )                                          // Function are copied by reference
-            expect ( pretendHTML ).to.be.deep.equal ( { nodeType : 1, tagName : 'DIV' } )  // DOM elements are copied by reference
-            expect ( bad ).to.be.false
-            expect ( missing ).to.be.equal ( null )   // Request for missing segment or flatData-property in first dt-line of root segment - will return null.
-            expect ( res1 ).to.have.property ( 'insertSegment' )
-            expect ( res2 ).to.have.property ( 'insertSegment' )
-            expect ( funObject ).to.have.property ( 'insertSegment' )
+            expect ( theName ).toBe ( 'Peter' )
+            expect ( topFn() ).toBe ( 24 )                                          // Function are copied by reference
+            expect ( pretendHTML ).toEqual ( { nodeType : 1, tagName : 'DIV' } )  // DOM elements are copied by reference
+            expect ( bad ).toBe ( false )
+            expect ( missing ).toBe ( null )   // Request for missing segment or flatData-property in first dt-line of root segment - will return null.
+            expect ( res1 ).toHaveProperty ( 'insertSegment' )
+            expect ( res2 ).toHaveProperty ( 'insertSegment' )
+            expect ( funObject ).toHaveProperty ( 'insertSegment' )
 
             let [ fRes ] = funObject.extractList ( ['fn'])
-            expect ( fRes() ).to.be.equal ( 12 )
+            expect ( fRes() ).toBe ( 12 )
     }) // it extractList, no options
 
 
@@ -296,35 +296,35 @@ it ( 'ExtractList with options', () => {
     storage.insertSegment ( 'sports', dtbox.init ( sample2))
     storage.insertSegment ( 'music', dtbox.init ( sample3))
 
-    expect ( storage.listSegments() ).to.contains ( 'root' )
-    expect ( storage.listSegments() ).to.contains ( 'sports' )
-    expect ( storage.listSegments() ).to.contains ( 'music' )
+    expect ( storage.listSegments() ).toContain ( 'root' )
+    expect ( storage.listSegments() ).toContain ( 'sports' )
+    expect ( storage.listSegments() ).toContain ( 'music' )
 
     const [ theName, bad, missing, res1, res2 ] = storage.extractList ( [ 'name', 'bad', 'aloha', 'sports' , 'music'], {as:'std'} );  // as standard data-model
 
-    expect ( theName ).to.be.equal ( 'Peter' )   
-    expect ( missing ).to.be.equal ( null    )   // Request for missing segment or flatData-property in first dt-line of root segment - will return null.
-    expect ( bad ).to.be.false                   // Negative value should be returned as is. Only missing property should return null.
+    expect ( theName ).toBe ( 'Peter' )   
+    expect ( missing ).toBe ( null    )   // Request for missing segment or flatData-property in first dt-line of root segment - will return null.
+    expect ( bad ).toBe ( false )                   // Negative value should be returned as is. Only missing property should return null.
 
-    expect ( res1 ).to.have.property ( 'sportnames' )
-    expect ( res1.sportnames ).to.have.length ( 3 )
-    expect ( res2 ).to.have.length ( 4 )
-    expect ( res2 ).to.contains ( 'punk' )
+    expect ( res1 ).toHaveProperty ( 'sportnames' )
+    expect ( res1.sportnames ).toHaveLength ( 3 )
+    expect ( res2 ).toHaveLength ( 4 )
+    expect ( res2 ).toContain ( 'punk' )
 
 
 
     const [ res3, res4, nameAgain ] = storage.extractList ( [ 'sports' , 'music', 'name' ], {as:'files'} );  // as files
     
-    expect ( nameAgain ).to.be.equal ( 'Peter' )   // Options works only on segments. So, if response is not a segment will skip a conversion.
-    expect ( res3 ).to.have.length ( 7 )
-    expect ( res3 ).to.contains ( 'gear/ski' )
-    expect ( res3 ).to.contains ( 'sportnames/fencing' )
+    expect ( nameAgain ).toBe ( 'Peter' )   // Options works only on segments. So, if response is not a segment will skip a conversion.
+    expect ( res3 ).toHaveLength ( 7 )
+    expect ( res3 ).toContain ( 'gear/ski' )
+    expect ( res3 ).toContain ( 'sportnames/fencing' )
 
-    expect ( res4 ).to.have.length ( 4 )
-    expect ( res4 ).to.contains ( 'punk' )
-    expect ( res4 ).to.contains ( 'ska' )
-    expect ( res4 ).to.contains ( 'metal' )
-    expect ( res4 ).to.contains ( 'guitar' )
+    expect ( res4 ).toHaveLength ( 4 )
+    expect ( res4 ).toContain ( 'punk' )
+    expect ( res4 ).toContain ( 'ska' )
+    expect ( res4 ).toContain ( 'metal' )
+    expect ( res4 ).toContain ( 'guitar' )
 
 }) // it extractList
 
@@ -348,9 +348,9 @@ it ('ExtractList dt-object', () => {
     storage.insertSegment ( 'music', dtbox.init ( sample3))
 
     const [ res1, res2, name ] = storage.extractList ( [ 'sports' , 'music', 'name' ], {as:'dt-object'} );
-    expect ( res1 ).to.have.property ( 'query' )
-    expect ( res2 ).to.have.property ( 'query' )
-    expect ( name ).to.be.equal ( 'Peter' )   // Options works only on segments. So, if response is not a segment will skip a conversion.
+    expect ( res1 ).toHaveProperty ( 'query' )
+    expect ( res2 ).toHaveProperty ( 'query' )
+    expect ( name ).toBe ( 'Peter' )   // Options works only on segments. So, if response is not a segment will skip a conversion.
 }) // it extractList dt-object
 
 

@@ -18,8 +18,8 @@
   },
   "scripts": {
     "start": "node src/main.js",
-    "test": "mocha test",
-    "cover": "c8 mocha test",
+    "test": "vitest run",
+    "cover": "vitest run --coverage",
     "build": "rollup -c"
   },
   "repository": {
@@ -37,30 +37,9 @@
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
-    "c8": "^12.0.0",
-    "chai": "^6.2.2",
-    "mocha": "^11.7.6",
-    "rollup": "^4.62.2"
-  },
-  "overrides": {
-    "diff": ">=8.0.3",
-    "serialize-javascript": ">=7.0.5",
-    "glob": ">=13.0.6",
-    "yargs": ">=17.7.3"
-  },
-  "c8": {
-    "include": [
-      "src/**/*.js"
-    ],
-    "exclude": [
-      "node_modules",
-      "test",
-      "test-data"
-    ],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ]
+    "@vitest/coverage-v8": "^4.1.10",
+    "rollup": "^4.62.2",
+    "vitest": "^4.1.10"
   },
   "keywords": [
     "flatten",

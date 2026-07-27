@@ -7,7 +7,7 @@
 
 
 
-import { expect } from "chai"
+import { expect } from "vitest"
 import flatData from '../src/flatData/index.js'
 import convert from '../src/convertors/index.js'
 import walk from "@peter.naydenov/walk"
@@ -45,11 +45,11 @@ beforeEach ( () => {
 
 it ( 'flatIO: export', () => {
         const res =  flatIO.export ( 'root' );
-        expect ( res ).to.have.length ( 7 )           // flatStore rows;
-        expect ( res[0]).to.have.length ( 4 )         // flatStore row - [ name, data, path, edges ]
-        expect ( res[0][0]).to.be.equal ( res[0][2] ) // in a starting of data-structure name==path 
-        expect ( res[0][0]).to.be.equal ( 'root' )
-        expect ( res[0][1]).to.have.a.property ( 'name' )
+        expect ( res ).toHaveLength ( 7 )           // flatStore rows;
+        expect ( res[0]).toHaveLength ( 4 )         // flatStore row - [ name, data, path, edges ]
+        expect ( res[0][0]).toBe ( res[0][2] ) // in a starting of data-structure name==path 
+        expect ( res[0][0]).toBe ( 'root' )
+        expect ( res[0][1]).toHaveProperty ( 'name' )
 }) // it export
 
 
@@ -70,9 +70,9 @@ it ( 'flatIO: insert', () => {
             , ix = flatIO.getIndexes ()
             ;
 
-        expect ( ix ).to.have.property ( 'b' )
-        expect ( res ).to.have.length ( 8 )
-        expect ( res[7][0]).to.be.equal ( 'b' )
+        expect ( ix ).toHaveProperty ( 'b' )
+        expect ( res ).toHaveLength ( 8 )
+        expect ( res[7][0]).toBe ( 'b' )
 }) // it flatIO.insert
 
 
@@ -80,7 +80,7 @@ it ( 'flatIO: insert', () => {
 it ( 'flatStore: look ', () => {
     let i = 0;
     flatStore.look ( ({empty}) => empty ? null : i++ ) // Count of the object properties. Some objects don't have own properties. Such objects will provide 'empty' property to 'look' fn
-    expect ( i ).to.be.equal ( 17 )  // Number of properties in the data 
+    expect ( i ).toBe ( 17 )  // Number of properties in the data 
 }) // it flatStore.look
 
 
@@ -91,7 +91,7 @@ it ( 'flatStore: look with next()', () => {
                             if ( !empty )   i++   // Count of the object properties. Some objects don't have own properties. Such objects will provide 'empty' property to 'look' fn;
                             return next ()        // Call 'look' fn once per flatRow;
                 })
-    expect ( i ).to.be.equal ( 6 )  // Number of flatRows in the data 
+    expect ( i ).toBe ( 6 )  // Number of flatRows in the data 
 }) // it flatStore.look with next()
 
 
@@ -102,10 +102,10 @@ it ( 'flatStore: get', () => {
         .get ( 'root/personal/sizes' )
         .look ( ({value}) => list.push(value)   )
 
-    expect ( list ).to.have.length ( 4 )
-    expect ( list ).to.contains ( 10 )
-    expect ( list ).to.contains ( 44 )
-    expect ( list ).to.contains ( 'm' )
+    expect ( list ).toHaveLength ( 4 )
+    expect ( list ).toContain ( 10 )
+    expect ( list ).toContain ( 44 )
+    expect ( list ).toContain ( 'm' )
 }) // it flatStore.get
 
 
@@ -117,7 +117,7 @@ it ( 'flatStore: get. Breadcrumbs does not exist', () => {
         .get ( 'root/personal/size' )
         .look ( ({value}) => list.push(value)   )
 
-    expect ( list ).to.have.length ( 0 )
+    expect ( list ).toHaveLength ( 0 )
 }) // it flatStore.get, no such breadcrumbs
 
 
@@ -127,12 +127,12 @@ it ( 'flatStore: find', () => {
     flatStore
         .find ( 'personal' )
         .look (({empty}) => empty ? null : i++ )   // Function 'find' will search for objects with name 'personal' and will start 'look' fn against 'personal' properties only;
-    expect ( i ).to.be.equal ( 2 )                 // In our case properties are 'age' and 'eyes'.
+    expect ( i ).toBe ( 2 )                 // In our case properties are 'age' and 'eyes'.
 
     // after call of 'look', scanList should be reset to default
     i = 0
     flatStore.look ( ({key}) => { if (key!=null) i++ })   // Count of the object properties. Some objects don't have own properties. Such objects will provide 'empty' property to 'look' fn
-    expect ( i ).to.be.equal ( 17 )
+    expect ( i ).toBe ( 17 )
 }) // it flatStore.find
 
 
@@ -142,7 +142,7 @@ it ( 'flatStore: from', () => {
     flatStore
        .from ( 'root/personal' )
        .look (({empty}) => empty ? null : i++ )   // Function 'from' will start to search for object and properties from 'root/personal' location and going deeper; 
-    expect ( i ).to.be.equal ( 13 )
+    expect ( i ).toBe ( 13 )
 }) // it flatStore.from
 
 
@@ -152,7 +152,7 @@ it ( 'flatStore: from not available location', () => {
     flatStore
          .from ( 'root/personal/none' )
          .look ( ({ name }) => i++ )
-    expect ( i ).to.be.equal ( 0 )
+    expect ( i ).toBe ( 0 )
 }) // it from not available location
 
 
@@ -162,7 +162,7 @@ it ( 'flatStore: like. Single word.', () => {
     flatStore
        .like ('sic')
        .look ( () => i++ )
-    expect ( i ).to.be.equal ( 4 )
+    expect ( i ).toBe ( 4 )
 }) // it flatStore.like single
 
 
@@ -172,7 +172,7 @@ it ( 'flatStore: like. Multiple words.', () => {
     flatStore
         .like (['sic', 'sp'])
         .look ( () => i++ )
-    expect ( i ).to.be.equal ( 7 )
+    expect ( i ).toBe ( 7 )
 }) // it flatStore.like multiple
 
 
@@ -186,7 +186,7 @@ it ( 'flatIO: setup a filter, flatStore: use', () => {
                             })
 
     flatStore.use ( 'custom' ).look ( () => i++ )
-    expect ( i ).to.be.equal ( 4 )
+    expect ( i ).toBe ( 4 )
 }) // it flatIO.setupFilter, flatStore.use
 
 
@@ -199,7 +199,7 @@ it ( 'flatStore: try to use a non-existing filter', () => {
                     i++ 
                     return next ()
                 })
-    expect ( i ).to.be.equal ( 7 ) // will be executed on each dt-line
+    expect ( i ).toBe ( 7 ) // will be executed on each dt-line
 }) // it flatStore.use a non-existing filter
 
 }) // describe
