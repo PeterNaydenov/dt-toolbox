@@ -1,6 +1,10 @@
 ## Release History
 
 
+### 7.4.9 ( 2026-07-21)
+- Dependency update. @peter.naydenov/walk to version 6.0.0;
+
+
 
 ### 7.4.8 ( 2026-07-20)
 - Dependency update. @peter.naydenov/walk to version 5.0.7;
