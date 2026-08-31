@@ -38,7 +38,7 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
     "@vitest/coverage-v8": "^4.1.11",
-    "rollup": "^4.63.0",
+    "rollup": "^4.63.1",
     "vitest": "^4.1.11"
   },
   "keywords": [
