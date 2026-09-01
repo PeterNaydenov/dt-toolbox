@@ -1,6 +1,14 @@
 ## Release History
 
 
+
+### 7.5.0 ( 2026-09-01)
+- [x] Feature: Added a skill at `.agents/skills/git-dt-toolbox/SKILL.md`;
+- [x] Chore: Added a `"files"` allow-list to `package.json` so the skill at `.agents/skills/git-dt-toolbox/SKILL.md` is **explicitly included** in the published npm package. 
+- [x] Side benefit: the old `README_v.*.x.md` snapshots, `rollup.config.js`, and `vitest.config.js` are no longer shipped. Resolves the previous "Stale" note about `.npmignore`;
+
+
+
 ### 7.4.9 ( 2026-07-21)
 - Dependency update. @peter.naydenov/walk to version 6.0.0;
 
