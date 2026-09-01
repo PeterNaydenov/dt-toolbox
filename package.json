@@ -49,6 +49,15 @@
     "structure",
     "dt"
   ],
+  "files": [
+    ".agents",
+    "dist",
+    "src",
+    "README.md",
+    "Changelog.md",
+    "Migration.guide.md",
+    "LICENSE"
+  ],
   "allowScripts": {
     "fsevents@2.3.3": true
   }
