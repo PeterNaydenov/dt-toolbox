@@ -2,6 +2,11 @@
 
 
 
+### 7.5.1 ( 2026-09-24)
+- [x] Dependency update. @peter.naydenov/walk to version 6.1.0;
+
+
+
 ### 7.5.0 ( 2026-09-01)
 - [x] Feature: Added a skill at `.agents/skills/git-dt-toolbox/SKILL.md`;
 - [x] Chore: Added a `"files"` allow-list to `package.json` so the skill at `.agents/skills/git-dt-toolbox/SKILL.md` is **explicitly included** in the published npm package. 
