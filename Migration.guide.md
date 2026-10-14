@@ -1,5 +1,58 @@
 # Migration Guides
 
+## From v.7.x.x  - v.8.x.x
+
+### `init` throws on an unsupported model name
+`dtbox.init` now throws, like `flat` and `convert`. Before, it logged an error and returned `null`. Omitting `model` (or passing `undefined`) still defaults to `'std'`.
+
+```js
+// was:
+const dt = dtbox.init ( data, { model: userChoice } )
+if ( dt === null ) {
+        // handle the unsupported model
+    }
+
+// become:
+let dt;
+try {
+        dt = dtbox.init ( data, { model: userChoice } )
+    }
+catch ( err ) {
+        // handle the unsupported model. `err.message` lists the supported models
+    }
+```
+
+### `getWalk` returns walk v.7
+`dtbox.getWalk()` returns `@peter.naydenov/walk` v.7. In walk callbacks, `IGNORE` is now a function:
+
+```js
+const walk = dtbox.getWalk ();
+
+// was:
+walk ({ data, keyCallback: ({ key, value, IGNORE }) => key === 'password' ? IGNORE : value })
+
+// become:
+walk ({ data, keyCallback: ({ key, value, IGNORE }) => key === 'password' ? IGNORE () : value })
+```
+
+Returning `IGNORE` without calling it no longer removes anything. The function is stored as a value. Walk v.7 also adds `PASS`, `FINISH`, `settings` (`copy`, `breadcrumbs`, `parentPath`, `detectCycles`) and the `parentPath` callback argument. See the walk migration guide: https://github.com/PeterNaydenov/walk/blob/master/Migration.guide.md
+
+If you don't use `getWalk`, no changes are needed for this part.
+
+### `dt.copy()` key order
+dt-objects don't store a second copy of the original data anymore (less memory, faster `init`). `dt.copy()` rebuilds the data from the dt-lines. Values are the same, but object keys come in this order: primitive values first, then nested objects and arrays. It's the same order as `dt.model ( () => ({ as: 'std' }) )`.
+
+```js
+const dt = dtbox.init ({ a: { x: 1 }, b: 2 })
+dt.copy ()
+// was:    { a: { x: 1 }, b: 2 }
+// become: { b: 2, a: { x: 1 } }
+```
+
+This matters only if your code depends on key order, e.g. compares `JSON.stringify` results.
+
+
+
 ## From v.6.x.x  - v.7.x.x
 Look function can return `next` and `finish` functions. This functions are used to control the flow of the "**look**" function. If you `return next()`, the look function will continue to execute callback with next dt-line object. If you `return finish()`, the look function will end. 
 
