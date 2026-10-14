@@ -1,4 +1,4 @@
-# DT Toolbox v.7.x.x
+# DT Toolbox
 
 ![version](https://img.shields.io/github/package-json/v/peterNaydenov/dt-toolbox)
 ![license](https://img.shields.io/github/license/peterNaydenov/dt-toolbox)
@@ -12,9 +12,7 @@
 
 
 ## Last Updates
-- After version 7.4.2 - load the library with `require` or `import`. Folder '**dist**' contains the library in commonjs, esm and umd formats;
-- After version 7.3.0 extractList options.as can receive a `dt-model` and `dt-object`;
-- After version 7.1.x `dt-object` api has a new method `extractList` that helps to extract a multiple segments or properties, defined as a list. Use '**options**'(the second argument) to define a model of extracted data if needed. Read about `extractList` bellow.
+- Version 8.0.0 - `dtbox.init` throws on an unsupported model name, and `dtbox.getWalk()` returns walk v.7. TypeScript declarations and an agent skill (`skills/dt-toolbox/`) are included in the package. Read the [Migration guide](Migration.guide.md);
 
 
 
@@ -64,6 +62,25 @@ import dtbox from 'dt-toolbox'
 // if you are using commonjs:
 const dtbox = require ( 'dt-toolbox' );
 ```
+
+
+
+## Performance
+
+Version 8.0.0 (with `@peter.naydenov/walk` v.7) compared with 7.5.1, on typical application data (3,000 records with nested objects and arrays):
+
+| Operation | 7.5.1 | 8.0.0 | Change |
+|---|---:|---:|---:|
+| `dtbox.init` | 22.01 ms | 12.31 ms | **-44%** |
+| `dtbox.flat` | 18.16 ms | 10.06 ms | **-45%** |
+| `dtbox.load` | 19.65 ms | 3.29 ms | **-83%** |
+| `dt.model` as `'dt-model'` | 18.95 ms | 1.16 ms | **-94%** |
+| Memory kept by a dt-object (`init`) | 7.1 MiB | 5.5 MiB | **-22%** |
+| Memory kept by a dt-object (`load`) | 7.0 MiB | 3.5 MiB | **-49%** |
+| Memory allocated by `dtbox.init` | 37.5 MiB | 25.1 MiB | **-33%** |
+| Memory allocated by `dtbox.load` | 48.2 MiB | 11.5 MiB | **-76%** |
+
+All data sets, the method and how to run the benchmarks yourself: [benchmarks/README.md](benchmarks/README.md).
 
 
 
@@ -319,11 +336,15 @@ let result = dtbox.convert ( a, {
 
 
 ### dtbox.getWalk ()
-Dt-Toolbox is using "walk" library. If you need to use it directly - get the version used by Dt-Toolbox.
+Dt-Toolbox is using "walk" library. If you need to use it directly - get the version used by Dt-Toolbox. Since version 8.0.0 it's [walk v.7](https://github.com/PeterNaydenov/walk#readme). Note that `IGNORE` is a function in walk v.7.
 
 ```js
 const walk = dtbox.getWalk ();
-
+const result = walk ({
+                      data : { user: 'peter', password: 'secret' }
+                    , keyCallback : ({ key, value, IGNORE }) => key === 'password' ? IGNORE () : value
+                })
+// result → { user: 'peter' }
 ```
 
 
@@ -1197,8 +1218,9 @@ console.log ( result )
 - [DT-Queries. Some useful query functions for DT-Toolbox](https://github.com/PeterNaydenov/dt-queries)
 - [History of changes](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Changelog.md)
 - [Migration guide](https://github.com/PeterNaydenov/dt-toolbox/blob/master/Migration.guide.md)
-- [Documentation v.4.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.4.x.x.md)
-- [Documentation v.2.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/master/README_v.2.x.x.md)
+- [Documentation v.6.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/v7.5.1/README_v.6.x.x.md)
+- [Documentation v.4.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/v7.5.1/README_v.4.x.x.md)
+- [Documentation v.2.x.x](https://github.com/PeterNaydenov/dt-toolbox/blob/v7.5.1/README_v.2.x.x.md)
 
 
 
