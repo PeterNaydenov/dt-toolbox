@@ -57,14 +57,14 @@ it ( 'flatIO: export', () => {
 it ( 'flatIO: insert', () => {
         const 
              d = convert.from ( 'std' ).toFlat ( dependencies, [ 'here', 'we', 'are'] )
-            ,[ , , flatStore ] = d
+            ,[ , flatStore ] = d
             ;
 
         // Change import name - made originally by flatObject API
         flatStore[0][0] = 'b'
         flatStore[0][2] = 'b'
 
-        flatIO.insert ( d )
+        flatIO.insert ( flatStore )
         const 
               res = flatIO.export ()  // res should contain copy of a an
             , ix = flatIO.getIndexes ()

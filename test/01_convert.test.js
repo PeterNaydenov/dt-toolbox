@@ -36,7 +36,7 @@ describe ( 'Convertors', () => {
 
 
 it ( 'Standard -> DT', () => {
-            const [ copy, indexes, dt ] = convert.from('std').toFlat ( dependencies, a )
+            const [ indexes, dt ] = convert.from('std').toFlat ( dependencies, a )
             let i = 0;
             expect ( dt ).toHaveLength ( 10 )
             expect ( dt[0][1] ).toHaveProperty ( 'pretendHTML' )   // HTML DOM nodes - copy by reference
@@ -100,7 +100,7 @@ it ( 'Tuples -> DT', () => {
                         , ['check/out/this/prop/deep', 'mo' ]
                   ];
 
-    const [ copy, index, flatRows ] = convert.from ( 'tuples' ).toFlat ( dependencies, tuples );
+    const [ index, flatRows ] = convert.from ( 'tuples' ).toFlat ( dependencies, tuples );
     let i = 0;
     
     flatRows.forEach ( line => {
@@ -148,7 +148,7 @@ it ( 'Tuples -> DT', () => {
 
 it ( 'DT -> Tuples', () => {
     const 
-        [ copy, indexes, dt ] = convert.from('std').toFlat ( dependencies, a )
+        [ indexes, dt ] = convert.from('std').toFlat ( dependencies, a )
       , res = convert.to ( 'tuples', dependencies, dt )
       ;
     let i = 0;
@@ -193,7 +193,7 @@ const data = {
                 }
 }
 
- const [,,dt] = convert.from ( 'midFlat' ).toFlat ( dependencies, data );
+ const [ , dt ] = convert.from ( 'midFlat' ).toFlat ( dependencies, data );
  let i = 0;
  dt.forEach ( line => {
               const [ name, data, breadcrumbs, edges ] = line;
@@ -228,7 +228,7 @@ const data = {
 
 it ( 'DT -> Midflat', () => {
     const 
-          [,,dt] = convert.from ('std').toFlat ( dependencies, a )
+          [ , dt ] = convert.from ('std').toFlat ( dependencies, a )
         , res = convert.to ('midFlat', dependencies, dt )
         , entries = Object.entries ( res )
         ;
@@ -275,7 +275,7 @@ it ( 'Files -> DT', () => {
                     , 'shoes/summer/Lotto'
                     , 'shoes/summer/Asics'
                 ]
-          , [ , , dt ] = convert.from ( 'files').toFlat ( dependencies, data )
+          , [ , dt ] = convert.from ( 'files').toFlat ( dependencies, data )
           ;
     let i = 0;
     dt.forEach ( line => {
@@ -302,7 +302,7 @@ it ( 'Files -> DT', () => {
 
 it ( 'DT -> Files', () => {
     const 
-          [ , , dt ] = convert.from('std').toFlat ( dependencies, a )
+          [ , dt ] = convert.from('std').toFlat ( dependencies, a )
         , res = convert.to ( 'files', dependencies, dt )
         ;    
     expect ( res ).toHaveLength ( 23 )
@@ -329,7 +329,7 @@ it ( 'Breadcrumbs -> DT', () => {
                     , 'shoes/summer/0'  : 'Lotto'
                     , 'shoes/summer/1'  : 'Asics'
                 }
-        , [ , , dt ] = convert.from ( 'breadcrumbs' ).toFlat ( dependencies, data )
+        , [ , dt ] = convert.from ( 'breadcrumbs' ).toFlat ( dependencies, data )
         ;
     let i = 0;
     dt.forEach ( line => {
@@ -355,7 +355,7 @@ it ( 'Breadcrumbs -> DT', () => {
 
 it ( 'DT -> Breadcrumbs', () => {
     const 
-          [ , , dt ] = convert.from('std').toFlat ( dependencies, a )
+          [ , dt ] = convert.from('std').toFlat ( dependencies, a )
         , res = convert.to ( 'breadcrumbs', dependencies, dt )
         ;    
 

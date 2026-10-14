@@ -46,11 +46,9 @@ it ( 'Init', () => {
 
 
 it ( 'Init with non-existing model', () => {
-    // Bug fix: unknown models used to silently return null. init() still
-    // returns null (per existing API) because the user's data wasn't valid
-    // for any model. flat() and convert() throw instead.
-    const store = dtbox.init ( a , { model: 'halo' });
-    expect ( store ).toBeNull ()
+    // Since v.8.0.0 init() throws for unknown models, like flat() and convert().
+    // (v.7.x.x: console.error + return null)
+    expect ( () => dtbox.init ( a , { model: 'halo' }) ).toThrow ( /data-model/ )
 })
 
 
