@@ -34,12 +34,16 @@ function updateBreadcrumbs ( selectionIx, child, bread ) {
             ;
 
         childLine[2] = bread
-        selectionIx[oldBread] = childLine
+        selectionIx[bread] = childLine   // Index by breadcrumbs too, so descendants can be found on later re-parenting
 
+        // Re-parent descendants: update their breadcrumbs and the edges pointing to them.
+        // Before the fix, connecting a dt-line that already had children
+        // (e.g. 'mid/leaf' then 'root/mid') crashed with "Cannot read properties of undefined".
+        const prefix = `${oldBread}/`;   // Plain prefix check: names may contain RegExp special characters
         childLine[3].forEach ( (br,i) => {
-                        const search = new RegExp (`^${oldBread}\/`);
-                        const brUpdate = br.replace ( search, `${bread}/` );
-                        updateBreadcrumbs ( selectionIx[br], br, brUpdate )
+                        const brUpdate = br.startsWith ( prefix ) ? `${bread}/${br.slice ( prefix.length )}` : br;
+                        updateBreadcrumbs ( selectionIx, br, brUpdate )
+                        childLine[3][i] = brUpdate
                 })
 } // updateBreadcrumbs func.
 

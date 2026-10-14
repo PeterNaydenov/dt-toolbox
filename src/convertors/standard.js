@@ -1,5 +1,7 @@
 'use strict'
 
+import walkSettings from '../walkSettings.js'
+
 
 
 /**
@@ -30,14 +32,12 @@ const deepCopy = ( v ) => {
 
 
 
-// Sentinel for Date/RegExp encoding (see toFlat below).
-// The walk library treats Date/RegExp as plain objects and copies them to
-// empty `{}` (because their own properties are non-enumerable). To preserve
-// them across the walk, we encode them as plain sentinel objects BEFORE
-// walking and decode them back AFTER.
-// The sentinel is a plain object with a known key shape so `toType` (and
-// any future code that walks the dt-model) can decode it without needing
-// a side-channel store.
+// Sentinel for Date/RegExp encoding.
+// dt-toolbox 7.4.7 - 7.5.1 encoded Date/RegExp as plain sentinel objects
+// because older versions of the walk library collapsed them to `{}`.
+// Since walk 6.1.0 they are treated as leaf values and are stored as-is in
+// flatData, so no encoding is needed anymore. Decoding is kept in `toType`
+// so dt-models exported by those versions still convert back correctly.
 const SENTINEL_KEY    = '__dtSentinel__'
 const SENTINEL_DATE   = 'date'
 const SENTINEL_REGEXP = 'regexp'
@@ -51,21 +51,16 @@ const decodeSentinel = ( v ) => {
         return v
     };
 
-const encodeSpecialTypes = ( v ) => {
-        if ( v === null || v === undefined )   return v
-        if ( typeof v !== 'object' )            return v
-        if ( Array.isArray ( v ) )              return v.map ( encodeSpecialTypes )
-        if ( v instanceof Date ) {
-                return { [SENTINEL_KEY]: SENTINEL_DATE, iso: v.toISOString () }
-            }
-        if ( v instanceof RegExp ) {
-                return { [SENTINEL_KEY]: SENTINEL_REGEXP, source: v.source, flags: v.flags }
-            }
-        if ( typeof v === 'function' || v.nodeType )   return v  // pass through
-        const out = {};
-        for ( const k in v )   out[k] = encodeSpecialTypes ( v[k] )
-        return out
-    };
+/**
+ * Breadcrumbs of the parent: walk builds breadcrumbs as `parent + '/' + key`.
+ * Before the fix, a RegExp was built from the key for every value. Keys with
+ * special characters like `(`, `+`, `$` or `[` crashed or found a wrong parent,
+ * and creating a RegExp per value was slow.
+ * @param {string} breadcrumbs - breadcrumbs of the current value
+ * @param {string} key - key of the current value
+ * @returns {string} breadcrumbs of the parent
+ */
+const parentOf = ( breadcrumbs, key ) => breadcrumbs.slice ( 0, breadcrumbs.length - key.length - 1 );
 
 
 
@@ -78,18 +73,13 @@ function toFlat ( dependencies, d ) {   // Convert data to 'dt' model
             , dtEDGES = 3  // Const: Edges in store record line;
             ;
 
-        // Encode Date/RegExp as plain sentinels so they survive the walk
-        // (the walk library collapses them to `{}` otherwise).
-        const encodedInput = encodeSpecialTypes ( d );
-
         function objCallbackFn ({ value, key, breadcrumbs }) {
                         const
                               isRoot = (breadcrumbs === 'root' ) && ( key === 'root' )
                             , isArray = value instanceof Array ? true : false
                             , dataType = isArray ? [] : {}
                             , objectName = key
-                            , search = new RegExp (  `\/${key}$` )
-                            , parentName = breadcrumbs.replace ( search, '' )
+                            , parentName = parentOf ( breadcrumbs, key )
                             , newObject = [ objectName, dataType, breadcrumbs, [] ]
                             ;
 
@@ -100,20 +90,18 @@ function toFlat ( dependencies, d ) {   // Convert data to 'dt' model
                 } // objCallbackFn
 
         function keyCallbackFn ({ value, key, breadcrumbs }) {
-                        const
-                              search = new RegExp (  `\/${key}$` )
-                            , parentName = breadcrumbs.replace ( search, '' )
-                            ;
-                        index [parentName][dtDATA][key] = value
+                        index [ parentOf ( breadcrumbs, key ) ][dtDATA][key] = value
                         return value
                 } // keyCallbackFn
 
-        const copy = walk ({
-                              data : encodedInput
+        // Only the callbacks matter: they build the dt-lines. No result copy is needed (`copy:false`).
+        walk ({
+                              data : d
+                            , settings       : walkSettings.toFlat
                             , keyCallback    : keyCallbackFn
                             , objectCallback : objCallbackFn
                         })
-            return [ { root:copy }, index, dt ]
+            return [ index, dt ]
     } // getFlat func.
 
 
@@ -129,40 +117,36 @@ function toType ( dt ) {
             let
                   result = {}
                 , revDT = dt.reverse ()
-                , extraSegments = []   // dt-lines outside the root hierarchy;
+                , extraSegments = []   // Top dt-lines outside 'root' (segments like 'extra', or unconnected drafted lines);
+                , children = new Set ( dt.flatMap ( ([ , , , edges ]) => edges ) )   // Breadcrumbs that have a parent dt-line
                 ;
+            // Children come after their parents in a DT-model, so in reverse order
+            // every child is built before the parent attaches it through `edges`.
+            // Segments are built the same way as 'root'. Before the fix, nested
+            // dt-lines of a segment (e.g. 'extra/y') were moved to the top level.
             revDT.forEach ( ([ name, d, breadcrumbs, edges ]) => {
                         const copy = deepCopy ( d );
-
-                        // A dt-line is "extra" if its breadcrumbs don't start
-                        // with 'root/' (i.e. it's a top-level segment like 'extra1').
-                        if ( breadcrumbs !== 'root' && !breadcrumbs.startsWith ( 'root/' ) ) {
-                                extraSegments.push ( { name, breadcrumbs, data: copy } )
-                                return
-                            }
                         result[breadcrumbs] = copy
                         edges.forEach ( edge => {
                                         if ( result[edge] ) {
-                                                const name = edge.replace (`${breadcrumbs}/`, '' );
+                                                const name = edge.slice ( breadcrumbs.length + 1 );   // edge is `breadcrumbs + '/' + name`
                                                 result[breadcrumbs][name] = result[edge]
                                             }
                                 })
+                        if ( breadcrumbs !== 'root' && !children.has ( breadcrumbs ) ) {
+                                extraSegments.push ( { name, data: copy } )
+                            }
                     })
-            // Merge any extra segments into the root result. Each becomes
-            // a top-level key, matching the same shape the user would get
-            // if all the data were in a single nested object.
+            // Merge the segments into the root result. Each becomes a top-level key,
+            // matching the shape the user would get if all the data were in a single nested object.
             const root = result['root'] || {}
-            extraSegments.forEach ( ({ name, breadcrumbs, data }) => {
+            extraSegments.forEach ( ({ name, data }) => {
                         const existing = root[name]
                         if ( existing && typeof existing === 'object' && !Array.isArray(existing) && typeof data === 'object' && !Array.isArray(data) ) {
                                 // Same name as an existing root property: merge.
                                 root[name] = { ...existing, ...data }
                             }
-                        else {
-                                // Use segment name; if name collides with a key on
-                                // 'breadcrumbs' path, store under breadcrumbs key.
-                                root[ name === breadcrumbs ? name : name ] = data
-                            }
+                        else   root[name] = data
                     })
             // Decode any Date/RegExp sentinels back to their original types.
             return decodeSpecialTypesInResult ( root )
@@ -180,6 +164,7 @@ const decodeSpecialTypesInResult = ( v ) => {
         // Sentinel?
         const decoded = decodeSentinel ( v )
         if ( decoded !== v )                    return decoded
+        if ( v instanceof Date || v instanceof RegExp || v.nodeType )   return v   // leaf values, keep as-is
         if ( Array.isArray ( v ) )              return v.map ( decodeSpecialTypesInResult )
         const out = {};
         for ( const k in v )   out[k] = decodeSpecialTypesInResult ( v[k] )

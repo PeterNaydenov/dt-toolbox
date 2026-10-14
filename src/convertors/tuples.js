@@ -2,10 +2,10 @@
 
 
 
+
 function toFlat ( dependencies, d ) {   // Converts data to 'dt' model
         const 
-              { walk } = dependencies ()
-            , indexes = {}
+              indexes = {}
             , buffer = {root:[]}
             , dt = []
             ;
@@ -130,8 +130,7 @@ function toFlat ( dependencies, d ) {   // Converts data to 'dt' model
                         if ( l )   l[3].push ( breadcrumbs )
                 }) // revDT
         dt.reverse ()
-        const copy = walk ({ data : d });
-        return [ copy, indexes, dt ]
+        return [ indexes, dt ]
     } // toFlat func.
 
 

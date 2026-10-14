@@ -4,7 +4,7 @@ function setupFilter ( flatStorage, filterFn, filtering, getFilterNames ) {
 return function setupFilter ( name, fn ) {
         const 
               filterNames = getFilterNames ()
-            , [,, flatData ] = flatStorage
+            , [, flatData ] = flatStorage
             ;
         if ( filterNames.includes( name )) {
                     console.error ( `Filter name "${name}" is already defined` )

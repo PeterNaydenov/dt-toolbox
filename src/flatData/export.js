@@ -2,7 +2,7 @@
 
 function ex ( flatStorage ) {
 return function ex ( name ) {
-        const [ , indexes, flatData ] = flatStorage;
+        const [ indexes, flatData ] = flatStorage;
 
         // Reject invalid argument types with a clear message.
         // Before the fix, `export(null)`/`export(0)`/`export('') silently
@@ -26,18 +26,22 @@ return function ex ( name ) {
             }
 
         // If existing name:
-        const selection = [];
+        // Plain prefix checks instead of a RegExp built from the name. Before the fix,
+        // names with special characters threw (e.g. 'a(') or matched other segments ('a.b' matched 'aXb').
+        const
+              selection = []
+            , prefix = `${name}/`
+            // 'root' needs no rebase. Building equal long strings is slow on deep data
+            , rebase = name === 'root' ? br => br : br => br.startsWith ( prefix ) ? `root/${br.slice ( prefix.length )}` : br
+            ;
         flatData.forEach ( line => {
-                    const
-                          [ lnName, data, breadcrumbs, edges ] = line
-                        , search = new RegExp ( `^${name}\/`)
-                        ;
-                    if ( breadcrumbs === name || breadcrumbs.match(search) ) {
+                    const [ lnName, data, breadcrumbs, edges ] = line;
+                    if ( breadcrumbs === name || breadcrumbs.startsWith ( prefix ) ) {
                             let
                                   nameChange = ( lnName === breadcrumbs ) ? 'root' : lnName
                                 , dataChange = copyData ( data )
-                                , breadcrumbsChange = ( breadcrumbs.includes('/') ) ? breadcrumbs.replace ( search, 'root/' ) : 'root'
-                                , edgesChange = edges.map ( edge => edge.replace ( search, 'root/'))
+                                , breadcrumbsChange = ( breadcrumbs.includes('/') ) ? rebase ( breadcrumbs ) : 'root'
+                                , edgesChange = edges.map ( rebase )
                                 ;
                             selection.push ([ nameChange, dataChange, breadcrumbsChange, edgesChange ])
                         }

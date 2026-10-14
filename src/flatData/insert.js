@@ -1,14 +1,11 @@
 'use strict'
 
 function insert ( flat, flitering, getFilterNames ) {
-return function insert ( d ) {
+return function insert ( flatData ) {
     const 
-          [ copy,, flatData ] = d
-        , name = flatData[0][0]
-        , [ copies, indexes, flatStorage ] = flat
+          [ indexes, flatStorage ] = flat
         , filterNames = getFilterNames ()
         ;
-    copies [ name ] = copy
     flatData.forEach ( line => {
                 const [ ,, breadcrumbs ] = line;
                 indexes[breadcrumbs] = line

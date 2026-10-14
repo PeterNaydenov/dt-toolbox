@@ -1,5 +1,6 @@
 'use strict'
 
+
 import std     from './standard.js'
 import midFlat from './midflat.js'
 import tuples  from './tuples.js'
@@ -29,10 +30,11 @@ const selectConvertorFrom =
                                                                                 return [ ar.join('/'), v ]
                                                                         })
                                                   return tuples.toFlat ( dependencies, tups )
+                                case 'midflat' :
                                 case 'midFlat' :
                                                   return midFlat.toFlat ( dependencies, inData )
                             }
-                    return [ ['object', 0], {} ]
+                    return [ {}, [] ]   // Unreachable: model names are validated before conversion
             } // toFlat func.
 
 
@@ -47,18 +49,36 @@ function from ( type ) {   // convert from something to flat...
 
 
 
+/**
+ * Convert a DT-model to the 'breadcrumbs' model: one flat object with paths as keys.
+ * Paths come from the dt-lines, so array items always get their index.
+ * Before the fix, arrays were guessed by counting repeated paths: a one-item array lost
+ * its index (`{ k: [1] }` → `{ k: 1 }`), and arrays with objects between values got
+ * wrong indexes, so values were lost on the way back.
+ * @param {Array} dt - DT-model
+ * @returns {Object} - breadcrumbs model
+ */
+function toBreadcrumbs ( dt ) {
+        const result = {};
+        dt.forEach ( ([ , flatData, breadcrumbs ]) => {
+                    const prefix = breadcrumbs === 'root' ? ''
+                                 : breadcrumbs.startsWith ( 'root/' ) ? `${breadcrumbs.slice ( 5 )}/`
+                                 : `${breadcrumbs}/`   // Segments outside 'root'
+                    // Object.keys skips array holes: objects inside arrays are dt-lines of their own
+                    Object.keys ( flatData ).forEach ( k => result[`${prefix}${k}`] = flatData[k] )
+            })
+        return result
+    } // toBreadcrumbs func.
+
+
+
 function to ( type, dependencies, inData ) {   // convert from flat to 'data-type'...
-        const 
-              breadcrumbs = {}
-            , { walk } = dependencies ()
-            , check = new Set()
-            , extend = new Set()
-            ;
-        let tups, count = 0;
+        const { copyDtModel } = dependencies ();
+        let tups;
         switch ( type ) {
             case 'flat':
             case 'dt-model':
-                             return walk ({data:inData })
+                             return copyDtModel ( inData )
             case 'std' :
             case 'standard':
                              return std.toType ( inData )
@@ -68,6 +88,7 @@ function to ( type, dependencies, inData ) {   // convert from flat to 'data-typ
             case 'tuple':
             case 'tuples':
                             return tuples.toType ( inData )
+            case 'file':
             case 'files':
                            tups = tuples.toType ( inData );
                            return tups.map ( ([k,v]) => { 
@@ -77,24 +98,7 @@ function to ( type, dependencies, inData ) {   // convert from flat to 'data-typ
                                         })
             case 'breadcrumb' :
             case 'breadcrumbs':
-                           let current;
-                           tups = tuples.toType ( inData )
-                           tups.forEach ( ([k,v]) => check.has(k) ? extend.add(k) : check.add(k)  )
-                           tups.forEach ( ([k,v]) => {
-                                                if ( extend.has(k) ) {
-                                                        if ( current !== k ) {
-                                                                        current = k
-                                                                        count = 0
-                                                            }
-                                                        let key = ( k === 'root' ) ? count : `${k}/${count}` 
-                                                        breadcrumbs[key] = v
-                                                        count++
-                                                    }
-                                                else {
-                                                        breadcrumbs[k] = v
-                                                    }
-                                        })
-                           return breadcrumbs
+                           return toBreadcrumbs ( inData )
             } //switch type
     } // to func.
 

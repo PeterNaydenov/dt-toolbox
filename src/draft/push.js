@@ -7,7 +7,7 @@ return function push ( target, val ) {
 
         if ( !line                     )   return this
         if ( !(line instanceof Array)  )   return this
-        if ( typeof value === 'object' )   return this
+        if ( val !== null && typeof val === 'object' )   return this   // flatData arrays hold primitives only
         line.push ( val )
         return this
 }} // push func.

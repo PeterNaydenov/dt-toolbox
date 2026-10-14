@@ -4,7 +4,7 @@
     DT object & DT Toolbox
     =======================
     
-    Version 7.1.0
+    Version 8.0.0
 
     History notes:
      - Idea was born on March 17th, 2016.
@@ -38,6 +38,10 @@
      - Version 7.4.3 published on December 7th, 2024
             * Update a 'walk' library to version 5.x.x;
             * Development dependencies updates;
+             
+    - Version 8.0.0 published on October 14th, 2026
+            * Update a 'walk' library to version 7.x.x;
+            * Almost 2x faster than v.7.4.3;
 */
 
 

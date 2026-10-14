@@ -2,10 +2,10 @@
 
 
 
+
 function toFlat ( dependencies, d ) {   // Converts data to 'dt' model
         const 
               entries = Object.entries ( d )
-            , { walk } = dependencies ()
             , indexes = {}
             , dt = []
             , containers = {}
@@ -65,9 +65,7 @@ function toFlat ( dependencies, d ) {   // Converts data to 'dt' model
                         if ( !parent                )   return
                         if ( indexes[parent] )   indexes[parent][3].push ( breadcrumbs )
                 }) // forEach entry
-
-        const copy = walk ({ data : d })
-        return [ copy, indexes, dt ]
+        return [ indexes, dt ]
     } // toFlat func.
 
 

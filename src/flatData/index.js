@@ -21,8 +21,8 @@ import root       from './filters/root.js'
 
 function flatData ( dependencies, d ) {
           const 
-              [ copy, indexes, flatData ] = d
-            , flatStorage = [ copy, indexes, flatData ]
+              [ indexes, flatData ] = d
+            , flatStorage = [ indexes, flatData ]
             , filters =  {} // { filterName : [selected flat items] }
             , filterFn = { list, listObject, object, root } // { filter functions}
             ;
@@ -51,7 +51,6 @@ function flatData ( dependencies, d ) {
               flatIO_API = {
                           insert  : insert ( flatStorage, filtering, getFilterNames )                     // Insert a new rows to existing flatData;
                         , export  : ex ( flatStorage )                                                   // Exports a copy of flatData;
-                        , getCopy : name => ( copy[name] ) ? copy[name] : null 
                         , getIndexes    : () => indexes
                         , getLine       : k => indexes[k] ? indexes[k] : null
                         , getFilters    : () => filters
