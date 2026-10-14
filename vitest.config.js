@@ -7,7 +7,7 @@ export default defineConfig ( {
     ,   coverage : {
                 provider : 'v8'
             ,   include  : [ 'src/**/*.js' ]
-            ,   exclude  : [ 'node_modules', 'test', 'test-data' ]
+            ,   exclude  : [ 'node_modules', 'test' ]
             ,   reporter : [ 'lcov', 'text-summary' ]
             }
         }
