@@ -2,6 +2,40 @@
 
 
 
+### 8.0.0 ( 2026-10-14)
+- [x] Breaking: Dependency update. `@peter.naydenov/walk` to version 7.0.1. `dtbox.getWalk()` returns walk v7 as is: in callbacks, `return IGNORE` must become `return IGNORE()`. Walk v7 also adds `PASS`, `FINISH`, `settings` and `parentPath`. See `Migration.guide.md`;
+- [x] Breaking: `dtbox.init(data, {model})` with an unsupported model name now throws an error with the list of supported models, like `flat` and `convert` (was: `console.error` + return `null`). Omitting `model` still defaults to `'std'`;
+- [x] Breaking: dt-objects no longer keep a second full copy of the original data in memory. `dt.copy()` rebuilds the data from the dt-lines, so object keys come in the same order as `dt.model(() => ({as:'std'}))` output: primitive values first, then nested objects. Values are the same;
+- [x] Performance: Compared with 7.5.1, `load` is 79-84% faster, DT-model output (`as:'dt-model'`) 90-94%, `init`/`flat` 17-53%, and `model` with `as:'std'` 88% on deep data. A dt-object keeps 13-27% less memory (created with `load`: 49-63% less), and calls allocate up to 83% less temporary memory (`init` 33-39% less, `load` 75-80% less). `dt.copy()` allocates 15-56% more, because it rebuilds the data. Full tables in `benchmarks/README.md`, reproducible with `node benchmarks/compare.mjs`. How: walk v7 settings (`copy:false`, `detectCycles:false`, `parentPath:false`); no stored copy of the original data; a shape-aware copy for DT-models instead of walk (`src/copyDtModel.js`); and paths handled with `slice` instead of a RegExp per value;
+- [x] Feature: TypeScript type declarations. `types/dtbox.d.mts` for ES modules (`import`) and `types/dtbox.d.cts` for CommonJS/UMD (`require`). Wired through the `types` field and the `exports` conditions in `package.json`. Editors autocomplete data-model names (`model`, `as`) and show a short description with an example for each model. Verified with `@arethetypeswrong/cli` for node10, node16 (CJS and ESM) and bundler resolution;
+- [x] Feature: Agent skill at `skills/dt-toolbox/`, shipped with the package. A `SKILL.md` covers the workflow and decisions, and `references/` holds the full API, the data-models and runnable recipes. It replaces `.agents/skills/git-dt-toolbox/`, which had incorrect API examples (e.g. `as` passed as an argument to `dt.model`, wrong `connect`/`set` signatures);
+- [x] Fix: `dtbox.flat(data, {model})` and `dtbox.convert(data, {model, as})` now respect `options.model`. Before the fix, the source data was always treated as `std`;
+- [x] Fix: Options that are explicitly `undefined` now fall back to their defaults. `init`, `flat` and `convert` with `{ model: undefined }` use `'std'`, and `convert` with `{ as: undefined }` uses `'std'`. The same applies when options are `null`. Before the fix, `init` returned `null`, and `flat`/`convert` threw;
+- [x] Fix: `as: 'file'` (in `dt.model`, `dt.extractList` and `dtbox.convert`) now works like `as: 'files'` (was: returned `undefined`);
+- [x] Fix: `dtbox.init(data, {model:'midflat'})` (lowercase alias) now works like `'midFlat'` (was: produced a broken dt-object);
+- [x] Fix: `store.push` now ignores objects and arrays as documented. Primitives and `null` are still accepted. The guard was checking an undefined variable and never worked;
+- [x] Fix: `store.connect` no longer crashes when the child dt-line already has children (e.g. `connect(['mid/leaf'])` followed by `connect(['root/mid'])`). Breadcrumbs and edges of all descendants are updated;
+- [x] Fix: Date and RegExp values are now regular leaf values in every data-model. Before the fix, they were stored as internal `{ __dtSentinel__ }` objects that leaked into `export`, `flat`, `index`, `extractList`, `look`, and the `tuples`/`breadcrumbs`/`midFlat`/`files` outputs. Only `std` output decoded them. DT-models exported by versions 7.4.7 - 7.5.1 still decode correctly;
+- [x] Fix: `store.look` - returning `finish()` now stops the whole `look`, as documented. Before the fix, it only ended the current dt-line, the same as `next()`. `finish()` returned from an empty dt-line also works now. The scan-list now also resets after a `look` on an empty selection (e.g. `from('missing')`);
+- [x] Fix: `dt.model(() => ({as:'std'}))` keeps the nested structure of inserted segments. Before the fix, nested objects of a segment were placed at the top level of the result (e.g. `{ a, y, extra: { x } }` instead of `{ a, extra: { x, y } }`);
+- [x] Fix: `dtbox.init` accepts shared references (e.g. `{ a: shared, b: shared }`). Before the fix, any object that appeared twice was reported as a circular reference. Only real cycles throw;
+- [x] Fix: `dtbox.flat`, `dtbox.convert` and `dt.insertSegment` (with plain data) now throw a clear error on circular data, like `init` (was: out-of-memory crash with walk 6). The check is iterative, so very deep data no longer risks a stack overflow;
+- [x] Fix: `dtbox.init(dtModel, {model:'dt-model'})` and `{model:'flat'}` now create a dt-object (was: threw "d is not iterable");
+- [x] Fix: `dtbox.load(dtModel)` keeps its own copy of the DT-model. Before the fix, it used the caller's arrays as its data, so changing the DT-model after `load` also changed the dt-object;
+- [x] Fix: `dt.copy()` returns the data for dt-objects created from a DT-model (`load`, `init` with `'dt-model'`, `query` results). Before the fix, it returned `null`. A loaded dt-object inserted with `insertSegment` now also keeps its data;
+- [x] Performance: `query` results and `model` with `as:'dt-object'` skip an unneeded copy of the arrays dt-toolbox has just built (`model` with `as:'dt-object'` is about 3x faster on large data);
+- [x] Fix: Keys and names with RegExp special characters work. Before the fix, `init`/`flat`/`convert` threw on keys like `'a(b'`, `'x+'`, `'k$'` or `'['`; `dt.export(name)`/`dt.copy(name)` with a segment name like `'a.b'` also matched other segments (`'aXb'`); `store.connect` had the same problem with drafted names;
+- [x] Fix: `dt.insertSegment(name, dtModel)` - `dt.copy(name)` returns the data (was: the DT-model itself), and changing the DT-model afterwards no longer changes the dt-object;
+- [x] Fix: `dt.copy()` returns the full data when the dt-object was created from `midFlat` input (was: only the root values, e.g. `{ a: 1 }` without the nested `b`);
+- [x] Fix: `breadcrumbs` output keeps array indexes. Before the fix, a one-item array lost its index (`{ k: [1] }` gave `{ k: 1 }`, and `[ 'only' ]` gave `{ root: 'only' }`), so it came back as a plain value. Arrays with objects between values got wrong indexes, and values were lost on the way back (`{ m: [ 'first', { a: 1 }, 'third' ] }` lost `'third'`);
+- [x] Fix: `midFlat` input without plain values at the top level (e.g. `{ k: ['only'] }` or `{ b: { c: 2 } }` as midFlat) keeps its data. In 7.5.1 the result was an empty `{}`;
+- [x] Chore: Removed unused `src/flatData/connect.js` (an unreferenced duplicate of `src/draft/connect.js`);
+- [x] Chore: Repository cleanup. Removed the old documentation snapshots `README_v.2.x.x.md`, `README_v.4.x.x.md` and `README_v.6.x.x.md` (README links now point to the `v7.5.1` tag, where they are kept), the `.npmignore` file (the `files` list in `package.json` decides what is published), the no-op `start` script, and the unused dev dependencies `@rollup/plugin-node-resolve` and `@rollup/plugin-commonjs` (the build output is identical without them);
+- [x] Tests: 54 new regression and coverage tests. Line coverage is up from 92.9% to 98.5%, function coverage is 100%;
+- [x] Tests: `test/07_skill.test.js` runs every code example in the skill and checks its documented result, so the skill stays in sync with the library;
+
+
+
 ### 7.5.1 ( 2026-09-24)
 - [x] Dependency update. @peter.naydenov/walk to version 6.1.0;
 
