@@ -1,5 +1,3 @@
-import resolve    from '@rollup/plugin-node-resolve'
-import commonjs   from '@rollup/plugin-commonjs'
 import terser     from '@rollup/plugin-terser';
 
 
@@ -16,11 +14,7 @@ export default [
 					}
 		},
 		external: ['@peter.naydenov/walk'],
-		plugins: [
-			resolve(), // so Rollup can find `ms`
-			commonjs() // so Rollup can convert `ms` to an ES module
-			, terser()
-		]
+		plugins: [ terser() ]
 	},
 
 	// CommonJS (for Node) and ES module (for bundlers) build.
