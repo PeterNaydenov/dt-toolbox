@@ -13,7 +13,16 @@ Model names used below: `'std' | 'standard' | 'breadcrumbs' | 'breadcrumb' | 'tu
 ## dtbox (library)
 
 ### `dtbox.init ( data, { model = 'std' }? )` → dt-object
-Creates a dt-object from data in any model. `data` is copied, so later changes to `data` don't affect the dt-object. Primitives are wrapped: `init ( 42 )` holds `{ value: 42 }`. Shared references (the same object in two places) are fine. Circular references and an unsupported `model` throw.
+Creates a dt-object from data in any model. `data` is copied, so later changes to `data` don't affect the dt-object. Primitives are wrapped: `init ( 42 )` holds `{ value: 42 }`. Shared references (the same object in two places) are fine. Circular references and an unsupported `model` throw. A dt-object as `data` gives a new, independent dt-object with a copy of its data (all segments).
+
+```js
+const original = dtbox.init ({ name: 'Peter' })
+const copy = dtbox.init ( original )
+copy.model ( () => ({ as: 'std' }) )
+// → { name: 'Peter' }
+copy === original
+// → false
+```
 
 ### `dtbox.load ( dtModel )` → dt-object
 Creates a dt-object from a DT-model, e.g. the output of `dt.export()` or `dtbox.flat()`. No conversion is done. The DT-model is copied, so later changes to it don't affect the dt-object.
