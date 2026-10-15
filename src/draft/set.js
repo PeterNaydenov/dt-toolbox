@@ -33,7 +33,7 @@ return function set ( name, data ) {
         selection.push ( newRecord )
         selectionIx[name] = newRecord
 
-        if ( isPath && !parent[3].includes ( name ) )   parent[3].push ( name )   // Attach to the parent dt-line
+        if ( isPath )   parent[3].push ( name )   // Attach to the parent dt-line. A new path is never in the edges: existing paths return above
         return this
 }} // set func.
 
