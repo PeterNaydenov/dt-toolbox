@@ -920,6 +920,32 @@ describe ( 'bug fix 39: midFlat input without top-level primitive values', () =>
 
 
 
+describe ( 'bug fix 40: init with a dt-object', () => {
+    it ( 'returns a copy of the dt-object (8.1.1 returned an empty dt-object)', () => {
+        const dt = dtbox.init ({ name: 'Peter', p: { tags: [ 'a' ], when: new Date ( 0 ) } })
+        dt.insertSegment ( 'extra', dtbox.init ({ x: 1 }) )
+        const copy = dtbox.init ( dt )
+        expect ( copy ).not.toBe ( dt )
+        expect ( copy.listSegments () ).toEqual ( [ 'root', 'extra' ] )
+        expect ( copy.model ( () => ({ as: 'std' }) ) ).toEqual ( dt.model ( () => ({ as: 'std' }) ) )
+        expect ( copy.model ( () => ({ as: 'std' }) ).p.when ).toBeInstanceOf ( Date )
+    })
+
+    it ( 'the copy is independent', () => {
+        const dt = dtbox.init ({ name: 'Peter' })
+        const copy = dtbox.init ( dt )
+        copy.insertSegment ( 'more', dtbox.init ({ y: 2 }) )
+        expect ( dt.listSegments () ).toEqual ( [ 'root' ] )
+        expect ( copy.query ( store => { store.set ( 'root', {} ); store.save ( 'root', 'n', 1 ) }).model ( () => ({ as: 'std' }) ) ).toEqual ({ n: 1 })
+    })
+
+    it ( 'an unsupported model name still throws', () => {
+        expect ( () => dtbox.init ( dtbox.init ({ a: 1 }), { model: 'nope' } ) ).toThrow ( /Can't understand your data-model/ )
+    })
+})
+
+
+
 describe ( 'coverage: previously untested paths', () => {
     const data = { a: 1, c: { d: [ 10, 20 ] }, when: new Date ( 0 ) }
 
