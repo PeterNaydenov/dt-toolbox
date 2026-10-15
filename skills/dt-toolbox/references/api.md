@@ -140,13 +140,14 @@ const firstAdult = dtbox.init ({
 
 ## Store: draft methods
 
-Drafted dt-lines form the result of `query`/`model`. Names identify lines, and `connect` creates the nesting.
+Drafted dt-lines form the result of `query`/`model`. Names identify lines, and `connect` creates the nesting. A path (`'root/users/0'`) identifies a line by its place: it needs no `connect`, and lines with the same name in different places don't clash.
 
 | Method | Effect | Returns |
 |---|---|---|
 | `set ( name, data )` | new dt-line. `data`: object or array of primitives (copied) | store |
-| `save ( name, key, value )` | `flatData[key] = value` on a drafted line, if the key isn't set yet | store |
-| `push ( name, value )` | appends to a drafted array line. Objects and arrays are ignored | store |
+| `set ( path, data )` | new dt-line on this place, attached to the parent line (the parent must be set first). An existing path: replaces the data, keeps the children | store |
+| `save ( name or path, key, value )` | `flatData[key] = value` on a drafted line, if the key isn't set yet | store |
+| `push ( name or path, value )` | appends to a drafted array line. Objects and arrays are ignored | store |
 | `connect ( [ 'parent/child', … ] )` | nests drafted line `child` under drafted line `parent`, in any order | void |
 
 In `std` output, lines that were never connected are added to the top level under their own name.
@@ -162,6 +163,24 @@ const res = dt.model ( store => {
     })
 // res → { name: 'X', age: 1, tags: [ 'a', 'b' ] }
 ```
+
+Build by path when the same names repeat in different places (e.g. every user has `tags`):
+
+```js
+const users = dt.model ( store => {
+        store.set ( 'root', {} )
+        store.set ( 'root/users', [] )
+        store.set ( 'root/users/0', { id: 0 } )
+        store.set ( 'root/users/0/tags', [ 'a' ] )
+        store.set ( 'root/users/1', { id: 1 } )
+        store.set ( 'root/users/1/tags', [ 'b' ] )
+        store.push ( 'root/users/1/tags', 'c' )
+        return { as: 'std' }
+    })
+// users → { users: [ { id: 0, tags: [ 'a' ] }, { id: 1, tags: [ 'b', 'c' ] } ] }
+```
+
+A path whose parent line doesn't exist is a plain name with `/`, as before: it is not attached anywhere.
 
 ## Filters
 
