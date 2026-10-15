@@ -2,6 +2,13 @@
 
 
 
+### 8.1.1 ( 2026-10-15)
+- [x] Fix: The published 8.1.0 had the build files (`dist`) of 8.0.0, so `store.set` by path didn't work. The `dist` files are rebuilt;
+- [x] Performance: `store.set` by path attaches the dt-line to its parent in constant time. Before, each `set` checked all the existing children of the parent, so 2000 lines under one parent took ~10 ms instead of ~1 ms;
+- [x] Performance: `store.look` - less work per dt-line and per callback: child names with `slice` instead of a string `replace`, and `next()`/`finish()` results compared with constants instead of new arrays;
+
+
+
 ### 8.1.0 ( 2026-10-15)
 - [x] Feature: Draft dt-lines by path. `store.set ( 'root/users/0/tags', data )` creates the dt-line on this place and attaches it to the parent dt-line (`'root/users/0'`), without `connect`. Lines with the same name in different places don't clash (before, a second `set ( 'tags' )` replaced the first in the draft index). `save` and `push` find lines by path too. Setting an existing path again replaces its data and keeps its children. Backward compatible: a name with `/` whose parent line doesn't exist works as before;
 
