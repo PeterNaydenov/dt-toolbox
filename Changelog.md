@@ -2,6 +2,11 @@
 
 
 
+### 8.1.2 ( 2026-10-15)
+- [x] Fix: `dtbox.init ( dtObject )` returns a new dt-object with a copy of the data, all segments included. Before the fix, the dt-object was read as a standard object and the result was an empty dt-object, so the data was lost silently;
+
+
+
 ### 8.1.1 ( 2026-10-15)
 - [x] Fix: The published 8.1.0 had the build files (`dist`) of 8.0.0, so `store.set` by path didn't work. The `dist` files are rebuilt;
 - [x] Performance: `store.set` by path attaches the dt-line to its parent in constant time. Before, each `set` checked all the existing children of the parent, so 2000 lines under one parent took ~10 ms instead of ~1 ms;
