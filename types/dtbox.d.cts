@@ -251,7 +251,7 @@ declare namespace dtbox {
     type WalkCallbackArgs = walk.CallbackArgs;
 
     interface DtBox {
-        /** Create a dt-object from a data source. Throws if the model name is not supported. */
+        /** Create a dt-object from a data source. Throws if the model name is not supported. A dt-object as `data` gives a new dt-object with a copy of its data. */
         init ( data: any, options?: InitOptions ): DTObject;
         /** Create a dt-object from a DT-model. */
         load ( data: DtModel ): DTObject;
