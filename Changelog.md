@@ -2,6 +2,11 @@
 
 
 
+### 8.1.0 ( 2026-10-15)
+- [x] Feature: Draft dt-lines by path. `store.set ( 'root/users/0/tags', data )` creates the dt-line on this place and attaches it to the parent dt-line (`'root/users/0'`), without `connect`. Lines with the same name in different places don't clash (before, a second `set ( 'tags' )` replaced the first in the draft index). `save` and `push` find lines by path too. Setting an existing path again replaces its data and keeps its children. Backward compatible: a name with `/` whose parent line doesn't exist works as before;
+
+
+
 ### 8.0.0 ( 2026-10-14)
 - [x] Breaking: Dependency update. `@peter.naydenov/walk` to version 7.0.1. `dtbox.getWalk()` returns walk v7 as is: in callbacks, `return IGNORE` must become `return IGNORE()`. Walk v7 also adds `PASS`, `FINISH`, `settings` and `parentPath`. See `Migration.guide.md`;
 - [x] Breaking: `dtbox.init(data, {model})` with an unsupported model name now throws an error with the list of supported models, like `flat` and `convert` (was: `console.error` + return `null`). Omitting `model` still defaults to `'std'`;
