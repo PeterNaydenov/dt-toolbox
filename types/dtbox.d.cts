@@ -201,7 +201,13 @@ declare namespace dtbox {
         look ( fn: LookFn ): void;
 
         // DT-model creation methods
-        /** Define a new dt-line record. */
+        /**
+         * Define a new dt-line record.
+         * - `name` - name of the dt-line. Connect it later with `connect`;
+         * - path (e.g. `'root/users/0'`) - when the parent dt-line (`'root/users'`) exists, the new dt-line is
+         *   created on this place and attached to the parent. Lines with the same name in different places don't clash.
+         *   Setting an existing path again replaces its data and keeps its children.
+         */
         set ( name: string, data: any ): DtStore;
         /** Create connections between existing dt-lines. Each item is `'parent/child'`. */
         connect ( list: string[] ): void;
