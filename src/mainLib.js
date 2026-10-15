@@ -196,6 +196,10 @@ const mainLib = {
                             // Since v.8.0.0 throws like `flat` and `convert` (was: console.error + return null)
                             throw new Error ( `Can't understand your data-model: ${model}. Supported: ${INIT_DATA_TYPES.join(', ')}` )
                         }
+                    // A dt-object as data source: a new dt-object with a copy of its data (all segments).
+                    // `export()` returns a copy, so no second copy is needed. Before the fix, the dt-object
+                    // was read as a standard object and the result was an empty dt-object.
+                    if ( inData != null && dependencies().isDTO ( inData ) )   return loadDtModel ( inData.export (), false )
                     // Primitive inputs (number, string, boolean, null, undefined) are
                     // wrapped in { value: <primitive> } so the data is preserved
                     // and round-trippable. Before the fix, primitives silently
