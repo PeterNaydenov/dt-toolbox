@@ -705,7 +705,7 @@ const
 
 
 ### store.get ()
-Take a single dt-line with specific breadcrumbs.
+Take a single dt-line with specific breadcrumbs. Uses the dt-object index, so it takes the same time on any data size.
 
 ```js
 const data = {
@@ -737,7 +737,7 @@ const
 
 
 ### store.find ()
-String search for exact object name
+String search for exact object name. From the second `find` on all dt-lines, the dt-object keeps an index by name, so later calls don't scan the dt-lines. After `from`, `use`, `like` or another `find`, the narrowed scan-list is searched.
 
 ```js
 const data = {
@@ -769,7 +769,7 @@ const
 
 
 ### store.like ()
-String search in dt-line name
+String search in dt-line name. With a list of texts, a dt-line is selected once, also when more texts match its name.
 
 ```js
 const data = {
