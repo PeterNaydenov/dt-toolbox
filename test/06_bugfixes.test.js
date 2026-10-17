@@ -1006,4 +1006,157 @@ describe ( 'coverage: previously untested paths', () => {
 
 
 
+describe ( 'store.get with the breadcrumbs index', () => {
+    const
+          data = { a: 1, b: { c: 2, d: { e: 3 } }, l: [ 'x', 'y' ] }
+        , getLines = ( dt, run ) => {
+                    const r = [];
+                    dt.query ( store => { run ( store ).look ( ({ breadcrumbs, next }) => { r.push ( breadcrumbs ); return next () }) })
+                    return r
+                }
+        ;
+
+    it ( 'finds a dt-line on the full scan-list', () => {
+        const dt = dtbox.init ( data )
+        expect ( getLines ( dt, s => s.get ( 'root/b/d' ) ) ).toEqual ( [ 'root/b/d' ] )
+        expect ( getLines ( dt, s => s.get ( 'root/b/x' ) ) ).toEqual ( [] )
+    })
+
+    it ( 'searches only in the current scan-list', () => {
+        const dt = dtbox.init ( data )
+        expect ( getLines ( dt, s => s.from ( 'root/b' ).get ( 'root/b/d' ) ) ).toEqual ( [ 'root/b/d' ] )
+        expect ( getLines ( dt, s => s.from ( 'root/b' ).get ( 'root/l' ) ) ).toEqual ( [] )
+        expect ( getLines ( dt, s => s.use ( 'list' ).get ( 'root/l' ) ) ).toEqual ( [ 'root/l' ] )
+        expect ( getLines ( dt, s => s.find ( 'd' ).get ( 'root/b' ) ) ).toEqual ( [] )
+    })
+
+    it ( 'finds dt-lines of inserted segments', () => {
+        const dt = dtbox.init ( data )
+        getLines ( dt, s => s.get ( 'root' ) )   // Uniqueness is computed before the insert
+        dt.insertSegment ( 'extra', { f: { g: 1 } } )
+        expect ( getLines ( dt, s => s.get ( 'extra/f' ) ) ).toEqual ( [ 'extra/f' ] )
+    })
+
+    it ( 'ignores names of Object.prototype', () => {
+        const dt = dtbox.init ( data )
+        expect ( getLines ( dt, s => s.get ( 'constructor' ) ) ).toEqual ( [] )
+        expect ( getLines ( dt, s => s.get ( '__proto__' ) ) ).toEqual ( [] )
+        expect ( dt.index ( 'constructor' ) ).toBe ( null )
+        expect ( dt.index ( 'toString' ) ).toBe ( null )
+    })
+
+    it ( 'returns the first dt-line when breadcrumbs repeat', () => {
+        const dt = dtbox.load ([
+                              [ 'root', { a: 1 }, 'root', [] ]
+                            , [ 'x', { v: 'first' }, 'x', [] ]
+                            , [ 'x', { v: 'second' }, 'x', [] ]
+                        ])
+        const values = [];
+        dt.query ( store => { store.get ( 'x' ).look ( ({ value }) => { values.push ( value ) }) })
+        expect ( values ).toEqual ( [ 'first' ] )
+    })
+
+    it ( 'returns the first dt-line when keys with "/" repeat breadcrumbs', () => {
+        const dt = dtbox.init ({ 'a/b': { x: 1 }, a: { b: { y: 2 } } })   // Both nested objects get breadcrumbs 'root/a/b'
+        const keys = [];
+        dt.query ( store => { store.get ( 'root/a/b' ).look ( ({ key }) => { keys.push ( key ) }) })
+        expect ( keys ).toEqual ( [ 'x' ] )
+    })
+}) // describe store.get with the breadcrumbs index
+
+
+
+describe ( 'store.find with the name index', () => {
+    const
+          data = { a: { x: 1 }, b: { a: { x: 2 }, c: [ { a: { x: 3 } } ] } }
+        , found = ( dt, run ) => {
+                    const r = [];
+                    dt.query ( store => { run ( store ).look ( ({ breadcrumbs, next }) => { r.push ( breadcrumbs ); return next () }) })
+                    return r
+                }
+        , all = [ 'root/a', 'root/b/a', 'root/b/c/0/a' ]
+        ;
+
+    it ( 'returns the same dt-lines, in the same order, on every call', () => {
+        const dt = dtbox.init ( data )
+        for ( let i = 0; i < 4; i++ ) {   // The index is built on the second call
+                expect ( found ( dt, s => s.find ( 'a' ) ) ).toEqual ( all )
+                expect ( found ( dt, s => s.find ( 'missing' ) ) ).toEqual ( [] )
+                expect ( found ( dt, s => s.find ( 'constructor' ) ) ).toEqual ( [] )
+            }
+    })
+
+    it ( 'searches only in the current scan-list', () => {
+        const dt = dtbox.init ( data )
+        found ( dt, s => s.find ( 'a' ) ); found ( dt, s => s.find ( 'a' ) )
+        expect ( found ( dt, s => s.from ( 'root/b' ).find ( 'a' ) ) ).toEqual ( [ 'root/b/a', 'root/b/c/0/a' ] )
+        expect ( found ( dt, s => s.find ( 'a' ).find ( 'a' ) ) ).toEqual ( all )
+        expect ( found ( dt, s => s.find ( 'a' ).get ( 'root/b/a' ) ) ).toEqual ( [ 'root/b/a' ] )
+    })
+
+    it ( 'finds dt-lines of segments inserted after the index was built', () => {
+        const dt = dtbox.init ( data )
+        found ( dt, s => s.find ( 'a' ) ); found ( dt, s => s.find ( 'a' ) )
+        dt.insertSegment ( 'extra', { a: { x: 4 } } )
+        expect ( found ( dt, s => s.find ( 'a' ) ) ).toEqual ( [ ...all, 'extra/a' ] )
+    })
+}) // describe store.find with the name index
+
+
+
+describe ( 'store.like', () => {
+    it ( 'selects a dt-line once when more texts match its name', () => {
+        const dt = dtbox.init ({ ab: { x: 1 }, b: { y: 2 }, c: { z: 3 } })
+        const r = [];
+        dt.query ( store => { store.like ( [ 'a', 'b' ] ).look ( ({ breadcrumbs, key }) => { r.push ( `${breadcrumbs}:${key}` ) }) })
+        expect ( r ).toEqual ( [ 'root/ab:x', 'root/b:y' ] )
+    })
+}) // describe store.like
+
+
+
+describe ( 'store.look callback arguments', () => {
+    const visits = ( dt, cb = () => {} ) => {
+                const r = [];
+                dt.query ( store => { store.look ( arg => { r.push ( arg ); return cb ( arg ) }) })
+                return r
+        };
+
+    it ( 'gives links, key types and empty dt-lines', () => {
+        const dt = dtbox.init ({ n: 1, o: { p: { q: 1 } }, l: [ 'x', 'y' ], e: {} })
+        const r = visits ( dt ).map ( ({ name, key, value, links, empty }) => ({ name, key, value, links, empty }) )
+        expect ( r ).toEqual ([
+                  { name: 'root', key: 'n', value: 1, links: [ [ 'root', 'o' ], [ 'root', 'l' ], [ 'root', 'e' ] ], empty: undefined }
+                , { name: 'o', key: null, value: null, links: [ [ 'o', 'p' ] ], empty: true }
+                , { name: 'l', key: 0, value: 'x', links: [], empty: undefined }
+                , { name: 'l', key: 1, value: 'y', links: [], empty: undefined }
+                , { name: 'e', key: null, value: null, links: [], empty: true }
+                , { name: 'p', key: 'q', value: 1, links: [], empty: undefined }
+            ])
+    })
+
+    it ( 'shares one links array per dt-line and a new one per look', () => {
+        const dt = dtbox.init ({ a: 1, b: 2, c: { d: 1 } })
+        const [ first, second ] = visits ( dt )
+        expect ( first.links ).toBe ( second.links )
+        expect ( visits ( dt )[ 0 ].links ).not.toBe ( first.links )
+    })
+
+    it ( 'does not visit dt-lines inserted during the look', () => {
+        const dt = dtbox.init ({ a: 1 })
+        let inserted = false;
+        const r = visits ( dt, () => { if ( !inserted ) { inserted = true; dt.insertSegment ( 'extra', { b: 2 } ) } } )
+        expect ( r.map ( ({ breadcrumbs }) => breadcrumbs ) ).toEqual ( [ 'root' ] )
+        expect ( visits ( dt ).map ( ({ breadcrumbs }) => breadcrumbs ) ).toEqual ( [ 'root', 'extra' ] )
+    })
+
+    it ( 'gives the values read before the callbacks of a dt-line', () => {
+        const dt = dtbox.init ({ a: 1, b: 2 })
+        const r = visits ( dt, ({ key, flatData }) => { if ( key === 'a' ) flatData.b = 99 } )
+        expect ( r.map ( ({ value }) => value ) ).toEqual ( [ 1, 2 ] )
+    })
+}) // describe store.look callback arguments
+
+
+
 }) // bug fix regression tests
