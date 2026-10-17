@@ -2,6 +2,16 @@
 
 
 
+### 8.1.3 ( 2026-10-17)
+- [x] Performance: `store.get` uses the index by breadcrumbs instead of checking every dt-line of the scan-list. 120k dt-lines: 0.37 ms → 0.001 ms. The result is the same: on a narrowed scan-list it still finds only lines of that list, and when breadcrumbs repeat (a hand-made DT-model, drafts with a repeated name, keys with `/`) it still returns the first one;
+- [x] Performance: `store.find` on all dt-lines builds an index by name on its second call, so later calls don't scan the dt-lines. 180k dt-lines: ~3 ms → 0.01 ms from the third call. The index takes about 5% more memory and is rebuilt after `insertSegment`. A single `find`, and `find` on a narrowed scan-list, work as before;
+- [x] Performance: `store.look` is about 2× faster: plain loops instead of `every` and `Object.entries`. Callbacks get the same arguments in the same order;
+- [x] Fix: `store.like ( [ texts ] )` selects a dt-line once, also when more texts match its name. Before the fix, `like ( [ 'a', 'b' ] )` added a dt-line named `ab` twice, so `look` visited it twice;
+- [x] Fix: `dt.index` returns `null` for names of `Object.prototype` (e.g. `'constructor'`, `'toString'`). Before the fix, it threw "r is not iterable";
+- [x] Benchmark: `benchmarks/search.mjs` compares searching a plain object with walk and a dt-object with the same tasks. Results and conclusions in `benchmarks/search.md`;
+
+
+
 ### 8.1.2 ( 2026-10-15)
 - [x] Fix: `dtbox.init ( dtObject )` returns a new dt-object with a copy of the data, all segments included. Before the fix, the dt-object was read as a standard object and the result was an empty dt-object, so the data was lost silently;
 
