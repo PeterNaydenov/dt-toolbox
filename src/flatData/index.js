@@ -27,7 +27,12 @@ function flatData ( dependencies, d ) {
             , filterFn = { list, listObject, object, root } // { filter functions}
             ;
 
-        let scanList  = flatData;   // Where 'look' function will be executed;
+        let 
+              scanList  = flatData   // Where 'look' function will be executed;
+            , unique    = true       // All breadcrumbs are unique, so the index holds every dt-line
+            , names     = null       // Index by name: Map name → dt-lines in flatData order
+            , nameRequests = 0
+            ;
             
         const  
                 getFilterNames = () => Object.keys ( filterFn )
@@ -46,18 +51,40 @@ function flatData ( dependencies, d ) {
         // Apply default filters
         const filterNames = getFilterNames ();
         filterNames.forEach ( name => flatData.forEach ( line => filtering(name, line)   ))
+        // Repeated breadcrumbs (a hand-made DT-model, drafts with a repeated name, keys with '/'):
+        // the index keeps only the last dt-line, so an earlier one is not its index entry
+        unique = flatData.every ( line => indexes[line[2]] === line )
 
         const 
-              flatIO_API = {
-                          insert  : insert ( flatStorage, filtering, getFilterNames )                     // Insert a new rows to existing flatData;
+              insertLines = insert ( flatStorage, filtering, getFilterNames )
+            , flatIO_API = {
+                          insert  : lines => {                                                           // Insert a new rows to existing flatData;
+                                    if ( lines.some ( line => Object.hasOwn ( indexes, line[2] ) ) )   unique = false
+                                    names = null   // Rebuilt on the next request
+                                    insertLines ( lines )
+                                    if ( !lines.every ( line => indexes[line[2]] === line ) )   unique = false
+                                }
                         , export  : ex ( flatStorage )                                                   // Exports a copy of flatData;
                         , getIndexes    : () => indexes
-                        , getLine       : k => indexes[k] ? indexes[k] : null
+                        , getLine       : k => Object.hasOwn ( indexes, k ) ? indexes[k] : null   // Own keys only: 'constructor' is not a dt-line
                         , getFilters    : () => filters
                         , getScanList   : () => scanList
                         , setupScanList : l =>  scanList = l
                         , setupFilter : setupFilter ( flatStorage, filterFn, filtering, getFilterNames )   // Add and apply a new filter function to flatData;
                         , resetScan     : () => { scanList = flatData }                                  // Reset the scanList to use all flatData;
+                        , isFullScan    : () => scanList === flatData                                    // The scan-list contains all dt-lines;
+                        , hasUniqueBreadcrumbs : () => unique                                            // When false, the index doesn't hold every dt-line;
+                        , getNameIndex  : () => {                                                        // Built on the second request: a single `find` stays a plain scan;
+                                    if ( names )   return names
+                                    if ( ++nameRequests < 2 )   return null
+                                    names = new Map ()
+                                    flatData.forEach ( line => {
+                                                const list = names.get ( line[0] );
+                                                if ( list )   list.push ( line )
+                                                else          names.set ( line[0], [ line ] )
+                                        })
+                                    return names
+                                }
                     }
             
             , flatStore_API = {

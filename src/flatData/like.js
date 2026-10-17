@@ -11,7 +11,7 @@ return function like ( name ) {
 
         flatIO.getScanList().forEach ( line => {
                         const lnName = line[0];
-                        listNames.forEach ( nm => { if ( lnName.includes(nm) )   list.push ( line )   })                        
+                        if ( listNames.some ( nm => lnName.includes(nm) ) )   list.push ( line )   // Once, also when more texts match
                 })
         flatIO.setupScanList ( list )
         return this

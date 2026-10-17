@@ -13,53 +13,49 @@ const
 
 function look ( flatIO ) {
 return function look ( fn ) {
-    // Shared by all dt-lines: `finish()` stops the whole look, not only the current dt-line.
-    // Before the fix, it was reset for each dt-line, so `finish()` worked like `next()`.
-    let endLooking = false;
+    // Plain loops instead of `every` and `Object.entries`: no closure and no [key,value] pair per property.
+    // Same visits as before: values are read before the callbacks (like `Object.entries`),
+    // array length is fixed at the start and holes are skipped (like `every`).
+    const
+          scanList = flatIO.getScanList ()
+        , total    = scanList.length   // Fixed, like `every`: dt-lines inserted by a callback are not visited
+        ;
 
-    flatIO.getScanList().every ( line => {
-                        const
-                              [ name, flatData, breadcrumbs, edges ] = line
-                            ,  isArray = flatData instanceof Array ? true : false
-                            ;
+    for ( let i = 0; i < total; i++ ) {
+            const
+                  [ name, flatData, breadcrumbs, edges ] = scanList[i]
+                , cut   = breadcrumbs.length + 1
+                , links = new Array ( edges.length )
+                ;
+            let callback;
 
-                        const links = edges.map ( edge => [ name, edge.slice ( breadcrumbs.length + 1 ) ] )   // edge is `breadcrumbs + '/' + child`
+            for ( let e = 0; e < edges.length; e++ )   links[e] = [ name, edges[e].slice ( cut ) ]   // edge is `breadcrumbs + '/' + child`
 
-                        if ( isArray ) {
-                                if ( flatData.length === 0 )   empty([])
-                                else {
-                                        flatData.every ( (value,key) => {
-                                                    if ( endLooking )   return false   // Cancel other iterations
-                                                    const callback = fn({ value, key, name, flatData, breadcrumbs, links, next, finish });
-                                                    if ( callback === FINISH )   endLooking = true
-                                                    return ( callback !== FINISH && callback !== NEXT )
-                                            })
-                                    }
-                            }
-                        else {
-                                const test = Object.entries(flatData);
-                                if ( test.length === 0 )   empty({})
-                                else {
-                                        test.every ( ([key, value]) => {
-                                                    if ( endLooking )   return false   // Cancel other iterations
-                                                    const callback = fn ({ value, key, name, flatData, breadcrumbs, links, next, finish });
-                                                    if ( callback === FINISH )   endLooking = true
-                                                    return ( callback !== FINISH && callback !== NEXT )
-                                            })
-                                    }
-                                
-                            }
-                        function empty ( flatData ) {
-                                    const callback = fn ({ value:null, key:null, name, flatData, breadcrumbs, links, empty: true, next, finish });
-                                    if ( callback === FINISH )   endLooking = true
-                            } // empty func.
-                        return !endLooking   // Stop visiting dt-lines after `finish()`
-            })
+            if ( flatData instanceof Array ) {
+                    const length = flatData.length;
+                    if ( length === 0 )   callback = fn ({ value:null, key:null, name, flatData:[], breadcrumbs, links, empty: true, next, finish })
+                    for ( let key = 0; key < length; key++ ) {
+                            if ( !( key in flatData ) )   continue
+                            callback = fn ({ value: flatData[key], key, name, flatData, breadcrumbs, links, next, finish })
+                            if ( callback === FINISH || callback === NEXT )   break
+                        }
+                }
+            else {
+                    const
+                          keys   = Object.keys ( flatData )
+                        , values = Object.values ( flatData )
+                        ;
+                    if ( keys.length === 0 )   callback = fn ({ value:null, key:null, name, flatData:{}, breadcrumbs, links, empty: true, next, finish })
+                    for ( let k = 0; k < keys.length; k++ ) {
+                            callback = fn ({ value: values[k], key: keys[k], name, flatData, breadcrumbs, links, next, finish })
+                            if ( callback === FINISH || callback === NEXT )   break
+                        }
+                }
+            if ( callback === FINISH )   break   // `finish()` stops the whole look, not only the current dt-line
+        }
     flatIO.resetScan ()   // Also when the scan-list was empty
 }} // look func.
 
 
 
 export default look
-
-
