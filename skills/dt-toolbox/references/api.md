@@ -204,6 +204,8 @@ Built-in filters, available through `store.use ( name )`:
 
 Custom filters are created with `dt.setupFilter`. Prefer them when the same selection is used in many queries: the predicate runs once, not on every scan.
 
+Speed of the scan methods: `get` and `from` use the index by breadcrumbs, so their time doesn't depend on the data size. `find` on all dt-lines builds an index by name on its second call; later calls don't scan. `like`, and `find` after another scan method, check every dt-line of the current scan-list.
+
 ## Errors
 
 | Call | Bad input | Behaviour |
