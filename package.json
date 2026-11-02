@@ -43,7 +43,7 @@
     "@peter.naydenov/walk": "7.0.2"
   },
   "devDependencies": {
-    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-terser": "^1.0.2",
     "@vitest/coverage-v8": "^5.1.0",
     "rollup": "^4.64.7",
     "vitest": "^5.1.0"
