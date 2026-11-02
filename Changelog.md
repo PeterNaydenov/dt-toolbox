@@ -2,6 +2,11 @@
 
 
 
+### 8.1.4 ( 2026-11-01)
+- [x] Dependency update. @peter.naydenov/walk to version 7.0.2;
+
+
+
 ### 8.1.3 ( 2026-10-17)
 - [x] Performance: `store.get` uses the index by breadcrumbs instead of checking every dt-line of the scan-list. 120k dt-lines: 0.37 ms → 0.001 ms. The result is the same: on a narrowed scan-list it still finds only lines of that list, and when breadcrumbs repeat (a hand-made DT-model, drafts with a repeated name, keys with `/`) it still returns the first one;
 - [x] Performance: `store.find` on all dt-lines builds an index by name on its second call, so later calls don't scan the dt-lines. 180k dt-lines: ~3 ms → 0.01 ms from the third call. The index takes about 5% more memory and is rebuilt after `insertSegment`. A single `find`, and `find` on a narrowed scan-list, work as before;
